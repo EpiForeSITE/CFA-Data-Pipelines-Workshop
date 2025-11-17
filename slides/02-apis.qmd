@@ -1,0 +1,297 @@
+---
+title: "Data Acquisition from APIs"
+subtitle: "CFA Data Pipelines Workshop - Week 2"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    chalkboard: true
+    preview-links: auto
+---
+
+## Overview
+
+Today's topics:
+
+- RESTful API fundamentals
+- HTTP methods and status codes
+- Authentication
+- Pagination
+- Rate limiting
+- Error handling
+
+## What is an API?
+
+**Application Programming Interface (API)**
+
+- A way for applications to communicate
+- Defines methods and data structures
+- REST is most common web API style
+
+## RESTful APIs
+
+**REST** = Representational State Transfer
+
+Key concepts:
+
+- Resources (nouns)
+- HTTP methods (verbs)
+- Stateless communication
+- Standard data formats (JSON, XML)
+
+## HTTP Methods
+
+| Method | Purpose | Idempotent |
+|--------|---------|-----------|
+| GET | Retrieve data | Yes |
+| POST | Create resource | No |
+| PUT | Update/replace | Yes |
+| PATCH | Partial update | No |
+| DELETE | Remove resource | Yes |
+
+## HTTP Status Codes
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Success (2xx)**
+
+- 200 OK
+- 201 Created
+- 204 No Content
+
+**Client Errors (4xx)**
+
+- 400 Bad Request
+- 401 Unauthorized
+- 404 Not Found
+- 429 Too Many Requests
+:::
+
+::: {.column width="50%"}
+**Server Errors (5xx)**
+
+- 500 Internal Server Error
+- 502 Bad Gateway
+- 503 Service Unavailable
+:::
+
+::::
+
+## Making API Requests
+
+### Python Example
+
+```python
+import requests
+
+response = requests.get('https://api.example.com/data')
+
+if response.status_code == 200:
+    data = response.json()
+    print(data)
+else:
+    print(f"Error: {response.status_code}")
+```
+
+### R Example
+
+```r
+library(httr)
+
+response <- GET('https://api.example.com/data')
+
+if (status_code(response) == 200) {
+    data <- content(response, "parsed")
+    print(data)
+}
+```
+
+## Authentication
+
+### API Keys
+
+```python
+headers = {'Authorization': 'Bearer YOUR_API_KEY'}
+response = requests.get(url, headers=headers)
+```
+
+### OAuth 2.0
+
+More complex but more secure:
+
+1. User authorizes application
+2. Application receives access token
+3. Token used for API requests
+4. Token can be refreshed
+
+## Query Parameters
+
+Add filters and options to requests:
+
+```python
+params = {
+    'limit': 100,
+    'offset': 0,
+    'filter': 'status:active'
+}
+
+response = requests.get(url, params=params)
+```
+
+URL: `https://api.example.com/data?limit=100&offset=0&filter=status:active`
+
+## Pagination
+
+APIs limit response size. Common patterns:
+
+### Offset-based
+
+```python
+page = 0
+per_page = 100
+
+while True:
+    response = requests.get(url, params={
+        'offset': page * per_page,
+        'limit': per_page
+    })
+    data = response.json()
+    if not data:
+        break
+    # Process data
+    page += 1
+```
+
+## Pagination (continued)
+
+### Cursor-based
+
+```python
+cursor = None
+
+while True:
+    params = {'cursor': cursor} if cursor else {}
+    response = requests.get(url, params=params)
+    data = response.json()
+    
+    # Process data['results']
+    
+    cursor = data.get('next_cursor')
+    if not cursor:
+        break
+```
+
+## Rate Limiting
+
+APIs limit request frequency:
+
+- Requests per second/minute/hour
+- Often returned in response headers
+
+```python
+import time
+
+rate_limit = 60  # requests per minute
+delay = 60 / rate_limit
+
+for item in items:
+    response = requests.get(url)
+    # Process response
+    time.sleep(delay)
+```
+
+## Error Handling
+
+```python
+import requests
+from requests.exceptions import RequestException
+
+def fetch_data(url, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            return response.json()
+        except RequestException as e:
+            if attempt == max_retries - 1:
+                raise
+            time.sleep(2 ** attempt)  # Exponential backoff
+```
+
+## Best Practices
+
+1. **Respect rate limits**: Don't overwhelm the API
+2. **Handle errors gracefully**: Retry with backoff
+3. **Cache responses**: Reduce unnecessary requests
+4. **Use timeouts**: Don't wait forever
+5. **Log requests**: Track API usage
+6. **Validate responses**: Check data structure
+
+## Working with JSON
+
+```python
+import json
+
+# Parse JSON response
+data = response.json()
+
+# Access nested data
+user_name = data['user']['name']
+
+# Save to file
+with open('data.json', 'w') as f:
+    json.dump(data, f, indent=2)
+```
+
+## Real-world Example
+
+### GitHub API
+
+```python
+import requests
+
+# Get repository information
+url = 'https://api.github.com/repos/python/cpython'
+response = requests.get(url)
+repo = response.json()
+
+print(f"Name: {repo['name']}")
+print(f"Stars: {repo['stargazers_count']}")
+print(f"Language: {repo['language']}")
+```
+
+## Hands-on Exercise
+
+Build a script that:
+
+1. Fetches data from a public API
+2. Implements pagination
+3. Handles errors with retries
+4. Saves results to a file
+
+Suggested APIs:
+
+- GitHub API
+- OpenWeather API
+- REST Countries API
+
+## Common Pitfalls
+
+- Not handling rate limits
+- Ignoring HTTP status codes
+- Not using timeouts
+- Hardcoding credentials
+- Not validating responses
+- Infinite loops in pagination
+
+## Questions?
+
+Next session: Database Queries
+
+## Resources
+
+- [REST API Tutorial](https://restfulapi.net/)
+- [HTTP Status Codes](https://httpstatuses.com/)
+- [Requests Documentation](https://requests.readthedocs.io/)
+- [httr Documentation](https://httr.r-lib.org/)

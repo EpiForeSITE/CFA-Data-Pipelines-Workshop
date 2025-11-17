@@ -1,0 +1,416 @@
+---
+title: "Database Queries"
+subtitle: "CFA Data Pipelines Workshop - Week 3"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    chalkboard: true
+    preview-links: auto
+---
+
+## Overview
+
+Today's topics:
+
+- SQL fundamentals review
+- Connecting to databases
+- Writing efficient queries
+- Object-Relational Mapping (ORMs)
+- Transactions and ACID properties
+
+## Why Databases?
+
+- **Structured storage**: Organized data
+- **Query power**: Filter and aggregate
+- **Concurrency**: Multiple users
+- **ACID guarantees**: Data integrity
+- **Scalability**: Handle large datasets
+
+## Database Types
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Relational (SQL)**
+
+- PostgreSQL
+- MySQL
+- SQLite
+- SQL Server
+:::
+
+::: {.column width="50%"}
+**Non-relational (NoSQL)**
+
+- MongoDB
+- Redis
+- Cassandra
+- DynamoDB
+:::
+
+::::
+
+Focus today: SQL databases
+
+## SQL Fundamentals
+
+**Structured Query Language (SQL)**
+
+Basic operations:
+
+- `SELECT`: Retrieve data
+- `INSERT`: Add data
+- `UPDATE`: Modify data
+- `DELETE`: Remove data
+
+## SELECT Statement
+
+```sql
+-- Basic select
+SELECT column1, column2 FROM table_name;
+
+-- All columns
+SELECT * FROM users;
+
+-- With conditions
+SELECT name, email 
+FROM users 
+WHERE status = 'active';
+
+-- With sorting
+SELECT name, created_at 
+FROM users 
+ORDER BY created_at DESC;
+```
+
+## Filtering with WHERE
+
+```sql
+-- Comparison operators
+SELECT * FROM products WHERE price > 100;
+
+-- Multiple conditions
+SELECT * FROM orders 
+WHERE status = 'shipped' 
+  AND total > 50;
+
+-- Pattern matching
+SELECT * FROM users 
+WHERE email LIKE '%@example.com';
+
+-- IN clause
+SELECT * FROM products 
+WHERE category IN ('electronics', 'books');
+```
+
+## Aggregation
+
+```sql
+-- Count records
+SELECT COUNT(*) FROM users;
+
+-- Sum and average
+SELECT 
+    AVG(price) as avg_price,
+    SUM(quantity) as total_quantity
+FROM products;
+
+-- Group by
+SELECT 
+    category,
+    COUNT(*) as count,
+    AVG(price) as avg_price
+FROM products
+GROUP BY category;
+```
+
+## Joins
+
+```sql
+-- Inner join
+SELECT u.name, o.total
+FROM users u
+INNER JOIN orders o ON u.id = o.user_id;
+
+-- Left join
+SELECT u.name, COUNT(o.id) as order_count
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+GROUP BY u.name;
+```
+
+## Connecting to Databases
+
+### Python with SQLite
+
+```python
+import sqlite3
+
+# Connect to database
+conn = sqlite3.connect('database.db')
+cursor = conn.cursor()
+
+# Execute query
+cursor.execute('SELECT * FROM users')
+rows = cursor.fetchall()
+
+# Close connection
+conn.close()
+```
+
+## Python with PostgreSQL
+
+```python
+import psycopg2
+
+# Connect
+conn = psycopg2.connect(
+    host="localhost",
+    database="mydb",
+    user="user",
+    password="password"
+)
+
+cursor = conn.cursor()
+cursor.execute("SELECT * FROM users")
+rows = cursor.fetchall()
+
+conn.close()
+```
+
+## R with DBI
+
+```r
+library(DBI)
+
+# SQLite
+con <- dbConnect(RSQLite::SQLite(), "database.db")
+
+# Query
+result <- dbGetQuery(con, "SELECT * FROM users")
+
+# Close
+dbDisconnect(con)
+```
+
+## Parameterized Queries
+
+**Always use parameterized queries!**
+
+```python
+# WRONG - SQL injection risk
+user_id = input("Enter user ID: ")
+cursor.execute(f"SELECT * FROM users WHERE id = {user_id}")
+
+# CORRECT - Safe from SQL injection
+user_id = input("Enter user ID: ")
+cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+```
+
+## Object-Relational Mapping (ORM)
+
+ORMs map database tables to objects:
+
+- Write less SQL
+- Database-agnostic code
+- Type safety
+- May sacrifice performance
+
+## SQLAlchemy (Python)
+
+```python
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    email = Column(String)
+
+# Create engine and session
+engine = create_engine('sqlite:///database.db')
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# Query
+users = session.query(User).filter(User.email.like('%@example.com')).all()
+```
+
+## dbplyr (R)
+
+```r
+library(dplyr)
+library(dbplyr)
+
+# Connect
+con <- DBI::dbConnect(RSQLite::SQLite(), "database.db")
+
+# Reference table
+users <- tbl(con, "users")
+
+# Query with dplyr syntax
+active_users <- users %>%
+  filter(status == "active") %>%
+  select(name, email) %>%
+  collect()  # Execute query
+```
+
+## Transactions
+
+A transaction is a sequence of operations performed as a single logical unit of work.
+
+```python
+conn = sqlite3.connect('database.db')
+cursor = conn.cursor()
+
+try:
+    cursor.execute("BEGIN TRANSACTION")
+    cursor.execute("UPDATE accounts SET balance = balance - 100 WHERE id = 1")
+    cursor.execute("UPDATE accounts SET balance = balance + 100 WHERE id = 2")
+    conn.commit()
+except Exception as e:
+    conn.rollback()
+    print(f"Transaction failed: {e}")
+finally:
+    conn.close()
+```
+
+## ACID Properties
+
+- **Atomicity**: All or nothing
+- **Consistency**: Valid state transitions
+- **Isolation**: Concurrent transactions don't interfere
+- **Durability**: Committed data persists
+
+## Query Optimization
+
+### Use Indexes
+
+```sql
+-- Create index
+CREATE INDEX idx_users_email ON users(email);
+
+-- Query benefits from index
+SELECT * FROM users WHERE email = 'user@example.com';
+```
+
+### Avoid SELECT *
+
+```sql
+-- Less efficient
+SELECT * FROM users;
+
+-- More efficient - only needed columns
+SELECT id, name, email FROM users;
+```
+
+## Explain Query Plans
+
+```sql
+-- See how database executes query
+EXPLAIN QUERY PLAN
+SELECT u.name, COUNT(o.id)
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+GROUP BY u.name;
+```
+
+Helps identify:
+
+- Missing indexes
+- Inefficient joins
+- Full table scans
+
+## Connection Pooling
+
+Reuse database connections:
+
+```python
+from sqlalchemy import create_engine
+from sqlalchemy.pool import QueuePool
+
+engine = create_engine(
+    'postgresql://user:pass@localhost/db',
+    poolclass=QueuePool,
+    pool_size=10,
+    max_overflow=20
+)
+```
+
+Benefits:
+
+- Faster connections
+- Limited concurrent connections
+- Better resource management
+
+## Best Practices
+
+1. **Use parameterized queries**: Prevent SQL injection
+2. **Index appropriately**: Balance read/write performance
+3. **Use transactions**: Ensure data consistency
+4. **Close connections**: Avoid resource leaks
+5. **Handle errors**: Catch and log database errors
+6. **Limit result sets**: Use LIMIT/pagination
+7. **Monitor performance**: Log slow queries
+
+## Common Pitfalls
+
+- SQL injection vulnerabilities
+- Not closing connections
+- N+1 query problem (ORMs)
+- Missing indexes on large tables
+- Not using transactions for multi-step operations
+- Fetching too much data at once
+
+## Hands-on Exercise
+
+Build a script that:
+
+1. Connects to a database
+2. Creates a table
+3. Inserts sample data
+4. Queries and filters data
+5. Uses transactions
+6. Handles errors properly
+
+## Real-world Example
+
+```python
+import sqlite3
+import pandas as pd
+
+# Connect and load data
+conn = sqlite3.connect('sales.db')
+
+# Query to pandas DataFrame
+query = """
+    SELECT 
+        DATE(order_date) as date,
+        SUM(total) as daily_sales
+    FROM orders
+    WHERE order_date >= date('now', '-30 days')
+    GROUP BY DATE(order_date)
+    ORDER BY date
+"""
+
+df = pd.read_sql_query(query, conn)
+print(df)
+
+conn.close()
+```
+
+## Questions?
+
+Next session: Data Cleaning
+
+## Resources
+
+- [SQL Tutorial](https://www.w3schools.com/sql/)
+- [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+- [PostgreSQL Tutorial](https://www.postgresqltutorial.com/)
+- [dbplyr Documentation](https://dbplyr.tidyverse.org/)
