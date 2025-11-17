@@ -1,0 +1,163 @@
+---
+title: "Introduction to Data Pipelines"
+subtitle: "CFA Data Pipelines Workshop"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    chalkboard: true
+    preview-links: auto
+---
+
+## Welcome!
+
+Welcome to the CFA Data Pipelines Workshop
+
+- Introduction to course objectives
+- Overview of data pipelines
+- Setting up your environment
+
+## What is a Data Pipeline?
+
+A **data pipeline** is a series of data processing steps where:
+
+- Data is ingested from one or more sources
+- Data is transformed or processed
+- Data is loaded into a destination for analysis or storage
+
+## Why Data Pipelines?
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Benefits**
+
+- Automation
+- Reproducibility
+- Scalability
+- Error handling
+:::
+
+::: {.column width="50%"}
+**Use Cases**
+
+- ETL processes
+- Real-time analytics
+- Data warehousing
+- ML model training
+:::
+
+::::
+
+## Pipeline Design Patterns
+
+### 1. Extract-Transform-Load (ETL)
+
+- Extract data from sources
+- Transform in staging area
+- Load into destination
+
+### 2. Extract-Load-Transform (ELT)
+
+- Extract data from sources
+- Load into destination
+- Transform in destination
+
+## Common Data Sources
+
+- **APIs**: REST, GraphQL, SOAP
+- **Databases**: SQL, NoSQL
+- **Files**: CSV, JSON, XML, Parquet
+- **Streaming**: Kafka, message queues
+- **Web scraping**: HTML parsing
+
+## Pipeline Components
+
+```{mermaid}
+flowchart LR
+    A[Data Source] --> B[Extraction]
+    B --> C[Validation]
+    C --> D[Transformation]
+    D --> E[Loading]
+    E --> F[Destination]
+```
+
+## Best Practices
+
+1. **Idempotency**: Pipeline can run multiple times safely
+2. **Error Handling**: Graceful failures and retries
+3. **Logging**: Track pipeline execution
+4. **Monitoring**: Alert on failures
+5. **Testing**: Validate data quality
+6. **Documentation**: Clear pipeline logic
+
+## Tools and Frameworks
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Python**
+
+- Apache Airflow
+- Luigi
+- Prefect
+- Dagster
+:::
+
+::: {.column width="50%"}
+**R**
+
+- targets
+- drake (legacy)
+- custom workflows
+:::
+
+::::
+
+## Development Environment Setup
+
+### Python Setup
+
+```bash
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+
+# Install common packages
+pip install requests pandas sqlalchemy
+```
+
+### R Setup
+
+```r
+# Install common packages
+install.packages(c("httr", "dplyr", "DBI", "dbplyr"))
+```
+
+## Your First Pipeline
+
+Let's build a simple pipeline:
+
+1. Fetch data from an API
+2. Clean and validate
+3. Store in a database
+
+We'll start with the basics and build complexity throughout the course.
+
+## Course Structure
+
+- **Week 1**: Introduction (today!)
+- **Week 2**: Data Acquisition from APIs
+- **Week 3**: Database Queries
+- **Week 4**: Data Cleaning
+- **Final Project**: Complete pipeline
+
+## Questions?
+
+Next session: Data Acquisition from APIs
+
+## Resources
+
+- Course website: [GitHub](https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop)
+- Documentation links will be provided
+- Example code in repository

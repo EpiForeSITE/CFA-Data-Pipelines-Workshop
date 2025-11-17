@@ -1,0 +1,469 @@
+---
+title: "Data Cleaning"
+subtitle: "CFA Data Pipelines Workshop - Week 4"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    chalkboard: true
+    preview-links: auto
+---
+
+## Overview
+
+Today's topics:
+
+- Common data quality issues
+- Missing data strategies
+- Data validation
+- Data transformation
+- Documentation and reproducibility
+
+## Why Data Cleaning?
+
+> "Data scientists spend 80% of their time cleaning data"
+
+**Real data is messy:**
+
+- Missing values
+- Inconsistent formats
+- Duplicates
+- Outliers
+- Invalid entries
+
+## Common Data Quality Issues
+
+1. **Missing data**: NULL, empty strings, placeholder values
+2. **Duplicates**: Same record multiple times
+3. **Inconsistency**: Different formats for same data
+4. **Outliers**: Extreme or impossible values
+5. **Type mismatches**: Numbers stored as strings
+6. **Encoding issues**: Character encoding problems
+
+## Missing Data
+
+### Types of Missing Data
+
+- **MCAR**: Missing Completely At Random
+- **MAR**: Missing At Random
+- **MNAR**: Missing Not At Random
+
+Understanding the type helps choose the right strategy.
+
+## Handling Missing Data
+
+### Python (pandas)
+
+```python
+import pandas as pd
+
+# Detect missing values
+df.isnull().sum()
+
+# Drop rows with any missing values
+df.dropna()
+
+# Drop rows where specific column is missing
+df.dropna(subset=['important_column'])
+
+# Fill missing values
+df.fillna(0)  # Fill with 0
+df.fillna(df.mean())  # Fill with mean
+df.fillna(method='ffill')  # Forward fill
+```
+
+## Handling Missing Data (R)
+
+```r
+library(dplyr)
+
+# Detect missing values
+summary(df)
+sum(is.na(df$column))
+
+# Drop rows with missing values
+df_clean <- df %>% drop_na()
+
+# Fill missing values
+df <- df %>%
+  mutate(
+    column = ifelse(is.na(column), 0, column)
+  )
+
+# Fill with mean
+df <- df %>%
+  mutate(
+    column = ifelse(is.na(column), mean(column, na.rm = TRUE), column)
+  )
+```
+
+## Duplicates
+
+### Identifying and Removing
+
+```python
+# Python
+# Find duplicates
+duplicates = df.duplicated()
+print(f"Found {duplicates.sum()} duplicates")
+
+# Remove duplicates
+df_clean = df.drop_duplicates()
+
+# Remove duplicates based on specific columns
+df_clean = df.drop_duplicates(subset=['id', 'date'])
+
+# Keep last occurrence
+df_clean = df.drop_duplicates(keep='last')
+```
+
+## Data Type Conversion
+
+```python
+# Python
+# Convert to numeric (invalid -> NaN)
+df['price'] = pd.to_numeric(df['price'], errors='coerce')
+
+# Convert to datetime
+df['date'] = pd.to_datetime(df['date'])
+
+# Convert to string
+df['id'] = df['id'].astype(str)
+
+# Category type for efficiency
+df['category'] = df['category'].astype('category')
+```
+
+## String Cleaning
+
+```python
+# Python
+# Remove whitespace
+df['name'] = df['name'].str.strip()
+
+# Lowercase
+df['email'] = df['email'].str.lower()
+
+# Replace characters
+df['phone'] = df['phone'].str.replace(r'[^0-9]', '', regex=True)
+
+# Extract patterns
+df['area_code'] = df['phone'].str.extract(r'^(\d{3})')
+```
+
+## Data Validation
+
+### Define Expected Schema
+
+```python
+# Python with pandera
+import pandera as pa
+
+schema = pa.DataFrameSchema({
+    "id": pa.Column(int, pa.Check.greater_than(0)),
+    "name": pa.Column(str, pa.Check.str_length(min_value=1)),
+    "email": pa.Column(str, pa.Check.str_matches(r'^[^@]+@[^@]+\.[^@]+')),
+    "age": pa.Column(int, pa.Check.in_range(min_value=0, max_value=120)),
+    "status": pa.Column(str, pa.Check.isin(['active', 'inactive']))
+})
+
+# Validate
+validated_df = schema.validate(df)
+```
+
+## Outlier Detection
+
+```python
+# Python
+import numpy as np
+
+# Z-score method
+z_scores = np.abs((df['value'] - df['value'].mean()) / df['value'].std())
+outliers = df[z_scores > 3]
+
+# IQR method
+Q1 = df['value'].quantile(0.25)
+Q3 = df['value'].quantile(0.75)
+IQR = Q3 - Q1
+
+outliers = df[(df['value'] < Q1 - 1.5 * IQR) | 
+              (df['value'] > Q3 + 1.5 * IQR)]
+```
+
+## Standardization
+
+### Dates and Times
+
+```python
+# Python
+from datetime import datetime
+
+# Standardize date format
+df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y-%m-%d')
+
+# Extract components
+df['year'] = df['date'].dt.year
+df['month'] = df['date'].dt.month
+df['day_of_week'] = df['date'].dt.dayofweek
+```
+
+## Standardization (continued)
+
+### Units and Scales
+
+```python
+# Python
+# Convert units
+df['height_cm'] = df['height_inches'] * 2.54
+
+# Normalize to 0-1 range
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+df['normalized_value'] = scaler.fit_transform(df[['value']])
+
+# Standardize (mean=0, std=1)
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+df['standardized_value'] = scaler.fit_transform(df[['value']])
+```
+
+## Handling Inconsistencies
+
+```python
+# Python
+# Standardize categories
+mapping = {
+    'USA': 'United States',
+    'US': 'United States',
+    'U.S.A.': 'United States'
+}
+df['country'] = df['country'].replace(mapping)
+
+# Fix case inconsistencies
+df['status'] = df['status'].str.lower().str.strip()
+
+# Map to canonical values
+df['status'] = df['status'].map({
+    'active': 'active',
+    'act': 'active',
+    'inactive': 'inactive',
+    'inact': 'inactive'
+})
+```
+
+## Data Profiling
+
+Understand your data before cleaning:
+
+```python
+# Python
+# Basic statistics
+df.describe()
+
+# Value counts
+df['column'].value_counts()
+
+# Data types
+df.dtypes
+
+# Missing value summary
+df.isnull().sum()
+
+# Unique values
+df.nunique()
+```
+
+## Creating Data Quality Reports
+
+```python
+# Python
+def data_quality_report(df):
+    report = {
+        'total_rows': len(df),
+        'total_columns': len(df.columns),
+        'missing_values': df.isnull().sum().to_dict(),
+        'duplicate_rows': df.duplicated().sum(),
+        'memory_usage': df.memory_usage(deep=True).sum() / 1024**2,  # MB
+    }
+    
+    for col in df.select_dtypes(include=['number']).columns:
+        report[f'{col}_outliers'] = ((df[col] - df[col].mean()).abs() > 3 * df[col].std()).sum()
+    
+    return report
+
+print(data_quality_report(df))
+```
+
+## Pipeline Example
+
+```python
+def clean_data(df):
+    """Clean data pipeline"""
+    df = df.copy()
+    
+    # 1. Remove duplicates
+    df = df.drop_duplicates()
+    
+    # 2. Handle missing values
+    df['age'] = df['age'].fillna(df['age'].median())
+    df = df.dropna(subset=['id', 'name'])
+    
+    # 3. Standardize formats
+    df['email'] = df['email'].str.lower().str.strip()
+    df['date'] = pd.to_datetime(df['date'])
+    
+    # 4. Validate data types
+    df['id'] = df['id'].astype(int)
+    
+    # 5. Remove outliers
+    df = df[df['age'].between(0, 120)]
+    
+    return df
+```
+
+## Logging Changes
+
+Track what changed during cleaning:
+
+```python
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def clean_data_with_logging(df):
+    original_count = len(df)
+    logger.info(f"Starting with {original_count} rows")
+    
+    df = df.drop_duplicates()
+    logger.info(f"Removed {original_count - len(df)} duplicates")
+    
+    missing_before = df.isnull().sum().sum()
+    df = df.dropna(subset=['id'])
+    logger.info(f"Dropped {missing_before - df.isnull().sum().sum()} rows with missing critical fields")
+    
+    logger.info(f"Final dataset: {len(df)} rows")
+    return df
+```
+
+## Best Practices
+
+1. **Understand your data**: Profile before cleaning
+2. **Document decisions**: Why did you handle data this way?
+3. **Be reproducible**: Script your cleaning process
+4. **Validate assumptions**: Test data quality rules
+5. **Keep raw data**: Never modify original data
+6. **Version your data**: Track data changes
+7. **Automate**: Build reusable cleaning pipelines
+
+## Common Pitfalls
+
+- Deleting data without understanding why it's missing
+- Not documenting cleaning decisions
+- Over-cleaning (removing valid outliers)
+- Hardcoding values instead of using logic
+- Not validating cleaned data
+- Cleaning without understanding domain
+
+## Testing Data Quality
+
+```python
+# Python
+def test_data_quality(df):
+    """Run quality checks"""
+    assert not df['id'].duplicated().any(), "IDs must be unique"
+    assert df['age'].between(0, 120).all(), "Age must be 0-120"
+    assert df['email'].str.contains('@').all(), "Invalid email format"
+    assert not df[['id', 'name']].isnull().any().any(), "Critical fields missing"
+    print("All quality checks passed!")
+
+test_data_quality(clean_df)
+```
+
+## Documentation
+
+Document your cleaning process:
+
+```markdown
+# Data Cleaning Documentation
+
+## Source Data
+- File: raw_data.csv
+- Date: 2024-01-15
+- Rows: 10,000
+
+## Cleaning Steps
+1. Removed 150 duplicate rows based on ID
+2. Filled missing ages with median (35 years)
+3. Dropped 23 rows with missing IDs
+4. Standardized email to lowercase
+5. Converted dates to ISO format
+6. Removed 5 outliers (age > 120)
+
+## Final Dataset
+- Rows: 9,822
+- Quality score: 98%
+```
+
+## Hands-on Exercise
+
+Build a data cleaning pipeline:
+
+1. Load a messy dataset
+2. Profile the data
+3. Handle missing values
+4. Remove duplicates
+5. Validate and correct data types
+6. Remove outliers
+7. Document all changes
+8. Create a quality report
+
+## Real-world Example
+
+```python
+# Complete cleaning pipeline
+import pandas as pd
+import logging
+
+def clean_sales_data(input_file, output_file):
+    # Load
+    df = pd.read_csv(input_file)
+    logging.info(f"Loaded {len(df)} rows")
+    
+    # Clean
+    df = df.drop_duplicates(subset=['order_id'])
+    df['order_date'] = pd.to_datetime(df['order_date'])
+    df['total'] = pd.to_numeric(df['total'], errors='coerce')
+    df = df.dropna(subset=['order_id', 'total'])
+    df = df[df['total'] > 0]
+    
+    # Save
+    df.to_csv(output_file, index=False)
+    logging.info(f"Saved {len(df)} clean rows")
+    
+    return df
+```
+
+## Questions?
+
+Time for final project discussion!
+
+## Final Project Reminder
+
+Build a complete pipeline:
+
+1. Data acquisition (API or database)
+2. Data validation
+3. Data cleaning
+4. Error handling
+5. Logging
+6. Documentation
+
+Due: [See schedule]
+
+## Resources
+
+- [pandas Documentation](https://pandas.pydata.org/)
+- [Data Cleaning with Python](https://realpython.com/python-data-cleaning-numpy-pandas/)
+- [Tidy Data Principles](https://vita.had.co.nz/papers/tidy-data.pdf)
+- [Great Expectations](https://greatexpectations.io/) - Data validation framework
