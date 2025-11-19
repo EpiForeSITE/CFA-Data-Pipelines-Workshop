@@ -11,8 +11,8 @@ Welcome to the CFA Data Pipelines Workshop! This course will teach you essential
 In this workshop, you will learn:
 
 - **Data Pipeline Design**: Best practices for designing and implementing data pipelines
-- **API Integration**: How to acquire data from RESTful APIs
 - **Database Operations**: Querying and managing data in databases
+- **API Integration**: How to acquire data from RESTful APIs
 - **Data Cleaning**: Techniques for preparing and validating data for analysis
 
 ## Getting Started

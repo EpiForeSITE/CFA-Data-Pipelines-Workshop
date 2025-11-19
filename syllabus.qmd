@@ -6,11 +6,7 @@ title: "Syllabus"
 
 **Course Title**: CFA Data Pipelines Workshop
 
-**Instructor**: TBD
-
-**Contact**: TBD
-
-**Office Hours**: TBD
+**Instructor**: Andrew Redd, PhD
 
 ## Course Description
 
@@ -35,19 +31,19 @@ By the end of this course, students will be able to:
 - Pipeline design patterns
 - Tools and frameworks
 
-### Module 2: Data Acquisition from APIs
-- RESTful API fundamentals
-- Authentication methods (API keys, OAuth)
-- Handling pagination and rate limits
-- Error handling and retries
-- Practical examples with real APIs
-
-### Module 3: Database Queries
+### Module 2: Databases
 - SQL fundamentals review
 - Connecting to databases
 - Writing efficient queries
 - Working with ORMs
 - Transaction management
+
+### Module 3: Data Acquisition from APIs
+- RESTful API fundamentals
+- Authentication methods (API keys, OAuth)
+- Handling pagination and rate limits
+- Error handling and retries
+- Practical examples with real APIs
 
 ### Module 4: Data Cleaning
 - Common data quality issues
@@ -56,28 +52,12 @@ By the end of this course, students will be able to:
 - Data transformation and normalization
 - Documentation and reproducibility
 
-## Grading
-
-- Participation: 20%
-- Hands-on Exercises: 40%
-- Final Project: 40%
 
 ## Required Materials
 
 - Laptop with Python 3.8+ or R 4.0+ installed
 - Internet connection for API access
-- Text editor or IDE (VS Code, RStudio, or PyCharm recommended)
-
-## Course Policies
-
-### Attendance
-Regular attendance is expected. Please notify the instructor in advance if you cannot attend.
-
-### Academic Integrity
-All work must be your own. Collaboration is encouraged on exercises, but final submissions should reflect individual work.
-
-### Accessibility
-Students requiring accommodations should contact the instructor at the beginning of the course.
+- Text editor or IDE you are familiar with (VS Code, RStudio, or PyCharm recommended)
 
 ## Resources
 
