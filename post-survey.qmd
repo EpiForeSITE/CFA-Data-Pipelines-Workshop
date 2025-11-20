@@ -1,0 +1,46 @@
+---
+title: "Post-Workshop Survey"
+page-layout: article
+---
+
+
+## Instructions
+Please complete after the final session. Estimated time: 6–8 minutes. Your feedback measures learning gains and improves future workshops.
+
+---
+## Section 1: Learning Gains (Retain identical wording from pre for comparison)
+(Likert 1=Strongly Disagree … 5=Strongly Agree)
+1. I have built data workflows before.
+2. I can query databases confidently.
+3. I have retrieved data from REST APIs.
+4. I understand principles of data cleaning and validation.
+5. I can design a reproducible data structure.
+6. I feel confident troubleshooting data pipeline failures.
+7. I can choose appropriate tools for data acquisition.
+8. I can assess data quality issues systematically.
+9. I can document a pipeline for other users.
+
+## Section 2: Knowledge Check (Same items; optional randomized order)
+1. A data pipeline is best described as: (a) A single script; (b) A series of connected processes moving and transforming data; (c) A database schema; (d) A visualization tool.
+2. The HTTP status code 429 indicates: (a) Success; (b) Not Found; (c) Too Many Requests; (d) Unauthorized.
+3. In SQL, selecting unique values uses: (a) DISTINCT; (b) UNIQUE; (c) GROUP; (d) ONLY.
+4. Best first step when cleaning a dataset: (a) Delete all NAs; (b) Profile structure and summary statistics; (c) Normalize everything; (d) Load into production.
+5. An API rate limit is: (a) Maximum query complexity; (b) Restriction on number of requests per time window; (c) Disk quota; (d) Memory threshold.
+
+## Section 3: Satisfaction (Likert 1–5)
+1. The workshop met my expectations.
+2. The pacing was appropriate.
+3. The examples clarified the concepts.
+4. The slides/materials were well organized.
+5. I would recommend this workshop to others.
+
+## Section 4: Application & Impact
+1. How soon do you expect to apply what you learned? (Immediate, <1 month, 1–3 months, >3 months, Unsure)
+2. Which topic was MOST valuable? (APIs, Databases, Cleaning, Pipeline Design, Other)
+3. Which topic needs more depth next time? (APIs, Databases, Cleaning, Pipeline Design, Other)
+4. List one concrete change you will make to your current workflow. (long text)
+
+## Section 5: Open Feedback
+1. What was the most helpful part? (long text)
+2. What was least helpful / could be improved? (long text)
+3. Additional comments or suggestions. (long text)

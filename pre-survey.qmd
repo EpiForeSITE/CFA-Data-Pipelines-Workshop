@@ -1,0 +1,48 @@
+---
+title: "Pre-Workshop Survey"
+page-layout: article
+---
+
+> Replace this page with an embedded form (Google Forms / Microsoft Forms / Qualtrics) or connect the HTML form below to a handler (e.g. Formspree) before collecting responses.
+
+## Instructions
+Please complete this survey before the workshop begins. Your responses help tailor the instruction and measure learning gains. Estimated time: 5–7 minutes.
+
+---
+## Section 1: Background & Demographics
+#. Role / Title
+#. Years of experience with data, analytics, and programming (dropdown: None, <1, 1–2, 3–5, >5)
+#. Comfort with command line tools (Likert 1–5)
+
+## Section 2: Prior Experience (Likert 1=Never … 5=Expert)
+Rate your experience/comfort with the following languages
+1. R
+2. Python
+3. SQL
+
+Rate your experience with the following tasks:
+1. I have downloaded data from the internet.
+2. I can query databases confidently.
+3. I can retrieve data from REST APIs.
+4. I understand principles of data cleaning and validation.
+5. I can design a reproducible data structure.
+
+## Section 3: Self-Efficacy (Likert 1–5)
+1. I feel confident troubleshooting data pipeline failures.
+2. I can choose appropriate tools for data acquisition.
+3. I can assess data quality issues systematically.
+4. I can document a pipeline for other users.
+
+## Section 4: Knowledge Check (Multiple Choice)
+Select the best answer.
+1. A data pipeline is best described as: (a) A single script; (b) A series of connected processes moving and transforming data; (c) A database schema; (d) A visualization tool.
+2. The HTTP status code 429 indicates: (a) Success; (b) Not Found; (c) Too Many Requests; (d) Unauthorized.
+3. In SQL, selecting unique values uses: (a) DISTINCT; (b) UNIQUE; (c) GROUP; (d) ONLY.
+4. Best first step when cleaning a dataset: (a) Delete all NAs; (b) Profile structure and summary statistics; (c) Normalize everything; (d) Load into production.
+5. An API rate limit is: (a) Maximum query complexity; (b) Restriction on number of requests per time window; (c) Disk quota; (d) Memory threshold.
+
+## Section 5: Expectations
+1. What is your primary goal for attending? (long text)
+2. Which topic are you MOST interested in? (Single choice: APIs, Databases, Cleaning, Pipeline Design, Other)
+3. Any specific questions you hope get answered? (long text)
+
