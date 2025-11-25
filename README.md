@@ -56,22 +56,26 @@ This will start a local server (typically at http://localhost:4200) and open the
 
 ## Course Content
 
-### Week 1: Introduction to Data Pipelines
+### Session 1: Introduction to Data Pipelines
+
 - Pipeline design patterns
 - Best practices
 - Tools and frameworks
 
-### Week 2: Data Acquisition from APIs
+### Session 2: Data Acquisition from APIs
+
 - RESTful APIs
 - Authentication
 - Pagination and rate limiting
 
-### Week 3: Database Queries
+### Session 3: Database Queries
+
 - SQL fundamentals
 - ORMs
 - Query optimization
 
-### Week 4: Data Cleaning
+### Session 4: Data Cleaning
+
 - Data quality issues
 - Missing data handling
 - Validation and transformation

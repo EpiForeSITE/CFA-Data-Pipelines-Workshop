@@ -7,13 +7,17 @@ format:
     slide-number: true
     chalkboard: true
     preview-links: auto
+    logo: ../ForeSITE-logo.png
+knitr:
+  opts_chunk:
+    echo: true
 ---
 
 ## Welcome!
 
 Welcome to the CFA Data Pipelines Workshop
 
-- Introduction to course objectives
+- Introduction to workshop objectives
 - Overview of data pipelines
 - Setting up your environment
 
@@ -24,6 +28,20 @@ A **data pipeline** is a series of data processing steps where:
 - Data is ingested from one or more sources
 - Data is transformed or processed
 - Data is loaded into a destination for analysis or storage
+
+## Disclaimer
+
+The views and opinions expressed in this presentation are those of the presenter and do not necessarily reflect the official policy or position of the University of Utah, the Center for Forecasting and Outbreak Analytics (CFA), or any other affiliated organizations.
+
+
+## AI Disclosure
+
+This presentation was created with the assistance of artificial intelligence tools, including:
+
+- GitHub Copilot for code generation and suggestions
+- Large language models for content refinement and structure
+
+All content has been reviewed and validated by the presenter.
 
 ## Why Data Pipelines?
 
@@ -68,7 +86,7 @@ A **data pipeline** is a series of data processing steps where:
 - **APIs**: REST, GraphQL, SOAP
 - **Databases**: SQL, NoSQL
 - **Files**: CSV, JSON, XML, Parquet
-- **Streaming**: Kafka, message queues
+- **Streaming**: Kafka, message queues, logs
 - **Web scraping**: HTML parsing
 
 ## Pipeline Components
@@ -91,6 +109,97 @@ flowchart LR
 5. **Testing**: Validate data quality
 6. **Documentation**: Clear pipeline logic
 
+## Idempotency (Definition)
+
+> An operation (task, step, or entire pipeline run) is **idempotent** if executing it multiple times with the same inputs results in the same final state and does not create duplicate side effects (e.g., repeated inserts, duplicate files, double-charged API calls).
+
+## Idempotency Key strategies:
+
+- Use upserts/merges instead of plain inserts (match on a natural or surrogate key).
+- Write outputs atomically (temp file then rename) to avoid partial artifacts.
+- Make transformations pure: avoid relying on hidden global state or timestamps unless required.
+- Guard external side effects (e.g., check if data already fetched; hash content before reprocessing).
+- Design idempotent DAG tasks: each task declares its inputs and outputs; reruns only recompute what is invalidated.
+
+Benefits: safer reruns after failure, reproducibility, easier recovery, and confidence in scheduled (e.g., nightly) executions.
+
+## Error Handling Strategies
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Detection**
+
+- Input validation
+- Schema checks
+- Data quality tests
+- Exception catching
+:::
+
+::: {.column width="50%"}
+**Recovery**
+
+- Retry with backoff
+- Dead letter queues (i.e. Human intervention needed queue)
+- Partial success handling
+- Alerting and notifications
+:::
+
+::::
+
+## Logging and Monitoring
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Logging**
+
+- Structured logs (JSON)
+- Log levels (DEBUG, INFO, WARNING, ERROR)
+- Contextual information (timestamps, user IDs)
+- Centralized log storage
+:::
+
+::: {.column width="50%"}
+**Monitoring**
+
+- Pipeline execution metrics
+- Data quality metrics
+- Performance dashboards
+- Alerting thresholds
+- SLA (Service Level Agreement) tracking
+:::
+
+::::
+
+## Documentation Best Practices
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**What to Document**
+
+- Pipeline purpose and business logic
+- Data sources and schemas
+- Transformation rules
+- Dependencies and prerequisites
+- Expected runtime and resources
+- Contact information
+:::
+
+::: {.column width="50%"}
+**How to Document**
+
+- README files in repositories
+- Inline code comments
+- Docstrings for functions
+- Data dictionaries
+- Architecture diagrams
+- Runbooks for operators (Advanced)
+:::
+
+::::
+
 ## Tools and Frameworks
 
 :::: {.columns}
@@ -98,17 +207,17 @@ flowchart LR
 ::: {.column width="50%"}
 **Python**
 
-- Apache Airflow
-- Luigi
-- Prefect
-- Dagster
+- [Apache Airflow](https://airflow.apache.org/)
+- [Luigi](https://luigi.readthedocs.io/)
+- [Prefect](https://www.prefect.io/)
+- [Dagster](https://dagster.io/)
 :::
 
 ::: {.column width="50%"}
 **R**
 
-- targets
-- drake (legacy)
+- [targets](https://docs.ropensci.org/targets/)
+- [drake](https://books.ropensci.org/drake/) (legacy, superceeded by targets.)
 - custom workflows
 :::
 
@@ -144,13 +253,209 @@ Let's build a simple pipeline:
 
 We'll start with the basics and build complexity throughout the course.
 
+## Example Pipeline: Weather Data
+
+### Fetch weather data → Clean → Store
+
+We will be fetching daily precipitation for Brighton Ski Resort for the last year.
+
+**R Example:**
+
+```{r}
+## Needed Packages #####
+library(httr)       #< interacting with API
+library(jsonlite)   #< processing API results into usable data
+library(dplyr)      #< data cleaning and processing
+library(DBI)        #< generic database interface
+library(RSQLite)    #< specific database we will use
+library(ggplot2)    #< for visualization
+```
+
+## R Example Pipeline (continued)
+
+**Step 1: Fetch data from Open-Meteo API (Brighton Ski Resort)**
+```{r}
+end_date <- Sys.Date()
+start_date <- end_date - 365
+
+url <- "https://archive-api.open-meteo.com/v1/archive"
+response <- GET(url, query = list(
+  latitude = 40.5981,
+  longitude = -111.5831,
+  start_date = format(start_date, "%Y-%m-%d"),
+  end_date = format(end_date, "%Y-%m-%d"),
+  daily = "precipitation_sum,snowfall_sum",
+  timezone = "America/Denver"
+))
+
+data <- content(response, "parsed")
+```
+
+## R Example Pipeline (continued)
+**Step 2: Clean and validate**
+
+```{r}
+df <- data.frame(
+  date = as.Date(unlist(data$daily$time)),
+  precipitation_mm = unlist(data$daily$precipitation_sum),
+  snowfall_cm = unlist(data$daily$snowfall_sum)
+)
+
+df <- df %>%
+  # Remove nulls and validate ranges
+  filter(!is.na(precipitation_mm), !is.na(snowfall_cm)) %>%
+  filter(precipitation_mm >= 0, snowfall_cm >= 0) %>%
+  # Add derived variables
+  mutate(
+    snow_water_equiv_mm = snowfall_cm * 10,
+    rain_mm = pmax(0, precipitation_mm - snow_water_equiv_mm)
+  )
+```
+
+## R Example Pipeline (continued)
+**Step 3: Store in SQLite database**
+```{r}
+conn <- dbConnect(RSQLite::SQLite(), "weather_data.db")
+dbWriteTable(conn, "brighton_weather", df, overwrite = TRUE)
+dbDisconnect(conn)
+
+cat(sprintf("Stored %d records\n", nrow(df)))
+cat(sprintf("Total snowfall: %.1f cm\n", sum(df$snowfall_cm)))
+```
+
+## R Example Pipeline (finished)
+
+**Step 4: Do something with the data**
+```{r}
+#| label: brighton-plot
+#| echo: true
+#| eval: false
+# Create stacked area plot
+ggplot(df, aes(x = date)) +
+  geom_area(aes(y = rain_mm, fill = "Rain"), alpha = 0.7) +
+  geom_area(aes(y = snow_water_equiv_mm, fill = "Snow"), alpha = 0.7) +
+  scale_fill_manual(values = c("Rain" = "steelblue", "Snow" = "lightblue")) +
+  labs(
+    title = "Brighton Ski Resort: Snow vs Rain Precipitation",
+    x = "Date",
+    y = "Precipitation (mm water equivalent)",
+    fill = "Type"
+  ) +
+  theme_minimal()
+```
+
+## R Example Pipeline (plot)
+
+```{r}
+#| ref.label: brighton-plot
+#| echo: false
+#| eval: true
+```
+
+## Python Example Pipeline: Weather Data
+
+```{python}
+## Needed Packages #####
+import requests     # interacting with API
+import pandas as pd # data cleaning and processing
+import sqlite3      # database interface
+from datetime import datetime, timedelta
+```
+
+## Python Example Pipeline (continued)
+
+**Step 1: Fetch data from Open-Meteo API (Brighton Ski Resort)**
+
+```{python}
+end_date = datetime.now()
+start_date = end_date - timedelta(days=365)
+
+url = "https://archive-api.open-meteo.com/v1/archive"
+params = {
+    'latitude': 40.5981,
+    'longitude': -111.5831,
+    'start_date': start_date.strftime('%Y-%m-%d'),
+    'end_date': end_date.strftime('%Y-%m-%d'),
+    'daily': 'precipitation_sum,snowfall_sum',
+    'timezone': 'America/Denver'
+}
+
+response = requests.get(url, params=params)
+data = response.json()
+```
+
+## Python Example Pipeline (continued)
+
+**Step 2: Clean and validate**
+
+```{python}
+df = pd.DataFrame({
+    'date': pd.to_datetime(data['daily']['time']),
+    'precipitation_mm': data['daily']['precipitation_sum'],
+    'snowfall_cm': data['daily']['snowfall_sum']
+})
+
+# Remove nulls and validate ranges
+df = df.dropna()
+df = df[(df['precipitation_mm'] >= 0) & (df['snowfall_cm'] >= 0)]
+
+# Add derived variables
+df['snow_water_equiv_mm'] = df['snowfall_cm'] * 10
+df['rain_mm'] = (df['precipitation_mm'] - df['snow_water_equiv_mm']).clip(lower=0)
+```
+
+## Python Example Pipeline (continued)
+
+**Step 3: Store in SQLite database**
+
+```{python}
+conn = sqlite3.connect('weather_data_py.db')
+df.to_sql('brighton_weather', conn, if_exists='replace', index=False)
+conn.close()
+
+print(f"Stored {len(df)} records")
+print(f"Total snowfall: {df['snowfall_cm'].sum():.1f} cm")
+```
+
+## Python Example Pipeline (finished)
+
+**Step 4: Do something with the data**
+
+```{python}
+#| label: brighton-plot-py
+#| echo: true
+#| eval: false
+import matplotlib.pyplot as plt
+
+# Create stacked area plot
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.fill_between(df['date'], 0, df['rain_mm'], 
+                label='Rain', alpha=0.7, color='steelblue')
+ax.fill_between(df['date'], df['rain_mm'], 
+                df['rain_mm'] + df['snow_water_equiv_mm'],
+                label='Snow', alpha=0.7, color='lightblue')
+ax.set_xlabel('Date')
+ax.set_ylabel('Precipitation (mm water equivalent)')
+ax.set_title('Brighton Ski Resort: Snow vs Rain Precipitation')
+ax.legend()
+plt.tight_layout()
+plt.show()
+```
+
+## Python Example Pipeline (plot)
+
+```{python}
+#| ref.label: brighton-plot-py
+#| echo: false
+#| eval: true
+```
+
 ## Course Structure
 
-- **Week 1**: Introduction (today!)
-- **Week 2**: Data Acquisition from APIs
-- **Week 3**: Database Queries
-- **Week 4**: Data Cleaning
-- **Final Project**: Complete pipeline
+- **Session 1**: Introduction (Now!)
+- **Session 2**: Data Acquisition from APIs
+- **Session 3**: Database Queries
+- **Session 4**: Data Cleaning
 
 ## Questions?
 

@@ -7,6 +7,7 @@ format:
     slide-number: true
     chalkboard: true
     preview-links: auto
+    logo: ../ForeSITE-logo.png
 ---
 
 ## Overview
@@ -244,37 +245,64 @@ with open('data.json', 'w') as f:
     json.dump(data, f, indent=2)
 ```
 
-## Real-world Example
+## Real-world Example: Weather Data
 
-### GitHub API
+### Open-Meteo Historical API (Brighton Ski Resort)
+
+Brighton Mountain Resort coordinates: 40.5981° N, 111.5831° W
 
 ```python
 import requests
+import pandas as pd
+from datetime import datetime, timedelta
 
-# Get repository information
-url = 'https://api.github.com/repos/python/cpython'
-response = requests.get(url)
-repo = response.json()
+# Calculate date range (last 365 days)
+end_date = datetime.now()
+start_date = end_date - timedelta(days=365)
 
-print(f"Name: {repo['name']}")
-print(f"Stars: {repo['stargazers_count']}")
-print(f"Language: {repo['language']}")
+# API endpoint
+url = "https://archive-api.open-meteo.com/v1/archive"
+
+params = {
+    'latitude': 40.5981,
+    'longitude': -111.5831,
+    'start_date': start_date.strftime('%Y-%m-%d'),
+    'end_date': end_date.strftime('%Y-%m-%d'),
+    'daily': 'precipitation_sum,snowfall_sum',
+    'timezone': 'America/Denver'
+}
+
+response = requests.get(url, params=params)
+data = response.json()
+
+# Convert to DataFrame
+df = pd.DataFrame({
+    'date': data['daily']['time'],
+    'precipitation_mm': data['daily']['precipitation_sum'],
+    'snowfall_cm': data['daily']['snowfall_sum']
+})
+
+print(f"Total precipitation: {df['precipitation_mm'].sum():.1f} mm")
+print(f"Total snowfall: {df['snowfall_cm'].sum():.1f} cm")
 ```
 
 ## Hands-on Exercise
 
-Build a script that:
+Build a script that fetches historical weather data:
 
-1. Fetches data from a public API
-2. Implements pagination
-3. Handles errors with retries
-4. Saves results to a file
+1. Use Open-Meteo Archive API for a location of your choice
+2. Fetch daily precipitation/snowfall for the past year
+3. Handle errors with retries and timeouts
+4. Convert to a pandas DataFrame
+5. Calculate summary statistics (total, mean, max)
+6. Save results to CSV
 
-Suggested APIs:
+**Bonus:** Compare multiple ski resorts or visualize seasonal patterns
 
-- GitHub API
-- OpenWeather API
-- REST Countries API
+Coordinates for Utah resorts:
+- Brighton: 40.5981, -111.5831
+- Alta: 40.5885, -111.6381
+- Snowbird: 40.5803, -111.6573
 
 ## Common Pitfalls
 
