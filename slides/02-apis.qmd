@@ -576,7 +576,7 @@ sequenceDiagram
 - Set callback URL (e.g., `http://localhost:8000/callback`)
 - Get Client ID and Client Secret
 
-**Step 2: Authorization URL**
+**Step 2: Create OAuth Client and Get Token**
 ```{r}
 #| eval: false
 client <- oauth_client(
@@ -594,8 +594,7 @@ token <- oauth_flow_auth_code(
 
 ## OAuth 2.0 Implementation (continued)
 
-
-**Step 4: Use Token**
+**Step 3: Use Token**
 ```{r}
 #| eval: false
 # Use the access token to make authenticated requests
@@ -650,43 +649,6 @@ print(user_info$login)
 
 - R: `02-github-api-auth-starter.R` and `02-github-api-auth-solution.R`
 - Python: `02-github-api-auth-starter.py` and `02-github-api-auth-solution.py`
-
-## Query Parameters
-
-### API Keys
-
-```r
-api_key <- Sys.getenv("API_KEY")
-response <- request(url) |>
-  req_auth_bearer_token(api_key) |>
-  req_perform()
-```
-
-### OAuth 2.0
-
-More complex but more secure:
-
-1. User authorizes application
-2. Application receives access token
-3. Token used for API requests
-4. Token can be refreshed
-
-## Query Parameters
-
-Add filters and options to requests:
-
-Python:
-```python
-params = {
-    'limit': 100,
-    'offset': 0,
-    'filter': 'status:active'
-}
-
-response = requests.get(url, params=params)
-```
-
-URL: `https://api.example.com/data?limit=100&offset=0&filter=status:active`
 
 ## Pagination
 
