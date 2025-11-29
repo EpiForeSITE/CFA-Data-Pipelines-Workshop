@@ -25,14 +25,14 @@ Today's topics:
 - **Structured storage**: Organized data
 - **Query power**: Filter and aggregate
 - **Concurrency**: Multiple users
-- **ACID guarantees**: Data integrity
+- **ACID guarantees**: Data integrity: (Atomicity, Consistency, Isolation, and Durability)
 - **Scalability**: Handle large datasets
 
 ## Database Types
 
 :::: {.columns}
 
-::: {.column width="50%"}
+::: {.column width="33%"}
 **Relational (SQL)**
 
 - PostgreSQL
@@ -41,7 +41,7 @@ Today's topics:
 - SQL Server
 :::
 
-::: {.column width="50%"}
+::: {.column width="33%"}
 **Non-relational (NoSQL)**
 
 - MongoDB
@@ -50,9 +50,83 @@ Today's topics:
 - DynamoDB
 :::
 
+::: {.column width="33%"}
+**Specialized**
+
+- Neo4j (Graph)
+- Apache Spark (Big Data)
+- Hadoop (Big Data)
+- InfluxDB (Time-series)
+:::
+
 ::::
 
 Focus today: SQL databases
+
+## Relational Databases
+
+**What makes a database "relational"?**
+
+- Data organized into **tables** (relations)
+- Each table has **rows** (records) and **columns** (fields)
+- Tables connected through **relationships**
+- **Primary keys** uniquely identify rows
+- **Foreign keys** link tables together
+- Enforces **data integrity** and reduces redundancy
+
+## Relational Database Example
+
+Healthcare system with related tables:
+
+```{mermaid}
+%%| fig-width: 10
+%%| fig-height: 4
+erDiagram
+    direction LR
+    PATIENTS ||--o{ OUTPATIENT_VISITS : has
+    OUTPATIENT_VISITS }o--|| PROVIDERS : seen_by
+    OUTPATIENT_VISITS }o--|| DIAGNOSES : assigned
+    
+    PATIENTS {
+        int patient_id PK "🔑"
+        string name
+        date date_of_birth
+        string insurance_id
+    }
+    
+    OUTPATIENT_VISITS {
+        int visit_id PK "🔑"
+        int patient_id FK "🔗"
+        int provider_id FK "🔗"
+        int diagnosis_id FK "🔗"
+        date visit_date
+    }
+    
+    PROVIDERS {
+        int provider_id PK "🔑"
+        string name
+        string specialty
+    }
+    
+    DIAGNOSES {
+        int diagnosis_id PK "🔑"
+        string icd_code
+        string description
+    }
+```
+
+## Workshop Database
+
+**healthcare.db** - Sample SQLite database
+
+Run `exercises/03-healthcare-database.py` to create:
+
+- **10 patients** with demographics and insurance
+- **7 providers** across 4 specialties
+- **10 diagnoses** with ICD-10 codes
+- **25 outpatient visits** over 6 months
+
+All examples today use this database!
 
 ## SQL Fundamentals
 
@@ -69,76 +143,77 @@ Basic operations:
 
 ```sql
 -- Basic select
-SELECT column1, column2 FROM table_name;
+SELECT patient_id, name FROM patients;
 
 -- All columns
-SELECT * FROM users;
+SELECT * FROM patients;
 
 -- With conditions
-SELECT name, email 
-FROM users 
-WHERE status = 'active';
+SELECT name, date_of_birth 
+FROM patients 
+WHERE insurance_id IS NOT NULL;
 
 -- With sorting
-SELECT name, created_at 
-FROM users 
-ORDER BY created_at DESC;
+SELECT name, visit_date 
+FROM outpatient_visits 
+ORDER BY visit_date DESC;
 ```
 
 ## Filtering with WHERE
 
 ```sql
 -- Comparison operators
-SELECT * FROM products WHERE price > 100;
+SELECT * FROM outpatient_visits WHERE visit_date > '2024-01-01';
 
 -- Multiple conditions
-SELECT * FROM orders 
-WHERE status = 'shipped' 
-  AND total > 50;
+SELECT * FROM outpatient_visits 
+WHERE visit_date >= '2024-01-01' 
+  AND provider_id = 5;
 
 -- Pattern matching
-SELECT * FROM users 
-WHERE email LIKE '%@example.com';
+SELECT * FROM patients 
+WHERE name LIKE 'Smith%';
 
 -- IN clause
-SELECT * FROM products 
-WHERE category IN ('electronics', 'books');
+SELECT * FROM providers 
+WHERE specialty IN ('Cardiology', 'Neurology');
 ```
 
 ## Aggregation
 
 ```sql
 -- Count records
-SELECT COUNT(*) FROM users;
+SELECT COUNT(*) FROM patients;
 
--- Sum and average
+-- Count visits per patient
 SELECT 
-    AVG(price) as avg_price,
-    SUM(quantity) as total_quantity
-FROM products;
+    patient_id,
+    COUNT(*) as visit_count
+FROM outpatient_visits
+GROUP BY patient_id;
 
--- Group by
+-- Group by provider specialty
 SELECT 
-    category,
-    COUNT(*) as count,
-    AVG(price) as avg_price
-FROM products
-GROUP BY category;
+    specialty,
+    COUNT(*) as provider_count
+FROM providers
+GROUP BY specialty;
 ```
 
 ## Joins
 
 ```sql
 -- Inner join
-SELECT u.name, o.total
-FROM users u
-INNER JOIN orders o ON u.id = o.user_id;
+SELECT p.name, v.visit_date, pr.name as provider_name
+FROM patients p
+INNER JOIN outpatient_visits v ON p.patient_id = v.patient_id
+INNER JOIN providers pr ON v.provider_id = pr.provider_id;
 
 -- Left join
-SELECT u.name, COUNT(o.id) as order_count
-FROM users u
-LEFT JOIN orders o ON u.id = o.user_id
-GROUP BY u.name;
+SELECT p.name, COUNT(v.visit_id) as visit_count
+FROM patients p
+LEFT JOIN outpatient_visits v ON p.patient_id = v.patient_id
+GROUP BY p.name;
 ```
 
 ## Connecting to Databases
