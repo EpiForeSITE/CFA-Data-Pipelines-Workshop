@@ -8,11 +8,16 @@ format:
     chalkboard: true
     preview-links: auto
     logo: ../ForeSITE-logo.png
+    width: 1600
+    height: 900
+knitr:
+  opts_chunk:
+    echo: true
 ---
 
 ## Overview
 
-Today's topics:
+This sessions's topics:
 
 - RESTful API fundamentals
 - HTTP methods and status codes
@@ -28,6 +33,35 @@ Today's topics:
 - A way for applications to communicate
 - Defines methods and data structures
 - REST is most common web API style
+- GraphQL is gaining popularity
+- Other API styles are irrelevant to this presentation
+
+## API Process
+
+```{mermaid}
+sequenceDiagram
+    actor U as User
+    participant C as Client
+    participant A as Authentication Server
+    participant H as API Server
+    box pink Restricted
+    participant S as SQL Server
+    end
+    U->>C: I need data
+    C->>A: Let me in?
+    A->>C: What's the password? 
+    C->>U: Password?
+    U->>C: ******
+    C->>A: credentials
+    A->>C: token
+    C->>H: I can haz data? + token
+    H->>A: token good?
+    A->>H: token is good.
+    H->>S: Data?
+    S->>H: Data!
+    H->>C: Data
+    C->>U: Show data
+```
 
 ## RESTful APIs
 
@@ -40,26 +74,201 @@ Key concepts:
 - Stateless communication
 - Standard data formats (JSON, XML)
 
-## HTTP Methods
+## GraphQL APIs
 
-| Method | Purpose | Idempotent |
-|--------|---------|-----------|
-| GET | Retrieve data | Yes |
-| POST | Create resource | No |
-| PUT | Update/replace | Yes |
-| PATCH | Partial update | No |
-| DELETE | Remove resource | Yes |
+**GraphQL** = Query Language for APIs
 
-## HTTP Status Codes
+Key concepts:
+
+- Single endpoint
+- Client specifies exact data needed
+- Strongly typed schema
+- No over-fetching or under-fetching
+- Introspective (self-documenting)
+
+## REST vs GraphQL
 
 :::: {.columns}
 
 ::: {.column width="50%"}
+**REST**
+
+- Multiple endpoints
+- Fixed data structure
+- Over/under-fetching common
+- Easier to cache
+- Simpler to learn
+- Widely adopted
+:::
+
+::: {.column width="50%"}
+**GraphQL**
+
+- Single endpoint
+- Flexible queries
+- Precise data fetching
+- More complex caching
+- Steeper learning curve
+- Growing adoption
+:::
+
+::::
+
+## REST API
+
+**CRUD** = Create, Read, Update, and Delete
+
+**REST API Components**
+
+- **Endpoint**: URL where resource can be accessed
+- **Method**: HTTP verb (GET, POST, PUT, DELETE)
+- **Headers**: Metadata (auth, content-type)
+- **Query/Body**: Data sent with request (POST, PUT)
+- **Response**: Data returned by server
+    + **Status Code**: Result of request (200, 404, 500)
+    + **Headers**: Metadata (content-type)
+    + **Body**: The data.
+
+## HTTP Methods
+| Method | Purpose | Idempotent | Returns Data |
+|--------|---------|-----------|--------------|
+| GET | Retrieve data | Yes | Yes |
+| POST | Create resource | No | Depends |
+| PUT | Update/replace | Yes | Depends |
+| PATCH | Partial update | No | Depends |
+| DELETE | Remove resource | Yes | No |
+
+
+## Common Request Headers
+
+| Header | Purpose | Example |
+|--------|---------|---------|
+| Authorization | Authentication credentials | `Bearer token123` |
+| Content-Type | Format of request body | `application/json` |
+| Accept | Desired response format | `application/json` |
+| User-Agent | Client identification | `MyApp/1.0` |
+
+
+## Query Parameters
+
+URL parameters that modify API requests:
+
+**Format**: `<<URL>>?param1=value1&param2=value2`
+
+**Common Uses**:
+
+- Filtering: `?status=active&type=user`
+- Sorting: `?sort=name&order=asc`
+- Pagination: `?page=2&limit=50`
+- Field selection: `?fields=id,name,email`
+
+**Example**:
+
+[`https://www.google.com/search?`*q=url+parameters+example*](https://www.google.com/search?q=url+parameters+example)
+
+## Request Body
+
+Used with POST, PUT, and PATCH methods to send data to the server.
+
+### JSON Body Example
+
+```json
+{
+    "title": "CFA-Data-Pipelines-Workshop",
+    "start_date": "2025-12-02"
+}
+```
+
+## Revisit Example
+
+```{r}
+#| echo: false
+## Needed Packages #####
+library(httr2)       #< interacting with API
+library(jsonlite)   #< processing API results into usable data
+library(dplyr)      #< data cleaning and processing
+library(DBI)        #< generic database interface
+library(RSQLite)    #< specific database we will use
+library(ggplot2)    #< for visualization
+```
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Code:**
+
+```{r}
+#| echo: true
+end_date <- Sys.Date()
+start_date <- end_date - 365
+
+url <- "https://archive-api.open-meteo.com/v1/archive"
+response <- request(url) |>
+  req_url_query(
+    latitude = 40.5981,
+    longitude = -111.5831,
+    start_date = format(start_date, "%Y-%m-%d"),
+    end_date = format(end_date, "%Y-%m-%d"),
+    daily = "precipitation_sum,snowfall_sum",
+    timezone = "America/Denver"
+  ) |>
+  httr2::req_perform()
+```
+
+
+:::
+
+::: {.column width="50%"}
+**Components:**
+
+- **Endpoint**: `r url`
+- **Method**: GET
+- **Headers**: *None*
+- **Query**: 
+    + `latitude=40.5981&`
+    + `longitude=-111.5831&`
+    + `start_date=2024-11-26&`
+    + `end_date=2025-11-26&`
+    + `daily=precipitation_sum%2Csnowfall_sum&`
+    + `timezone=America%2FDenver`
+
+:::
+::::
+
+## API Response
+
+The data returned by the server after processing a request.
+
+**Response Components**
+
+- **Status Code**: Indicates success or failure (200, 404, etc.)
+- **Headers**: Metadata about the response (content-type, rate limits)
+- **Body**: The actual data (usually JSON or XML)
+
+```{r}
+#| echo: true
+names(response)
+```
+
+
+## HTTP Status Codes
+
+```{r}
+#| echo: true
+response$status_code
+```
+:::: {.columns}
+
+::: {.column width="33%"}
 **Success (2xx)**
 
 - 200 OK
 - 201 Created
 - 204 No Content
+
+:::
+
+::: {.column width="33%"}
 
 **Client Errors (4xx)**
 
@@ -69,7 +278,7 @@ Key concepts:
 - 429 Too Many Requests
 :::
 
-::: {.column width="50%"}
+::: {.column width="33%"}
 **Server Errors (5xx)**
 
 - 500 Internal Server Error
@@ -79,42 +288,378 @@ Key concepts:
 
 ::::
 
-## Making API Requests
+## Response Headers
 
-### Python Example
-
-```python
-import requests
-
-response = requests.get('https://api.example.com/data')
-
-if response.status_code == 200:
-    data = response.json()
-    print(data)
-else:
-    print(f"Error: {response.status_code}")
+```{r}
+#| echo: true
+glimpse(response$headers)
 ```
 
-### R Example
+| Header | Purpose | Example |
+|--------|---------|---------|
+| Content-Type | Format of response | `application/json` |
+| X-RateLimit-Limit | Max requests allowed | `1000` |
+| X-RateLimit-Remaining | Requests left | `742` |
+| X-RateLimit-Reset | When limit resets | `1640995200` |
 
-```r
-library(httr)
 
-response <- GET('https://api.example.com/data')
 
-if (status_code(response) == 200) {
-    data <- content(response, "parsed")
-    print(data)
+
+## Response Body
+
+* Usually JSON or XML
+* Defined by the header `Content-Type`
+
+**POST example**
+```json
+{
+    "id": 1,
+    "title": "CFA-Data-Pipelines-Workshop",
+    "start_date": "2025-12-02"
 }
 ```
 
-## Authentication
+**Weather example**
+```json
+{
+	"latitude":40.597538, "longitude":-111.64073,
+	"generationtime_ms":24.38044548034668,
+	"utc_offset_seconds":-25200, "timezone":"America/Denver", "timezone_abbreviation":"GMT-7",
+	"elevation":2680.0,
+	"daily_units":{"time":"iso8601", "precipitation_sum":"mm", "snowfall_sum":"cm"},
+	"daily":{
+		"time":["2024-11-26","2024-11-27","2024-11-28",...],
+		"precipitation_sum":[19.20,0.50,0.00,0.00,0.00,...],
+		"snowfall_sum":[13.44,0.35,0.00,0.00,0.00,0.00,...]
+	}
+}
+```
+*Shwon with manual formatting and truncation.*
+
+
+## Authentication Methods
+
+Different ways APIs verify client identity and authorize access:
+
+**Common Authentication Methods:**
+
+- **API Keys**: Simple token in header or query parameter
+- **Bearer Tokens**: Token-based authentication (often JWT - JSON Web Token)
+- **Basic Auth**: Username and password (base64 encoded)
+- **OAuth 2.0**: Delegated authorization protocol
+- **OAuth 1.0**: Legacy delegated authorization (less common)
+- **Digest Authentication**: More secure than Basic Auth
+- **Client Certificates**: Mutual TLS authentication
+
+**Security Best Practices:**
+
+- Never commit credentials to version control
+- Use environment variables or secure credential stores
+- Rotate keys/tokens regularly
+- Use HTTPS for all API requests
+
+## Authentication: Personal Access Token
+
+**GitHub API Example** (students will follow along)
+
+[GitHub Rest API Documentation](https://docs.github.com/en/rest)
+
+### Step 1: Generate Token
+1. Go to [GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)](https://github.com/settings/tokens)
+2. Click "Generate new token (classic)"
+3. Give it a note (e.g., "Workshop API Demo")
+4. Select scopes: `repo`, `read:user`
+5. Generate and copy token (starts with `ghp_`)
+
+**⚠️ Save immediately — you won't see it again!**
+
+## Storing Tokens Securely
+
+**Option 1: .Renviron file (Recommended)**
+
+Create/edit `.Renviron` in your home directory:
+
+
+
+```bash
+GITHUB_TOKEN=ghp_xaIy********************************
+```
+*Obfuscated because it is _supposed to be secret_.*
+
+
+## Authentication: Using Your Token (R)
+
+```{r}
+#| eval: false
+library(httr2)
+
+# Get token from environment
+token <- Sys.getenv("GITHUB_TOKEN")
+
+response <- request("https://api.github.com/user/repos") |>
+  req_auth_bearer_token(token) |>
+  req_perform()
+
+resp_check_status(response)
+if (resp_status(response) == 200) {
+  repos <- resp_body_json(response)
+  cat(sprintf("%d projects total.\n", length(repos)))
+  for (repo in repos[1:5]) {
+    cat(sprintf("%s: %d stars\n", 
+                repo$name, 
+                repo$stargazers_count))
+  }
+}
+```
+
+My output
+```
+30 projects total.
+.github: 0 stars
+.github-private: 0 stars
+abm-benchmark: 1 stars
+accessibility-check: 1 stars
+accessible-wastewater-dashboard: 1 stars
+```
+
+## Authentication: Using Your Token (Python)
+
+```python
+import requests
+import os
+
+# Store token in environment variable (never hardcode!)
+token = os.getenv('GITHUB_TOKEN')
+headers = {'Authorization': f'token {token}'}
+
+# Get your repos
+response = requests.get(
+    'https://api.github.com/user/repos',
+    headers=headers
+)
+
+if response.status_code == 200:
+    repos = response.json()
+    for repo in repos[:5]:
+        print(f"{repo['name']}: {repo['stargazers_count']} stars")
+```
+
+## Setting Environment Variables
+
+**Windows PowerShell:**
+```powershell
+$env:GITHUB_TOKEN = "ghp_your_token_here"
+```
+
+**Windows CMD:**
+```cmd
+set GITHUB_TOKEN=ghp_your_token_here
+```
+
+**macOS/Linux:**
+```bash
+export GITHUB_TOKEN="ghp_your_token_here"
+```
+
+**Persistent (add to `.env` file):**
+```
+GITHUB_TOKEN=ghp_your_token_here
+```
+
+Then load with `python-dotenv` or similar.
+
+
+## Authentication: Using Your Token (R), with data
+
+```{r}
+library(dplyr)
+# Token not teechnically needed as the data is public.
+# token <- Sys.getenv("GITHUB_TOKEN")
+
+response <- request(
+  "https://api.github.com/repos/EpiForeSITE/multigroup-vaccine/contents/data-raw/cc-est2024-agesex-49.csv"
+) |>
+  # req_auth_bearer_token(token) # if authentication needed
+  req_perform()
+
+resp_check_status(response)
+# Decode base64 content and load into R
+content_data <- resp_body_json(response)
+raw_data <- base64enc::base64decode(content_data$content)
+temp_file <- tempfile(fileext = ".csv")
+writeBin(raw_data, temp_file)
+# Cleaning replicates 
+# https://github.com/EpiForeSITE/multigroup-vaccine/blob/main/data-raw/UtahAgeCountyPop.R
+UtahAgeCountyPop <- read.csv(temp_file) |> 
+        filter( YEAR == max(YEAR)) |>  # Most recent year only
+        select(CTYNAME, POPESTIMATE, ends_with("_TOT")) |>
+        rename(
+            county = CTYNAME, 
+            total = POPESTIMATE,
+            age0to4 = AGE04_TOT,
+            age5to9 = AGE59_TOT,
+            age85plus = AGE85PLUS_TOT
+        ) |>
+        mutate(  # Select, rename, and create variables
+            # New Variables
+            age10to13 = AGE513_TOT - age5to9,
+            age14 = AGE1014_TOT - age10to13,
+            age15 = total - AGE16PLUS_TOT - age0to4 - age5to9 - age10to13 - age14, 
+            age16to17 = AGE16PLUS_TOT - AGE18PLUS_TOT,
+            age18to19 = AGE1519_TOT - age15 - age16to17,
+        ) |>
+        rename_with(
+            \(name)gsub('AGE(\\d\\d)(\\d\\d)_TOT$', 'age\\1to\\2', name),
+            .cols = matches("AGE\\d{4}_TOT")
+        )
+unlink(temp_file)
+```
+
+## Authentication: Using Your Token (R), with data, continued
+
+```{r}
+glimpse(UtahAgeCountyPop)
+```
+
+## OAuth 2.0: Pros and Cons
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Pros**
+
+- No password sharing with third parties
+- Fine-grained permission scopes
+- Easy to revoke access per application
+- Token expiration and refresh
+- Industry standard (widely supported)
+- Better audit trail
+- Secure delegation of access
+:::
+
+::: {.column width="50%"}
+**Cons**
+
+- Complex implementation
+- Requires web server/callback URL
+- Multiple steps in auth flow
+- Token management overhead
+- Potential security misconfiguration
+- Overkill for simple use cases
+- Requires user interaction
+:::
+
+::::
+## OAuth 2.0 Full Flow (Demo Only)
+
+**Three-Legged OAuth** (GitHub OAuth Apps)
+
+```{mermaid}
+sequenceDiagram
+    participant User
+    participant YourApp
+    participant GitHub
+    User->>YourApp: Click "Login with GitHub"
+    YourApp->>GitHub: Redirect to authorization URL
+    GitHub->>User: Show consent screen
+    User->>GitHub: Approve access
+    GitHub->>YourApp: Redirect with authorization code
+    YourApp->>GitHub: Exchange code for access token
+    GitHub->>YourApp: Return access token
+    YourApp->>GitHub: API requests with token
+```
+
+## OAuth 2.0 Implementation (Demo Only)
+
+**Step 1: Register OAuth App**
+- [GitHub → Settings → Developer settings → OAuth Apps](https://github.com/settings/developers)
+- Set callback URL (e.g., `http://localhost:8000/callback`)
+- Get Client ID and Client Secret
+
+**Step 2: Authorization URL**
+```{r}
+#| eval: false
+client <- oauth_client(
+  id = "Ov23li3mTc0U7AAsfVen",
+  secret = obfuscated("ynoMhQm-aBPCSASy5ep3CniXaCXId54KiYc8b8vRlzshbD7U69M_2y-iSP9R_ilQqWVqfZbFNY8"),
+  token_url = "https://github.com/login/oauth/access_token",
+  name = "API Workshop Demo"
+)
+# Retrieve authorization token
+token <- oauth_flow_auth_code(
+  client = client,
+  auth_url = "https://github.com/login/oauth/authorize"
+)
+```
+
+## OAuth 2.0 Implementation (continued)
+
+
+**Step 4: Use Token**
+```{r}
+#| eval: false
+# Use the access token to make authenticated requests
+user_info <- request('https://api.github.com/user') |>
+  req_auth_bearer_token(token$access_token) |>
+  req_perform() |>
+  resp_body_json()
+
+print(user_info$login)
+```
+
+## Personal Access Token vs OAuth
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Personal Access Token**
+
+- ✅ Simple for scripts/tools
+- ✅ Quick setup
+- ✅ Good for personal use
+- ❌ User must manually generate
+- ❌ Harder to revoke selectively
+- **Use for:** CLI tools, personal scripts
+:::
+
+::: {.column width="50%"}
+**OAuth 2.0**
+
+- ✅ User doesn't see/manage token
+- ✅ Granular permissions
+- ✅ Easy to revoke per-app
+- ❌ Complex implementation
+- ❌ Requires web server
+- **Use for:** Web apps, third-party integrations
+:::
+
+::::
+
+## Hands-on: GitHub API Authentication
+
+**Exercise:**
+
+1. Generate a GitHub personal access token
+2. Set it as an environment variable
+3. Fetch your repositories using the API
+4. Print repo names and star counts
+5. **Bonus:** Filter for public repos only
+6. **Bonus:** Get your latest commit for each repo
+
+**Starter code and solutions in `exercises/` folder:**
+
+- R: `02-github-api-auth-starter.R` and `02-github-api-auth-solution.R`
+- Python: `02-github-api-auth-starter.py` and `02-github-api-auth-solution.py`
+
+## Query Parameters
 
 ### API Keys
 
-```python
-headers = {'Authorization': 'Bearer YOUR_API_KEY'}
-response = requests.get(url, headers=headers)
+```r
+api_key <- Sys.getenv("API_KEY")
+response <- request(url) |>
+  req_auth_bearer_token(api_key) |>
+  req_perform()
 ```
 
 ### OAuth 2.0
@@ -130,6 +675,7 @@ More complex but more secure:
 
 Add filters and options to requests:
 
+Python:
 ```python
 params = {
     'limit': 100,
@@ -322,4 +868,4 @@ Next session: Database Queries
 - [REST API Tutorial](https://restfulapi.net/)
 - [HTTP Status Codes](https://httpstatuses.com/)
 - [Requests Documentation](https://requests.readthedocs.io/)
-- [httr Documentation](https://httr.r-lib.org/)
+- [httr2 Documentation](https://httr2.r-lib.org/)

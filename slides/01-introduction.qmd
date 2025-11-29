@@ -21,13 +21,19 @@ Welcome to the CFA Data Pipelines Workshop
 - Overview of data pipelines
 - Setting up your environment
 
-## What is a Data Pipeline?
+## Course Structure
 
-A **data pipeline** is a series of data processing steps where:
+- **Session 1**: Introduction (Now!)
+- **Session 2**: Data Acquisition from APIs
+- **Session 3**: Database Queries
+- **Session 4**: Data Cleaning
 
-- Data is ingested from one or more sources
-- Data is transformed or processed
-- Data is loaded into a destination for analysis or storage
+## Resources
+
+- Course website: [GitHub](https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/)
+- Course repository: [GitHub](https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop)
+- Documentation links will be provided
+- Example code in repository
 
 ## Disclaimer
 
@@ -42,6 +48,104 @@ This presentation was created with the assistance of artificial intelligence too
 - Large language models for content refinement and structure
 
 All content has been reviewed and validated by the presenter.
+
+
+## Newish R Conventions
+
+* The pipe operators
+* Lambda functions
+
+
+## The Pipe Operator
+
+The pipe operator (`%>%` from `magrittr` or `|>` native in R ≥4.1) chains operations together for cleaner, more readable code.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Without pipe:**
+```r
+# Nested functions (hard to read)
+result <- round(
+  mean(
+    filter(data, value > 0)$value
+  ), 
+  2
+)
+
+# Multiple intermediate variables
+filtered <- filter(data, value > 0)
+values <- filtered$value
+avg <- mean(values)
+result <- round(avg, 2)
+```
+:::
+
+::: {.column width="50%"}
+**With pipe:**
+```r
+# Clean, left-to-right flow
+result <- data |>
+  filter(value > 0) |>
+  pull(value) |>
+  mean() |>
+  round(2)
+
+# Read as: "take data, then
+# filter, then extract values,
+# then calculate mean, then round"
+```
+:::
+
+::::
+
+## Lambda Functions (Anonymous Functions)
+
+Short, unnamed functions created on-the-fly.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R:**
+```r
+# Traditional function
+square <- function(x) x^2
+lapply(1:5, square)
+
+# Lambda/anonymous function
+lapply(1:5, function(x) x^2)
+
+# New R ≥4.1 shorthand
+lapply(1:5, \(x) x^2)
+```
+:::
+
+::: {.column width="50%"}
+**Python:**
+```python
+# Traditional function
+def square(x):
+    return x**2
+list(map(square, range(1, 6)))
+
+# Lambda function
+list(map(lambda x: x**2, range(1, 6)))
+
+# List comprehension (often clearer)
+[x**2 for x in range(1, 6)]
+```
+:::
+
+::::
+
+## What is a Data Pipeline?
+
+A **data pipeline** is a series of data processing steps where:
+
+- Data is ingested from one or more sources
+- Data is transformed or processed
+- Data is loaded into a destination for analysis or storage
+
 
 ## Why Data Pipelines?
 
@@ -240,7 +344,7 @@ pip install requests pandas sqlalchemy
 
 ```r
 # Install common packages
-install.packages(c("httr", "dplyr", "DBI", "dbplyr"))
+install.packages(c("httr2", "dplyr", "DBI", "dbplyr"))
 ```
 
 ## Your First Pipeline
@@ -263,8 +367,7 @@ We will be fetching daily precipitation for Brighton Ski Resort for the last yea
 
 ```{r}
 ## Needed Packages #####
-library(httr)       #< interacting with API
-library(jsonlite)   #< processing API results into usable data
+library(httr2)      #< interacting with API (modern version)
 library(dplyr)      #< data cleaning and processing
 library(DBI)        #< generic database interface
 library(RSQLite)    #< specific database we will use
@@ -278,17 +381,17 @@ library(ggplot2)    #< for visualization
 end_date <- Sys.Date()
 start_date <- end_date - 365
 
-url <- "https://archive-api.open-meteo.com/v1/archive"
-response <- GET(url, query = list(
-  latitude = 40.5981,
-  longitude = -111.5831,
-  start_date = format(start_date, "%Y-%m-%d"),
-  end_date = format(end_date, "%Y-%m-%d"),
-  daily = "precipitation_sum,snowfall_sum",
-  timezone = "America/Denver"
-))
-
-data <- content(response, "parsed")
+request("https://archive-api.open-meteo.com/v1/archive") |>
+  req_url_query(
+    latitude = 40.5981,
+    longitude = -111.5831,
+    start_date = format(start_date, "%Y-%m-%d"),
+    end_date = format(end_date, "%Y-%m-%d"),
+    daily = "precipitation_sum,snowfall_sum",
+    timezone = "America/Denver"
+  ) |>
+  req_perform() |>
+  resp_body_json() -> data
 ```
 
 ## R Example Pipeline (continued)
@@ -450,19 +553,8 @@ plt.show()
 #| eval: true
 ```
 
-## Course Structure
 
-- **Session 1**: Introduction (Now!)
-- **Session 2**: Data Acquisition from APIs
-- **Session 3**: Database Queries
-- **Session 4**: Data Cleaning
 
 ## Questions?
 
 Next session: Data Acquisition from APIs
-
-## Resources
-
-- Course website: [GitHub](https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop)
-- Documentation links will be provided
-- Example code in repository

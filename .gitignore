@@ -53,3 +53,13 @@ rsconnect/
 /.quarto/
 /_site/
 /.luarc.json
+
+**/*.quarto_ipynb
+
+# renv library
+renv
+renv.lock
+
+# SQLite databases
+*.sqlite
+*.db
