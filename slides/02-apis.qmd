@@ -1,6 +1,6 @@
 ---
 title: "Data Acquisition from APIs"
-subtitle: "CFA Data Pipelines Workshop - Week 2"
+subtitle: "CFA Data Pipelines Workshop - Session 2"
 format:
   revealjs:
     theme: simple

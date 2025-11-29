@@ -1,6 +1,6 @@
 ---
 title: "Data Cleaning"
-subtitle: "CFA Data Pipelines Workshop - Week 4"
+subtitle: "CFA Data Pipelines Workshop - Session 4"
 format:
   revealjs:
     theme: simple

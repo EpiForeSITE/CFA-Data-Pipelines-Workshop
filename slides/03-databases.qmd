@@ -1,5 +1,5 @@
 ---
-title: "Database Queries"
+title: "Databases"
 subtitle: "CFA Data Pipelines Workshop - Week 3"
 format:
   revealjs:
