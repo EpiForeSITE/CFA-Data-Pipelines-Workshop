@@ -51,7 +51,7 @@ rsconnect/
 
 # Quarto
 /.quarto/
-/_site/
+# /_site/  # Commented out - we want to commit the built site
 /.luarc.json
 
 **/*.quarto_ipynb
