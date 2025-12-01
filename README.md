@@ -1,6 +1,6 @@
 # CFA-Data-Pipelines-Workshop
 
-Website for CFA Data Pipelines Class
+[Website for CFA Data Pipelines Class](https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/) (https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/)
 
 ## Overview
 
