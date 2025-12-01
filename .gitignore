@@ -59,6 +59,7 @@ rsconnect/
 # renv library
 renv
 renv.lock
+.Rprofile
 
 # SQLite databases
 *.sqlite
