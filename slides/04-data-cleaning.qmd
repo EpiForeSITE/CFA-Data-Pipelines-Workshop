@@ -448,6 +448,62 @@ except pa.errors.SchemaErrors as e:
 - **MAR**: Missing At Random (can impute)
 - **MNAR**: Missing Not At Random (domain knowledge needed)
 
+## MCAR: Missing Completely At Random
+
+**Properties:**
+
+- Missingness is independent of both observed and unobserved data
+- No systematic pattern to the missing values
+- Probability of being missing is the same for all observations
+
+**How to identify:**
+
+- Statistical tests (Little's MCAR test)
+- Visual inspection shows no patterns
+- Missing values distributed randomly across all groups
+
+**Safe handling:** Can drop rows or use any imputation method
+
+## MAR: Missing At Random
+
+**Properties:**
+
+- Missingness depends on observed data, not the missing value itself
+- Systematic pattern related to other variables
+- Can be predicted from other available information
+
+**How to identify:**
+
+- Compare missingness rates across groups
+- Correlation between missingness and other variables
+- Different missing rates in different subgroups
+
+**Safe handling:** Imputation using observed data (mean, median, regression)
+
+## MNAR: Missing Not At Random
+
+**Properties:**
+
+- Missingness depends on the unobserved missing value itself
+- Systematic relationship between missing value and its missingness
+- Cannot be predicted from observed data alone
+
+**How to identify:**
+
+- Domain knowledge and subject matter expertise
+- Missing pattern makes logical sense given the nature of data
+- Cannot be explained by other observed variables
+
+**Safe handling:** Requires domain expertise, sensitivity analysis, or specialized models
+
+## Healthcare Examples of Missing Data Types {.smaller}
+
+| MCAR | MAR | MNAR |
+|------|-----|------|
+| Random equipment failures during data collection | Older patients more likely to skip income questions | Patients with severe illness don't report weight (too sick) |
+| Lab results missing due to random computer glitches | Men less likely to report weight than women | Very high income earners refuse to disclose income |
+| Survey responses lost due to random technical errors | Insurance_id missing more often for certain visit types | Patients with no insurance leave insurance_id blank |
+| | | Abnormal lab results not recorded (measurement failed) |
 
 ## Missing Data Strategies
 
@@ -512,23 +568,43 @@ def handle_missing_patients(df):
 
 ::::
 
-## Handling Duplicates in Pipelines
+## Handling Duplicates in Pipelines {.smaller}
 
 **Idempotent pipelines prevent duplicates!**
 
-:::: {.columns}
-
-::: {.column width="50%"}
-**R:**
+<table width="100%">
+<tr>
+<th>R</th>
+<th>Python</th>
+</tr>
+<tr>
+<td colspan="2">BAD: Creates duplicates</td>
+</tr>
+<tr>
+<td>
 ```r
-# BAD: Creates duplicates on re-run
 bad_pipeline <- function() {
   data <- fetch_api()
   dbWriteTable(con, "patients", data, 
     append = TRUE)  # Duplicates!
 }
-
-# GOOD: Upsert prevents duplicates
+```
+</td>
+<td>
+```python
+def bad_pipeline():
+  data = fetch_api()
+  df.to_sql('patients', engine, 
+    if_exists='append')  # Duplicates!
+```
+</td>
+</tr>
+<tr>
+<td colspan="2"><emph>GOOD: Upsert prevents duplicates</emph></td>
+</tr>
+<tr>
+<td>
+```r
 good_pipeline <- function() {
   data <- fetch_api()
   
@@ -542,18 +618,9 @@ good_pipeline <- function() {
   )
 }
 ```
-:::
-
-::: {.column width="50%"}
-**Python:**
+</td>
+<td>
 ```python
-# BAD: Creates duplicates on re-run
-def bad_pipeline():
-  data = fetch_api()
-  df.to_sql('patients', engine, 
-    if_exists='append')  # Duplicates!
-
-# GOOD: Upsert prevents duplicates
 def good_pipeline():
   data = fetch_api()
   
@@ -576,9 +643,9 @@ def good_pipeline():
   
   conn.commit()
 ```
-:::
-
-::::
+</td>
+</tr>
+</table>
 
 ## Complete Pipeline Example
 
@@ -809,7 +876,25 @@ def clean_patient_data(df):
 - Reference semantics (mutable objects)
 - Inheritance and polymorphism
 - Similar to Python classes
+:::
 
+::: {.column width="50%"}
+**Python: [Classes](https://docs.python.org/3/tutorial/classes.html)**
+
+- Built-in object-oriented programming
+- Inheritance and composition
+- Special methods (dunder methods)
+- Foundation for reusable code
+:::
+
+::::
+
+## OOP Tools: Code Examples
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R:**
 ```r
 # Install
 install.packages("R6")
@@ -836,13 +921,7 @@ obj$print()
 :::
 
 ::: {.column width="50%"}
-**Python: [Classes](https://docs.python.org/3/tutorial/classes.html)**
-
-- Built-in object-oriented programming
-- Inheritance and composition
-- Special methods (dunder methods)
-- Foundation for reusable code
-
+**Python:**
 ```python
 # Built-in, no install needed
 
@@ -862,6 +941,40 @@ obj.print()
 
 ::::
 
+## Pipeline Class Architecture
+
+**Object-oriented design pattern:**
+
+```{mermaid}
+%%| fig-width: 8
+%%| fig-height: 6
+classDiagram
+direction LR
+    class DataPipeline {
+        +config
+        +logger
+        +engine/con
+        +initialize(config)
+        +extract()
+        +validate(df)
+        +transform(df)
+        +load(df)
+        +run()
+    }
+    
+    class HealthcarePipeline {
+        +extract()
+        +validate(df)
+        +transform(df)
+        +load(df)
+    }
+    
+    DataPipeline <|-- HealthcarePipeline : inherits
+    
+    note for DataPipeline "Base class with framework logic"
+    note for HealthcarePipeline "Concrete implementation"
+```
+
 ## Building Reusable Pipelines
 
 **Modular design for flexibility:**
@@ -873,12 +986,20 @@ obj.print()
 ```r
 library(R6)
 
+#' DataPipeline Class
+#' 
+#' @description Reusable pipeline framework
+#' @field config Configuration list
+#' @field logger Logger instance
+#' @field con Database connection
 DataPipeline <- R6Class("DataPipeline",
   public = list(
     config = NULL,
     logger = NULL,
     con = NULL,
     
+    #' @description Initialize pipeline
+    #' @param config Configuration list
     initialize = function(config) {
       self$config <- config
       self$logger <- log_appender(appender_file(
@@ -890,22 +1011,31 @@ DataPipeline <- R6Class("DataPipeline",
       )
     },
     
+    #' @description Override: Fetch from source
     extract = function() {
       stop("Override: Fetch from source")
     },
     
+    #' @description Override: Validate schema
+    #' @param df Data frame to validate
     validate = function(df) {
       stop("Override: Validate schema")
     },
     
+    #' @description Override: Clean data
+    #' @param df Data frame to transform
     transform = function(df) {
       stop("Override: Clean data")
     },
     
+    #' @description Override: Load to dest
+    #' @param df Data frame to load
     load = function(df) {
       stop("Override: Load to dest")
     },
     
+    #' @description Execute full ETL
+    #' @return TRUE on success, FALSE on failure
     run = function() {
       tryCatch({
         log_info("Starting pipeline...")
@@ -1253,6 +1383,47 @@ class RobustHealthcarePipeline(
 
 ::::
 
+## Pipeline Class Architecture (Updated)
+
+**Object-oriented design pattern:**
+
+```{mermaid}
+%%| fig-width: 8
+%%| fig-height: 6
+classDiagram
+direction LR
+    class DataPipeline {
+        +config
+        +logger
+        +engine/con
+        +initialize(config)
+        +extract()
+        +validate(df)
+        +transform(df)
+        +load(df)
+        +run()
+    }
+    
+    class HealthcarePipeline {
+        +extract()
+        +validate(df)
+        +transform(df)
+        +load(df)
+    }
+
+    class RobustHealthcarePipeline {
+        +extract()
+        +run()
+    }
+    
+    DataPipeline <|-- HealthcarePipeline : inherits
+    HealthcarePipeline <|-- RobustHealthcarePipeline : inherits
+    
+    note for DataPipeline "Base class with framework logic"
+    note for HealthcarePipeline "Concrete implementation"
+    note for RobustHealthcarePipeline "Added retry & error handling"
+```
+
 ## Monitoring & Logging
 
 **Track pipeline performance:**
@@ -1383,6 +1554,55 @@ class MonitoredPipeline(
 :::
 
 ::::
+
+## Pipeline Class Architecture (Final)
+
+**Complete class hierarchy with monitoring:**
+
+```{mermaid}
+%%| fig-width: 8
+%%| fig-height: 6
+classDiagram
+direction LR
+    class DataPipeline {
+        +config
+        +logger
+        +engine/con
+        +initialize(config)
+        +extract()
+        +validate(df)
+        +transform(df)
+        +load(df)
+        +run()
+    }
+    
+    class HealthcarePipeline {
+        +extract()
+        +validate(df)
+        +transform(df)
+        +load(df)
+    }
+
+    class RobustHealthcarePipeline {
+        +extract()
+        +run()
+    }
+    
+    class MonitoredPipeline {
+        +metrics
+        +initialize(config)
+        +run()
+    }
+    
+    DataPipeline <|-- HealthcarePipeline : inherits
+    HealthcarePipeline <|-- RobustHealthcarePipeline : inherits
+    RobustHealthcarePipeline <|-- MonitoredPipeline : inherits
+    
+    note for DataPipeline "Base framework"
+    note for HealthcarePipeline "Domain logic"
+    note for RobustHealthcarePipeline "Error handling"
+    note for MonitoredPipeline "Metrics tracking"
+```
 
 ## Configuration Management
 
@@ -2052,7 +2272,6 @@ if __name__ == '__main__':
 :::
 
 ::::
-:::
 
 ## Workshop Recap
 
