@@ -10,6 +10,10 @@ format:
     logo: ../ForeSITE-logo.png
     width: 1280
     height: 720
+    css: |
+      .reveal {
+        font-size: 0.8em;
+      }
 ---
 
 ## Overview
@@ -1606,34 +1610,53 @@ direction LR
 
 ## Configuration Management
 
-**Environment-based configuration:**
+**Environment-based configuration with unified config file:**
+
+**config.yaml (works for both R and Python):**
+```yaml
+development:
+  api_url: "https://api-dev.example.com"
+  db_connection: "sqlite:///dev.db"
+  log_level: "DEBUG"
+  retry_attempts: 3
+  timeout_seconds: 30
+  
+production:
+  api_url: "https://api.example.com"
+  db_connection: "postgresql://prod/db"  
+  log_level: "INFO"
+  retry_attempts: 5
+  timeout_seconds: 60
+
+staging:
+  api_url: "https://api-staging.example.com"
+  db_connection: "postgresql://staging/db"
+  log_level: "INFO"
+  retry_attempts: 3
+  timeout_seconds: 45
+```
+
+**Key principles:**
+- Environment variables override config file values
+- Sensitive data (tokens, passwords) stored in environment variables only
+- Same config structure works for both languages
+
+## Configuration Management: Implementation
+
+**Language-specific implementations:**
 
 :::: {.columns}
 
 ::: {.column width="50%"}
-**R (config.yml):**
-```yaml
-default:
-  api_url: "https://api-dev.example.com"
-  db_connection: "sqlite:///dev.db"
-  log_level: "DEBUG"
-  
-production:
-  api_url: "https://api.example.com"
-  db_connection: !expr Sys.getenv("DB_CONN")
-  log_level: "INFO"
-```
-
+**R:**
 ```r
 library(config)
+library(yaml)
 
-# Load environment-specific config
-load_config <- function(env = "default") {
-  # Set active config
+# Option 1: Using config package
+load_config <- function(env = "development") {
   Sys.setenv(R_CONFIG_ACTIVE = env)
-  
-  # Load config file
-  cfg <- config::get()
+  cfg <- config::get(file = "config.yaml")
   
   # Override with environment variables
   cfg$api_token <- Sys.getenv("API_TOKEN")
@@ -1642,27 +1665,26 @@ load_config <- function(env = "default") {
   cfg
 }
 
+# Option 2: Using yaml package
+load_config_yaml <- function(env = "development") {
+  cfg <- yaml::read_yaml("config.yaml")[[env]]
+  
+  # Override with environment variables  
+  cfg$api_token <- Sys.getenv("API_TOKEN")
+  cfg$db_password <- Sys.getenv("DB_PASSWORD")
+  
+  cfg
+}
+
 # Use in pipeline
-env <- Sys.getenv("ENVIRONMENT", "default")
+env <- Sys.getenv("ENVIRONMENT", "development")
 config <- load_config(env)
 pipeline <- MonitoredPipeline$new(config)
 ```
 :::
 
 ::: {.column width="50%"}
-**Python (config.yaml):**
-```yaml
-development:
-  api_url: "https://api-dev.example.com"
-  db_connection: "sqlite:///dev.db"
-  log_level: "DEBUG"
-  
-production:
-  api_url: "https://api.example.com"
-  db_connection: "postgresql://prod/db"
-  log_level: "INFO"
-```
-
+**Python:**
 ```python
 import yaml
 import os
@@ -1670,20 +1692,27 @@ import os
 def load_config(env='development'):
   """Load environment-specific config"""
   with open('config.yaml') as f:
-    config = yaml.safe_load(f)[env]
+    all_configs = yaml.safe_load(f)
   
-  # Override with env variables
-  config['api_token'] = \
-    os.getenv('API_TOKEN')
-  config['db_password'] = \
-    os.getenv('DB_PASSWORD')
+  if env not in all_configs:
+    raise ValueError(f"Environment '{env}' not found")
+  
+  config = all_configs[env].copy()
+  
+  # Override with environment variables
+  config['api_token'] = os.getenv('API_TOKEN')
+  config['db_password'] = os.getenv('DB_PASSWORD')
+  
+  # Validate required settings
+  required = ['api_url', 'db_connection']
+  missing = [k for k in required if not config.get(k)]
+  if missing:
+    raise ValueError(f"Missing config: {missing}")
   
   return config
 
 # Use in pipeline
-env = os.getenv(
-  'ENVIRONMENT', 'development'
-)
+env = os.getenv('ENVIRONMENT', 'development')
 config = load_config(env)
 pipeline = MonitoredPipeline(config)
 ```
@@ -1691,18 +1720,184 @@ pipeline = MonitoredPipeline(config)
 
 ::::
 
-## Scheduling & Automation
+## Pipeline Execution Patterns {.smaller data-transition="slide-in fade-out"}
 
-**Run pipelines on schedule:**
+**Choose the right execution model for your use case:**
 
-:::: {.columns}
+### 🔄 On-Demand (Manual)
 
-::: {.column width="50%"}
-**R (taskscheduleR / cron):**
+- Trigger when needed (button click, API call)
+- Best for: Ad-hoc analysis, debugging, one-time migrations
+- Pros: Full control, immediate feedback
+- Cons: Requires manual intervention
+
+## Pipeline Execution Patterns {.smaller data-transition="fade" data-visibility="uncounted"}
+
+**Choose the right execution model for your use case:**
+
+### 🔄 On-Demand (Manual)
+### 📦 Batch Processing
+
+- Scheduled runs at regular intervals  
+- Best for: Daily reports, periodic ETL, data warehousing
+- Pros: Predictable, efficient for large datasets
+- Cons: Delayed processing, fixed schedules
+
+## Pipeline Execution Patterns {.smaller data-transition="fade-in slide-out" data-visibility="uncounted"}
+
+**Choose the right execution model for your use case:**
+
+### 🔄 On-Demand (Manual)
+### 📦 Batch Processing
+### ⚡ Event-Triggered (Real-time)
+
+- React to external events (file upload, webhook, queue message)
+- Best for: Real-time alerts, streaming data, API integrations
+- Pros: Immediate response, efficient resource usage
+- Cons: Complex error handling, potential cascading failures
+
+## Scheduling Considerations & Warnings {.smaller data-transition="slide-in fade-out"}
+
+**⚠️ Critical considerations before automating:**
+
+### Resource Management
+
+- **CPU/Memory**: Pipelines can consume significant resources
+- **Database Load**: Batch operations can impact production systems
+- **Network**: API calls may hit rate limits during peak hours
+
+## Scheduling Considerations & Warnings {.smaller data-transition="fade" data-visibility="uncounted"}
+
+**⚠️ Critical considerations before automating:**
+
+### Resource Management
+### Failure Scenarios
+
+- **Silent Failures**: Scheduled jobs may fail without notification
+- **Infrastructure**: Network outages, server downtime, disk space
+- **Timing**: Computer hibernation, power failures, user logged out
+- **Data Corruption**: Bad data can propagate through systems
+- **Cascade Effects**: Failed pipeline can break downstream processes
+
+## Scheduling Considerations & Warnings {.smaller data-transition="fade-in slide-out" data-visibility="uncounted"}
+
+**⚠️ Critical considerations before automating:**
+
+### Resource Management
+### Failure Scenarios
+### Operational Complexity
+
+- **Monitoring**: Need alerts, logs, and health checks
+- **Debugging**: Harder to troubleshoot scheduled failures
+- **Maintenance**: Updates require coordination with schedules
+
+## Scheduling Options & Tools {.smaller data-transition="slide-in fade-out"}
+
+**Platform-specific scheduling tools:**
+
+### Windows
+
+- **Task Scheduler**: Built-in, GUI-based, reliable
+- **taskscheduleR**: R package for Windows scheduling
+- **PowerShell**: Script-based automation
+
+## Scheduling Options & Tools {.smaller data-transition="fade" data-visibility="uncounted"}
+
+**Platform-specific scheduling tools:**
+
+### Windows
+### Linux/Mac
+
+- **cron**: Standard Unix scheduler, text-based configuration
+- **cronR**: R package wrapper for cron
+- **systemd timers**: Modern alternative to cron
+
+## Scheduling Options & Tools {.smaller data-transition="fade-in slide-out" data-visibility="uncounted"}
+
+**Platform-specific scheduling tools:**
+
+### Windows
+### Linux/Mac
+### Cloud/Modern
+
+- **GitHub Actions**: CI/CD with scheduled workflows
+- **Azure Logic Apps / AWS Lambda**: Serverless scheduling
+- **Apache Airflow**: Enterprise workflow orchestration
+- **APScheduler (Python)**: In-process scheduling
+
+## Scheduling Best Practices {.smaller data-transition="slide-in fade-out"}
+
+**Design principles for reliable automation:**
+
+### Start Simple
+
+- Begin with manual execution, then automate
+- Test thoroughly before scheduling
+- Use development environment first
+
+## Scheduling Best Practices {.smaller data-transition="fade" data-visibility="uncounted"}
+
+**Design principles for reliable automation:**
+
+### Start Simple
+### Idempotency is Critical
+
+- Pipeline should produce same result if run multiple times
+- Use upserts instead of inserts
+- Handle partial failures gracefully
+
+## Scheduling Best Practices {.smaller data-transition="fade" data-visibility="uncounted"}
+
+**Design principles for reliable automation:**
+
+### Start Simple
+### Idempotency is Critical
+### Monitoring & Alerting
+
+- Log all operations with timestamps
+- Set up failure notifications (email, Slack, Teams)
+- Track execution metrics and performance
+
+## Scheduling Best Practices {.smaller data-transition="fade-in slide-out" data-visibility="uncounted"}
+
+**Design principles for reliable automation:**
+
+### Start Simple
+### Idempotency is Critical
+### Monitoring & Alerting
+### Resource Isolation
+
+- Run during off-peak hours when possible
+- Use separate environments for scheduled jobs
+- Implement connection pooling and timeouts
+
+## Scheduling & Automation Overview
+
+**Three main approaches for running pipelines:**
+
+1. **Platform-specific tools** (Windows Task Scheduler, cron)
+2. **Language-specific libraries** (APScheduler, taskscheduleR, cronR)
+3. **Cloud/Enterprise solutions** (GitHub Actions, Airflow)
+
+**Key considerations:**
+
+- **Timing**: When should the pipeline run?
+- **Dependencies**: What needs to be available?
+- **Monitoring**: How do you know if it worked?
+- **Recovery**: What happens when it fails?
+
+## R Scheduling Solutions
+
+**Multiple options for different environments:**
+
+::: {.panel-tabset}
+
+### Windows (taskscheduleR)
+
 ```r
 library(taskscheduleR)
 
-# Schedule daily at 2 AM (Windows)
+# Schedule daily at 2 AM
 taskscheduler_create(
   taskname = "healthcare_pipeline",
   rscript = "pipeline.R",
@@ -1710,26 +1905,27 @@ taskscheduler_create(
   starttime = "02:00",
   startdate = format(Sys.Date(), "%d/%m/%Y")
 )
+```
 
-# Or use cron (Linux/Mac)
+### Unix/Linux (cronR)
+
+```r
 library(cronR)
 
 cron_add(
   command = cron_rscript(
     "pipeline.R",
-    rscript_args = c(
-      Sys.getenv("ENVIRONMENT")
-    )
+    rscript_args = c(Sys.getenv("ENVIRONMENT"))
   ),
   frequency = "daily",
   at = "2AM",
   id = "healthcare_pipeline",
-  description = 
-    "Daily healthcare data sync"
+  description = "Daily healthcare data sync"
 )
 ```
 
-**pipeline.R:**
+### `pipeline.R`
+
 ```r
 #!/usr/bin/env Rscript
 source("healthcare_pipeline.R")
@@ -1749,16 +1945,20 @@ run_daily_pipeline <- function() {
 
 run_daily_pipeline()
 ```
+
 :::
 
-::: {.column width="50%"}
-**Python (APScheduler / cron):**
+## Python Scheduling Solutions
+
+**Multiple options for different environments:**
+
+::: {.panel-tabset}
+
+### APScheduler (In-process)
+
 ```python
-# Using APScheduler
-from apscheduler.schedulers.blocking \
-  import BlockingScheduler
-from apscheduler.triggers.cron \
-  import CronTrigger
+from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 def run_daily_pipeline():
   """Daily pipeline execution"""
@@ -1776,9 +1976,7 @@ def run_daily_pipeline():
 scheduler = BlockingScheduler()
 scheduler.add_job(
   run_daily_pipeline,
-  trigger=CronTrigger(
-    hour=2, minute=0
-  ),
+  trigger=CronTrigger(hour=2, minute=0),
   id='healthcare_pipeline',
   name='Daily healthcare data sync'
 )
@@ -1786,15 +1984,37 @@ scheduler.add_job(
 scheduler.start()
 ```
 
-**Or use cron (Linux/Mac):**
+### System cron
+
 ```bash
 # crontab -e
-0 2 * * * /path/to/venv/bin/python \
-  /path/to/pipeline.py
+0 2 * * * /path/to/venv/bin/python /path/to/pipeline.py
 ```
-:::
 
-::::
+### `pipeline.py`
+
+```python
+#!/usr/bin/env python3
+import os
+from healthcare_pipeline import MonitoredPipeline, load_config
+
+def main():
+  config = load_config(
+    os.getenv('ENVIRONMENT', 'production')
+  )
+  pipeline = MonitoredPipeline(config)
+  
+  success = pipeline.run()
+  
+  if not success:
+    send_alert("Pipeline failed!")
+    exit(1)
+
+if __name__ == '__main__':
+  main()
+```
+
+:::
 
 ## Testing Pipelines
 
@@ -1958,76 +2178,545 @@ healthcare_pipeline <- function(config) {
 }
 ```
 
-## Documentation Best Practices
+## Documentation Strategy Overview {.smaller}
 
-**Document for future you:**
+**Why documentation matters in data pipelines:**
+
+- **Future you**: Remember decisions made months ago
+- **Team collaboration**: Enable others to understand and maintain
+- **Troubleshooting**: Debug issues faster with clear context
+- **Compliance**: Meet regulatory requirements (HIPAA, SOX, etc.)
+- **Knowledge transfer**: Onboard new team members effectively
+
+**Documentation layers:**
+
+1. **Repository documentation** (README, architecture)
+2. **Code documentation** (functions, classes, inline comments)
+3. **Pipeline documentation** (data flow, business rules)
+4. **Version control** (commit messages, change history)
+
+## Repository Documentation: README
+
+**The first impression - make it count:**
 
 ````markdown
 # Healthcare Data Pipeline
 
-## Purpose
-Sync patient data from external API to internal database daily.
+![Pipeline Status](https://img.shields.io/badge/pipeline-passing-green)
 
-## Data Flow
+## Overview
+Automated ETL pipeline that syncs patient data from external healthcare APIs to our internal database. Runs daily at 2 AM EST.
+
+## Quick Start
+```bash
+# Clone repository
+git clone https://github.com/yourorg/healthcare-pipeline.git
+cd healthcare-pipeline
+
+# Setup environment (Python)
+pip install -r requirements.txt
+cp .env.example .env  # Edit with your credentials
+
+# Setup environment (R)
+renv::restore()
+# Edit config.yaml with your settings
+
+# Run pipeline
+python healthcare_pipeline.py
+# OR
+Rscript pipeline.R
 ```
-API → Validation → Cleaning → Database (upsert)
+
+## Architecture
+```
+API Source → Validation → Transformation → Database
+     ↓           ↓            ↓            ↓
+  Raw Data → Schema Check → Clean Data → Upserted Records
 ```
 
 ## Configuration
-- `API_TOKEN`: Authentication token (from env)
-- `DB_CONNECTION_STRING`: Database connection (from env)
-- `ENVIRONMENT`: 'development' or 'production'
+See [CONFIGURATION.md](docs/CONFIGURATION.md) for detailed setup.
 
-## Running
-```bash
-# One-time
-python healthcare_pipeline.py
+## Contributing
+See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for development guidelines.
 
-# Scheduled (daily 2 AM)
-python scheduler.py
-```
-
-## Data Quality Rules
-1. patient_id: Required, unique, > 0
-2. name: Required, trimmed, title case
-3. date_of_birth: Required, must be past
-4. insurance_id: Optional, defaults to "SELF_PAY"
-5. age: Calculated, must be 0-120
-
-## Error Handling
-- API errors: Retry 3 times with 10s delay
-- Validation errors: Log and skip record
-- Database errors: Rollback transaction
-
-## Monitoring
-- Logs: `logs/pipeline_YYYYMMDD.log`
-- Metrics stored in `pipeline_metrics` table
-- Alerts sent to #data-alerts Slack channel
+## License
+MIT License - see [LICENSE](LICENSE) for details.
 ````
 
-## Best Practices Summary
+## Repository Documentation: Structure
+
+**Organize supporting documentation:**
+
+```
+project/
+├── README.md                 # Main entry point
+├── docs/
+│   ├── ARCHITECTURE.md       # System design
+│   ├── CONFIGURATION.md      # Setup and config
+│   ├── DEPLOYMENT.md         # How to deploy
+│   ├── TROUBLESHOOTING.md    # Common issues
+│   └── API_REFERENCE.md      # Function docs
+├── examples/
+│   ├── sample_config.yaml    # Example configurations
+│   └── test_pipeline.py      # Usage examples
+├── tests/
+│   ├── test_extraction.py    # Unit tests
+│   └── fixtures/             # Test data
+├── .env.example              # Template env vars
+├── requirements.txt          # Python deps
+├── renv.lock                 # R dependencies
+└── CHANGELOG.md              # Version history
+```
+
+**Each document serves a specific purpose**
+
+## Function & Method Documentation {.smaller}
+
+**Self-documenting code with clear docstrings:**
+
+::: {.panel-tabset}
+
+### Python (docstring)
+
+```python
+def clean_patient_data(df: pd.DataFrame, 
+                      config: dict = None) -> pd.DataFrame:
+    """Clean and standardize patient data.
+    
+    Performs the following transformations:
+    - Removes duplicate patient_id records (keeps most recent)
+    - Standardizes name formatting (Title Case, trimmed)
+    - Handles missing insurance_id (defaults to 'SELF_PAY')
+    - Validates age range (0-120 years)
+    
+    Args:
+        df: Raw patient DataFrame with columns: 
+            patient_id, name, date_of_birth, insurance_id
+        config: Optional configuration dict for custom rules
+            
+    Returns:
+        Cleaned DataFrame with same schema but standardized values
+        
+    Raises:
+        ValueError: If required columns are missing
+        pandas.errors.DataError: If date parsing fails
+        
+    Example:
+        >>> raw_data = pd.DataFrame({
+        ...     'patient_id': [1, 1, 2],
+        ...     'name': ['  john doe  ', 'john doe', 'Jane Smith'],
+        ...     'date_of_birth': ['1990-01-01', '1990-01-01', '1985-05-15'],
+        ...     'insurance_id': [None, 'BC123', 'AETNA456']
+        ... })
+        >>> cleaned = clean_patient_data(raw_data)
+        >>> len(cleaned)  # Duplicates removed
+        2
+        >>> cleaned.loc[0, 'name']  # Standardized
+        'John Doe'
+    """
+    df = df.copy()
+    logger.info(f"Cleaning {len(df)} patient records")
+    
+    # Validate required columns
+    required_cols = ['patient_id', 'name', 'date_of_birth']
+    missing_cols = [col for col in required_cols if col not in df.columns]
+    if missing_cols:
+        raise ValueError(f"Missing required columns: {missing_cols}")
+    
+    # Remove duplicates (keep latest)
+    original_count = len(df)
+    df = df.sort_values('date_of_birth').drop_duplicates(
+        subset=['patient_id'], keep='last'
+    )
+    if len(df) < original_count:
+        logger.info(f"Removed {original_count - len(df)} duplicate records")
+    
+    # Standardize names
+    df['name'] = df['name'].str.strip().str.title()
+    
+    # Handle missing insurance
+    df['insurance_id'] = df['insurance_id'].fillna('SELF_PAY')
+    
+    # Validate age range
+    df['date_of_birth'] = pd.to_datetime(df['date_of_birth'])
+    df['age'] = ((pd.Timestamp.now() - df['date_of_birth']).dt.days / 365.25)
+    invalid_ages = (df['age'] < 0) | (df['age'] > 120)
+    if invalid_ages.any():
+        logger.warning(f"Removing {invalid_ages.sum()} records with invalid ages")
+        df = df[~invalid_ages]
+    
+    logger.info(f"Cleaning complete: {len(df)} valid records")
+    return df[['patient_id', 'name', 'date_of_birth', 'insurance_id']]
+```
+
+### R (roxygen2)
+
+```r
+#' Clean and Standardize Patient Data
+#'
+#' Performs comprehensive cleaning of raw patient data including
+#' deduplication, standardization, and validation.
+#'
+#' @description
+#' This function applies a series of data quality rules to ensure
+#' patient data meets our database standards. All transformations
+#' are logged for audit purposes.
+#'
+#' @param df Data frame containing raw patient data
+#' @param config List of optional configuration parameters
+#'   \describe{
+#'     \item{max_age}{Maximum valid age (default: 120)}
+#'     \item{min_age}{Minimum valid age (default: 0)}
+#'     \item{default_insurance}{Default insurance code (default: "SELF_PAY")}
+#'   }
+#'
+#' @return Data frame with cleaned patient records containing columns:
+#'   \describe{
+#'     \item{patient_id}{Unique patient identifier (integer)}
+#'     \item{name}{Standardized patient name (Title Case)}
+#'     \item{date_of_birth}{Patient birth date (Date)}
+#'     \item{insurance_id}{Insurance identifier or "SELF_PAY"}
+#'   }
+#'
+#' @details
+#' The cleaning process follows these steps:
+#' \enumerate{
+#'   \item Validate required columns exist
+#'   \item Remove duplicate patient_id records (keeps most recent)
+#'   \item Standardize name formatting (Title Case, trimmed)
+#'   \item Convert date_of_birth to Date type
+#'   \item Calculate and validate age (0-120 years)
+#'   \item Fill missing insurance_id with default value
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' # Basic usage
+#' raw_data <- data.frame(
+#'   patient_id = c(1, 1, 2),
+#'   name = c("  john doe  ", "john doe", "Jane Smith"),
+#'   date_of_birth = as.Date(c("1990-01-01", "1990-01-01", "1985-05-15")),
+#'   insurance_id = c(NA, "BC123", "AETNA456")
+#' )
+#' cleaned <- clean_patient_data(raw_data)
+#' 
+#' # With custom config
+#' config <- list(max_age = 100, default_insurance = "UNINSURED")
+#' cleaned <- clean_patient_data(raw_data, config)
+#' }
+#'
+#' @importFrom dplyr filter mutate distinct arrange
+#' @importFrom stringr str_trim str_to_title
+#' @importFrom logger log_info log_warning
+#'
+#' @export
+clean_patient_data <- function(df, config = NULL) {
+  # Set default configuration
+  default_config <- list(
+    max_age = 120,
+    min_age = 0,
+    default_insurance = "SELF_PAY"
+  )
+  config <- modifyList(default_config, config %||% list())
+  
+  log_info("Cleaning {nrow(df)} patient records")
+  
+  # Validate required columns
+  required_cols <- c("patient_id", "name", "date_of_birth")
+  missing_cols <- setdiff(required_cols, names(df))
+  if (length(missing_cols) > 0) {
+    stop("Missing required columns: ", paste(missing_cols, collapse = ", "))
+  }
+  
+  original_count <- nrow(df)
+  
+  # Remove duplicates (keep latest by date_of_birth)
+  df <- df %>%
+    arrange(date_of_birth) %>%
+    distinct(patient_id, .keep_all = TRUE)
+  
+  if (nrow(df) < original_count) {
+    log_info("Removed {original_count - nrow(df)} duplicate records")
+  }
+  
+  # Standardize and validate
+  df <- df %>%
+    mutate(
+      name = str_to_title(str_trim(name)),
+      date_of_birth = as.Date(date_of_birth),
+      age = as.numeric(difftime(Sys.Date(), date_of_birth, units = "days")) / 365.25,
+      insurance_id = coalesce(insurance_id, config$default_insurance)
+    ) %>%
+    filter(
+      age >= config$min_age,
+      age <= config$max_age
+    ) %>%
+    select(patient_id, name, date_of_birth, insurance_id)
+  
+  log_info("Cleaning complete: {nrow(df)} valid records")
+  df
+}
+```
+
+:::
+
+## Inline Code Documentation {.smaller}
+
+**Strategic commenting for complex logic:**
+
+::: {.panel-tabset}
+
+### Good (Why, not What)
+
+```python
+def upsert_patients(engine, df):
+    """Upsert patient records using PostgreSQL syntax"""
+    
+    # Use ON CONFLICT for idempotency - critical for scheduled runs
+    # This prevents duplicate records when pipeline runs multiple times
+    # with overlapping data (common in healthcare APIs)
+    for _, row in df.iterrows():
+        engine.execute("""
+            INSERT INTO patients (patient_id, name, date_of_birth, insurance_id)
+            VALUES (%(patient_id)s, %(name)s, %(dob)s, %(insurance)s)
+            ON CONFLICT (patient_id) 
+            DO UPDATE SET 
+                name = EXCLUDED.name,
+                date_of_birth = EXCLUDED.date_of_birth,
+                insurance_id = EXCLUDED.insurance_id,
+                updated_at = CURRENT_TIMESTAMP
+        """, {
+            'patient_id': row['patient_id'],
+            'name': row['name'],
+            'dob': row['date_of_birth'],
+            'insurance': row['insurance_id']
+        })
+    
+    # Commit after all records to maintain transaction consistency
+    # If any record fails, entire batch is rolled back
+    engine.commit()
+```
+
+### Bad (Obvious statements)
+
+```python
+def upsert_patients(engine, df):
+    # Loop through dataframe
+    for _, row in df.iterrows():
+        # Execute SQL statement
+        engine.execute("""
+            INSERT INTO patients (patient_id, name, date_of_birth, insurance_id)
+            VALUES (%(patient_id)s, %(name)s, %(dob)s, %(insurance)s)
+            ON CONFLICT (patient_id) DO UPDATE SET name = EXCLUDED.name
+        """, {
+            'patient_id': row['patient_id'],  # Set patient ID
+            'name': row['name'],              # Set name
+            'dob': row['date_of_birth'],      # Set date of birth
+            'insurance': row['insurance_id']  # Set insurance
+        })
+    
+    engine.commit()  # Commit transaction
+```
+
+:::
+
+## Version Control Documentation (Git){.smaller}
+
+::: {.panel-tabset}
+
+### Commits
+
+Use [Commit Conventions](https://www.conventionalcommits.org/).
+
+```bash
+# Good commit messages (follow conventional commits)
+feat: add patient data validation with pandera schema
+fix: handle missing insurance_id in clean_patient_data()  
+docs: add API authentication setup guide
+refactor: extract database connection into config class
+chore: update requirements.txt with latest pandas version
+
+# Include context for data changes
+fix: correct age calculation to use fractional years
+
+Previously using integer division which caused patients 
+born in December to appear 1 year younger. Now using 
+365.25 for more accurate age calculation.
+
+Fixes #123
+Tested with patients born 1990-12-31, 1991-01-01
+```
+
+### Branchs
+
+```bash
+# Feature branches for new functionality
+git checkout -b feature/add-graphql-api-support
+git checkout -b feature/implement-data-validation
+git checkout -b fix/database-connection-timeout
+
+# Use descriptive branch names
+git checkout -b refactor/split-pipeline-into-classes
+git checkout -b docs/add-deployment-guide
+git checkout -b test/add-integration-tests
+```
+
+### `.gitignore`
+
+```gitignore
+# Environment and secrets
+.env
+.env.*
+config/production.yaml
+*.key
+*.pem
+
+# Data files (never commit actual data)
+data/
+*.csv
+*.json
+*.xlsx
+!data/sample/  # Except sample/test data
+!*_example.csv
+
+# Logs and outputs
+logs/
+*.log
+pipeline_metrics_*.json
+
+# Language-specific
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# R
+.RData
+.Rhistory
+renv/library/
+packrat/lib*/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.Rproj
+.Rproj.user
+
+# OS
+.DS_Store
+Thumbs.db
+```
+
+:::
+
+## Pipeline-Specific Documentation
+
+**Document the data flow and business rules:**
+
+````markdown
+# Data Pipeline Documentation
+
+## Data Sources
+
+### Healthcare API (Primary)
+- **Endpoint**: `https://api.healthcare-provider.com/v2/patients`
+- **Authentication**: Bearer token (expires every 24 hours)
+- **Rate Limits**: 1000 requests/hour, 10 requests/second
+- **Data Freshness**: Updated every 4 hours
+- **Expected Volume**: ~500 new patients/day, ~2000 updates/day
+
+### Legacy Database (Backup)
+- **Connection**: PostgreSQL on `legacy-db.internal:5432`
+- **Tables**: `patients`, `insurance_providers`, `visit_history`
+- **Update Frequency**: Real-time for active patients
+- **Data Quality**: Known issues with pre-2020 records
+
+## Business Rules
+
+### Patient Data Validation
+1. **patient_id**: Must be positive integer, unique across all sources
+2. **name**: Required, must be 2-100 characters after trimming
+3. **date_of_birth**: Required, cannot be future date, must be after 1900-01-01
+4. **insurance_id**: Optional, but if present must match active provider list
+
+### Data Transformation Rules
+- **Name standardization**: Convert to Title Case, remove extra whitespace
+- **Insurance handling**: Missing values become "SELF_PAY"
+- **Duplicate resolution**: For same patient_id, keep record with latest update timestamp
+
+### Error Handling
+- **Validation failures**: Log error, store in `validation_errors` table, continue processing
+- **API timeouts**: Retry up to 3 times with exponential backoff
+- **Database errors**: Rollback transaction, alert #data-alerts channel
+
+## Monitoring & Alerts
+
+### Success Metrics
+- **Daily volume**: Expected 400-600 new/updated records
+- **Processing time**: Should complete within 15 minutes
+- **Error rate**: Should be <1% of total records
+
+### Alert Conditions
+- No data received in 6+ hours → **CRITICAL**
+- Error rate >5% → **WARNING**
+- Processing time >30 minutes → **WARNING**
+- Database connection fails → **CRITICAL**
+
+### Log Locations
+- **Application logs**: `/var/log/healthcare-pipeline/`
+- **Database logs**: CloudWatch LogGroup `/aws/rds/healthcare-db`
+- **Metrics dashboard**: `https://grafana.internal/dashboard/healthcare-pipeline`
+````
+
+## Best Practices Summary {data-transition="slide-in fade-out"}
 
 **From all 4 sessions:**
 
-1. **API Layer (Session 2)**
-   - Use authentication tokens securely (env variables)
-   - Handle rate limiting and pagination
-   - Retry on transient failures
+### API Layer (Session 2)
 
-2. **Database Layer (Session 3)**
-   - Use parameterized queries (prevent SQL injection)
-   - Implement upserts for idempotency
-   - Close connections properly
+- Use authentication tokens securely (env variables)
+- Handle rate limiting and pagination
+- Retry on transient failures
 
-3. **Data Quality (Session 4)**
-   - Validate early and often
-   - Keep raw data separate from clean data
-   - Document all transformations
+## Best Practices Summary {data-transition="fade" data-visibility="uncounted"}
 
-4. **Pipeline Design**
-   - Modular, reusable components
-   - Comprehensive error handling
-   - Monitor and log everything
+**From all 4 sessions:**
+
+### API Layer (Session 2)
+### Database Layer (Session 3)
+
+- Use parameterized queries (prevent SQL injection)
+- Implement upserts for idempotency
+- Close connections properly
+
+## Best Practices Summary {data-transition="fade" data-visibility="uncounted"}
+
+**From all 4 sessions:**
+
+### API Layer (Session 2)
+### Database Layer (Session 3)
+### Data Quality (Session 4)
+
+- Validate early and often
+- Keep raw data separate from clean data
+- Document all transformations
+
+## Best Practices Summary {data-transition="fade-in slide-out" data-visibility="uncounted"}
+
+**From all 4 sessions:**
+
+### API Layer (Session 2)
+### Database Layer (Session 3)
+### Data Quality (Session 4)
+### Pipeline Design
+
+- Modular, reusable components
+- Comprehensive error handling
+- Monitor and log everything
 
 ## Common Pitfalls (Revisited)
 
@@ -2073,6 +2762,134 @@ python scheduler.py
 8. **Schedule**: Set up to run every 15 minutes
 
 **Use the healthcare.db from Session 3 as your target!**
+
+## Docker Example vs Exercise Requirements
+
+**How does our `docker-example/` compare?**
+
+::: {.panel-tabset}
+
+### ✅ Completed Features
+
+| Requirement | Docker Example | Status |
+|------------|----------------|---------|
+| **Extract** | ✅ R Plumber API + PostgreSQL | **EXCEEDS** - Multiple sources |
+| **Load** | ✅ `rows_upsert()` in tidyverse version | **MEETS** - Uses upsert pattern |
+| **Monitor** | ✅ `logger` package with structured logging | **MEETS** - Production-ready logging |
+| **Document** | ✅ Comprehensive README + architecture docs | **EXCEEDS** - Multiple doc types |
+
+### ⚠️ Partially Completed
+
+| Requirement | Docker Example | Gap |
+|------------|----------------|-----|
+| **Validate** | ⚠️ Basic error handling, no schema validation | **MISSING** - No pandera/validate |
+| **Transform** | ⚠️ Basic joins, no standardization | **MISSING** - No name cleaning, date parsing |
+| **Test** | ⚠️ Integration tests (validate.ps1/sh), no unit tests | **MISSING** - No function-level tests |
+| **Schedule** | ⚠️ Manual execution only | **MISSING** - No cron/scheduler |
+
+### 🔄 What's Different
+
+**Database Target:**
+- **Exercise**: SQLite (`healthcare.db`)  
+- **Docker**: PostgreSQL (more enterprise-like)
+
+**API Source:**
+- **Exercise**: "Mock API" (undefined)
+- **Docker**: Real R Plumber API with sample data
+
+**Scope:**
+- **Exercise**: Simple single-source pipeline
+- **Docker**: Multi-source integration (API + DB)
+
+:::
+
+## Exercise Enhancement Opportunities
+
+**Building on the Docker example:**
+
+::: {.panel-tabset}
+
+### Add Missing Components
+
+```r
+# 1. Add schema validation to docker example
+library(validate)
+
+patient_rules <- validator(
+  patient_id > 0,
+  !is.na(name),
+  nchar(name) > 0,
+  !is.na(date_of_birth)
+)
+
+# Add to healthcare_pipeline_tidyverse.R:
+validated_patients <- patients_api %>%
+  confront(patient_rules) %>%
+  # Only keep valid records
+  filter(passes)
+```
+
+### Add Data Cleaning
+
+```r
+# 2. Add transformation functions
+clean_patient_data <- function(df) {
+  df %>%
+    # Remove duplicates
+    distinct(patient_id, .keep_all = TRUE) %>%
+    # Standardize names
+    mutate(
+      name = str_to_title(str_trim(name)),
+      insurance_id = coalesce(insurance_id, "SELF_PAY")
+    ) %>%
+    # Validate age
+    filter(
+      date_of_birth <= today(),
+      date_of_birth >= as.Date("1900-01-01")
+    )
+}
+```
+
+### Add Unit Tests
+
+```r
+# 3. Create tests/test-cleaning.R
+library(testthat)
+
+test_that("clean_patient_data removes duplicates", {
+  df <- tibble(
+    patient_id = c(1, 1, 2),
+    name = c("john", "john", "jane"),
+    date_of_birth = as.Date(c("1990-01-01", "1990-01-01", "1985-01-01")),
+    insurance_id = c(NA, "INS1", "INS2")
+  )
+  
+  result <- clean_patient_data(df)
+  
+  expect_equal(nrow(result), 2)
+  expect_true(!any(duplicated(result$patient_id)))
+  expect_equal(result$name[1], "John")  # Title case
+})
+```
+
+### Add Scheduling
+
+```r
+# 4. Add scheduler.R
+library(cronR)
+
+# Schedule every 15 minutes
+cron_add(
+  command = cron_rscript(
+    "docker-example/r-client/healthcare_pipeline_tidyverse.R"
+  ),
+  frequency = "*/15 * * * *",  # Every 15 minutes
+  id = "healthcare_pipeline",
+  description = "Healthcare data sync"
+)
+```
+
+:::
 
 ## Complete Example: End-to-End
 
