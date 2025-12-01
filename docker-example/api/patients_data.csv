@@ -1,0 +1,11 @@
+patient_id,name,date_of_birth,insurance_id
+1001,John Smith,1985-03-15,INS001
+1002,Jane Doe,1990-07-22,INS002
+1003,Robert Johnson,1978-11-08,INS001
+1004,Maria Garcia,1995-02-14,SELF_PAY
+1005,Michael Brown,1982-09-30,INS003
+1006,Lisa Anderson,1988-05-17,INS002
+1007,David Wilson,1992-12-03,INS001
+1008,Sarah Martinez,1987-08-25,SELF_PAY
+1009,James Taylor,1980-04-19,INS003
+1010,Jennifer Lee,1993-10-11,INS002

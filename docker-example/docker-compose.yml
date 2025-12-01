@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # R Plumber API Container
+  api:
+    build: ./api
+    container_name: healthcare_api
+    ports:
+      - "8000:8000"
+    networks:
+      - healthcare_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  # PostgreSQL Database Container
+  database:
+    build: ./database
+    container_name: healthcare_db
+    environment:
+      POSTGRES_DB: healthcare
+      POSTGRES_USER: healthuser
+      POSTGRES_PASSWORD: healthpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - healthcare_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U healthuser -d healthcare"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+networks:
+  healthcare_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
