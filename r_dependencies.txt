@@ -8,6 +8,16 @@ jsonlite
 dplyr
 DBI
 
+# httr2 dependencies (commonly missing)
+curl
+openssl
+magrittr
+rlang
+glue
+lifecycle
+rappdirs
+withr
+
 # Database drivers
 RSQLite
 RPostgres
