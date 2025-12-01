@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Data Pipelines – CFA Data Pipelines Workshop</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-e31584831b205ffbb2d98406f31c2a5b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">CFA Data Pipelines Workshop</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../syllabus.html"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../schedule.html"> 
+<span class="menu-text">Schedule</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-slides" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Slides</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-slides">    
+        <li>
+    <a class="dropdown-item" href="../slides/01-introduction.html">
+ <span class="dropdown-text">Introduction</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../slides/02-apis.html">
+ <span class="dropdown-text">Data Acquisition from APIs</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../slides/03-databases.html">
+ <span class="dropdown-text">Database Queries</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../slides/04-data-cleaning.html">
+ <span class="dropdown-text">Data Cleaning</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome!</a></li>
+  <li><a href="#course-structure" id="toc-course-structure" class="nav-link" data-scroll-target="#course-structure">Course Structure</a></li>
+  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources">Resources</a></li>
+  <li><a href="#disclaimer" id="toc-disclaimer" class="nav-link" data-scroll-target="#disclaimer">Disclaimer</a></li>
+  <li><a href="#ai-disclosure" id="toc-ai-disclosure" class="nav-link" data-scroll-target="#ai-disclosure">AI Disclosure</a></li>
+  <li><a href="#newish-r-conventions" id="toc-newish-r-conventions" class="nav-link" data-scroll-target="#newish-r-conventions">Newish R Conventions</a></li>
+  <li><a href="#the-pipe-operator" id="toc-the-pipe-operator" class="nav-link" data-scroll-target="#the-pipe-operator">The Pipe Operator</a></li>
+  <li><a href="#lambda-functions-anonymous-functions" id="toc-lambda-functions-anonymous-functions" class="nav-link" data-scroll-target="#lambda-functions-anonymous-functions">Lambda Functions (Anonymous Functions)</a></li>
+  <li><a href="#what-is-a-data-pipeline" id="toc-what-is-a-data-pipeline" class="nav-link" data-scroll-target="#what-is-a-data-pipeline">What is a Data Pipeline?</a></li>
+  <li><a href="#why-data-pipelines" id="toc-why-data-pipelines" class="nav-link" data-scroll-target="#why-data-pipelines">Why Data Pipelines?</a></li>
+  <li><a href="#pipeline-design-patterns" id="toc-pipeline-design-patterns" class="nav-link" data-scroll-target="#pipeline-design-patterns">Pipeline Design Patterns</a>
+  <ul class="collapse">
+  <li><a href="#extract-transform-load-etl" id="toc-extract-transform-load-etl" class="nav-link" data-scroll-target="#extract-transform-load-etl">1. Extract-Transform-Load (ETL)</a></li>
+  <li><a href="#extract-load-transform-elt" id="toc-extract-load-transform-elt" class="nav-link" data-scroll-target="#extract-load-transform-elt">2. Extract-Load-Transform (ELT)</a></li>
+  </ul></li>
+  <li><a href="#common-data-sources" id="toc-common-data-sources" class="nav-link" data-scroll-target="#common-data-sources">Common Data Sources</a></li>
+  <li><a href="#pipeline-components" id="toc-pipeline-components" class="nav-link" data-scroll-target="#pipeline-components">Pipeline Components</a></li>
+  <li><a href="#best-practices" id="toc-best-practices" class="nav-link" data-scroll-target="#best-practices">Best Practices</a></li>
+  <li><a href="#idempotency-definition" id="toc-idempotency-definition" class="nav-link" data-scroll-target="#idempotency-definition">Idempotency (Definition)</a></li>
+  <li><a href="#idempotency-key-strategies" id="toc-idempotency-key-strategies" class="nav-link" data-scroll-target="#idempotency-key-strategies">Idempotency Key strategies:</a></li>
+  <li><a href="#error-handling-strategies" id="toc-error-handling-strategies" class="nav-link" data-scroll-target="#error-handling-strategies">Error Handling Strategies</a></li>
+  <li><a href="#logging-and-monitoring" id="toc-logging-and-monitoring" class="nav-link" data-scroll-target="#logging-and-monitoring">Logging and Monitoring</a></li>
+  <li><a href="#documentation-best-practices" id="toc-documentation-best-practices" class="nav-link" data-scroll-target="#documentation-best-practices">Documentation Best Practices</a></li>
+  <li><a href="#tools-and-frameworks" id="toc-tools-and-frameworks" class="nav-link" data-scroll-target="#tools-and-frameworks">Tools and Frameworks</a></li>
+  <li><a href="#development-environment-setup" id="toc-development-environment-setup" class="nav-link" data-scroll-target="#development-environment-setup">Development Environment Setup</a>
+  <ul class="collapse">
+  <li><a href="#python-setup" id="toc-python-setup" class="nav-link" data-scroll-target="#python-setup">Python Setup</a></li>
+  <li><a href="#r-setup" id="toc-r-setup" class="nav-link" data-scroll-target="#r-setup">R Setup</a></li>
+  </ul></li>
+  <li><a href="#your-first-pipeline" id="toc-your-first-pipeline" class="nav-link" data-scroll-target="#your-first-pipeline">Your First Pipeline</a></li>
+  <li><a href="#example-pipeline-weather-data" id="toc-example-pipeline-weather-data" class="nav-link" data-scroll-target="#example-pipeline-weather-data">Example Pipeline: Weather Data</a>
+  <ul class="collapse">
+  <li><a href="#fetch-weather-data-clean-store" id="toc-fetch-weather-data-clean-store" class="nav-link" data-scroll-target="#fetch-weather-data-clean-store">Fetch weather data → Clean → Store</a></li>
+  </ul></li>
+  <li><a href="#r-example-pipeline-continued" id="toc-r-example-pipeline-continued" class="nav-link" data-scroll-target="#r-example-pipeline-continued">R Example Pipeline (continued)</a></li>
+  <li><a href="#r-example-pipeline-continued-1" id="toc-r-example-pipeline-continued-1" class="nav-link" data-scroll-target="#r-example-pipeline-continued-1">R Example Pipeline (continued)</a></li>
+  <li><a href="#r-example-pipeline-continued-2" id="toc-r-example-pipeline-continued-2" class="nav-link" data-scroll-target="#r-example-pipeline-continued-2">R Example Pipeline (continued)</a></li>
+  <li><a href="#r-example-pipeline-finished" id="toc-r-example-pipeline-finished" class="nav-link" data-scroll-target="#r-example-pipeline-finished">R Example Pipeline (finished)</a></li>
+  <li><a href="#r-example-pipeline-plot" id="toc-r-example-pipeline-plot" class="nav-link" data-scroll-target="#r-example-pipeline-plot">R Example Pipeline (plot)</a></li>
+  <li><a href="#python-example-pipeline-weather-data" id="toc-python-example-pipeline-weather-data" class="nav-link" data-scroll-target="#python-example-pipeline-weather-data">Python Example Pipeline: Weather Data</a></li>
+  <li><a href="#python-example-pipeline-continued" id="toc-python-example-pipeline-continued" class="nav-link" data-scroll-target="#python-example-pipeline-continued">Python Example Pipeline (continued)</a></li>
+  <li><a href="#python-example-pipeline-continued-1" id="toc-python-example-pipeline-continued-1" class="nav-link" data-scroll-target="#python-example-pipeline-continued-1">Python Example Pipeline (continued)</a></li>
+  <li><a href="#python-example-pipeline-continued-2" id="toc-python-example-pipeline-continued-2" class="nav-link" data-scroll-target="#python-example-pipeline-continued-2">Python Example Pipeline (continued)</a></li>
+  <li><a href="#python-example-pipeline-finished" id="toc-python-example-pipeline-finished" class="nav-link" data-scroll-target="#python-example-pipeline-finished">Python Example Pipeline (finished)</a></li>
+  <li><a href="#python-example-pipeline-plot" id="toc-python-example-pipeline-plot" class="nav-link" data-scroll-target="#python-example-pipeline-plot">Python Example Pipeline (plot)</a></li>
+  <li><a href="#questions" id="toc-questions" class="nav-link" data-scroll-target="#questions">Questions?</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="01-introduction.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introduction to Data Pipelines</h1>
+<p class="subtitle lead">CFA Data Pipelines Workshop</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="welcome" class="level2">
+<h2 class="anchored" data-anchor-id="welcome">Welcome!</h2>
+<p>Welcome to the CFA Data Pipelines Workshop</p>
+<ul>
+<li>Introduction to workshop objectives</li>
+<li>Overview of data pipelines</li>
+<li>Setting up your environment</li>
+</ul>
+</section>
+<section id="course-structure" class="level2">
+<h2 class="anchored" data-anchor-id="course-structure">Course Structure</h2>
+<ul>
+<li><strong>Session 1</strong>: Introduction (Now!)</li>
+<li><strong>Session 2</strong>: Data Acquisition from APIs</li>
+<li><strong>Session 3</strong>: Database Queries</li>
+<li><strong>Session 4</strong>: Data Cleaning</li>
+</ul>
+</section>
+<section id="resources" class="level2">
+<h2 class="anchored" data-anchor-id="resources">Resources</h2>
+<ul>
+<li>Course website: <a href="https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/">GitHub</a></li>
+<li>Course repository: <a href="https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop">GitHub</a></li>
+<li>Documentation links will be provided</li>
+<li>Example code in repository</li>
+</ul>
+</section>
+<section id="disclaimer" class="level2">
+<h2 class="anchored" data-anchor-id="disclaimer">Disclaimer</h2>
+<p>The views and opinions expressed in this presentation are those of the presenter and do not necessarily reflect the official policy or position of the University of Utah, the Center for Forecasting and Outbreak Analytics (CFA), or any other affiliated organizations.</p>
+</section>
+<section id="ai-disclosure" class="level2">
+<h2 class="anchored" data-anchor-id="ai-disclosure">AI Disclosure</h2>
+<p>This presentation was created with the assistance of artificial intelligence tools, including:</p>
+<ul>
+<li>GitHub Copilot for code generation and suggestions</li>
+<li>Large language models for content refinement and structure</li>
+</ul>
+<p>All content has been reviewed and validated by the presenter.</p>
+</section>
+<section id="newish-r-conventions" class="level2">
+<h2 class="anchored" data-anchor-id="newish-r-conventions">Newish R Conventions</h2>
+<ul>
+<li>The pipe operators</li>
+<li>Lambda functions</li>
+</ul>
+</section>
+<section id="the-pipe-operator" class="level2">
+<h2 class="anchored" data-anchor-id="the-pipe-operator">The Pipe Operator</h2>
+<p>The pipe operator (<code>%&gt;%</code> from <code>magrittr</code> or <code>|&gt;</code> native in R ≥4.1) chains operations together for cleaner, more readable code.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Without pipe:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Nested functions (hard to read)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">round</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(data, value <span class="sc">&gt;</span> <span class="dv">0</span>)<span class="sc">$</span>value</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  ), </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple intermediate variables</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>filtered <span class="ot">&lt;-</span> <span class="fu">filter</span>(data, value <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>values <span class="ot">&lt;-</span> filtered<span class="sc">$</span>value</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>avg <span class="ot">&lt;-</span> <span class="fu">mean</span>(values)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">round</span>(avg, <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column" style="width:50%;">
+<p><strong>With pipe:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean, left-to-right flow</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(value <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(value) <span class="sc">|&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Read as: "take data, then</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># filter, then extract values,</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># then calculate mean, then round"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section>
+<section id="lambda-functions-anonymous-functions" class="level2">
+<h2 class="anchored" data-anchor-id="lambda-functions-anonymous-functions">Lambda Functions (Anonymous Functions)</h2>
+<p>Short, unnamed functions created on-the-fly.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>R:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Traditional function</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>square <span class="ot">&lt;-</span> <span class="cf">function</span>(x) x<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, square)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Lambda/anonymous function</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="cf">function</span>(x) x<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># New R ≥4.1 shorthand</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, \(x) x<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column" style="width:50%;">
+<p><strong>Python:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Traditional function</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> square(x):</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(<span class="bu">map</span>(square, <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">6</span>)))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Lambda function</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(<span class="bu">map</span>(<span class="kw">lambda</span> x: x<span class="op">**</span><span class="dv">2</span>, <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">6</span>)))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># List comprehension (often clearer)</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>[x<span class="op">**</span><span class="dv">2</span> <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">6</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section>
+<section id="what-is-a-data-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-a-data-pipeline">What is a Data Pipeline?</h2>
+<p>A <strong>data pipeline</strong> is a series of data processing steps where:</p>
+<ul>
+<li>Data is ingested from one or more sources</li>
+<li>Data is transformed or processed</li>
+<li>Data is loaded into a destination for analysis or storage</li>
+</ul>
+</section>
+<section id="why-data-pipelines" class="level2">
+<h2 class="anchored" data-anchor-id="why-data-pipelines">Why Data Pipelines?</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Benefits</strong></p>
+<ul>
+<li>Automation</li>
+<li>Reproducibility</li>
+<li>Scalability</li>
+<li>Error handling</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Use Cases</strong></p>
+<ul>
+<li>ETL processes</li>
+<li>Real-time analytics</li>
+<li>Data warehousing</li>
+<li>ML model training</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="pipeline-design-patterns" class="level2">
+<h2 class="anchored" data-anchor-id="pipeline-design-patterns">Pipeline Design Patterns</h2>
+<section id="extract-transform-load-etl" class="level3">
+<h3 class="anchored" data-anchor-id="extract-transform-load-etl">1. Extract-Transform-Load (ETL)</h3>
+<ul>
+<li>Extract data from sources</li>
+<li>Transform in staging area</li>
+<li>Load into destination</li>
+</ul>
+</section>
+<section id="extract-load-transform-elt" class="level3">
+<h3 class="anchored" data-anchor-id="extract-load-transform-elt">2. Extract-Load-Transform (ELT)</h3>
+<ul>
+<li>Extract data from sources</li>
+<li>Load into destination</li>
+<li>Transform in destination</li>
+</ul>
+</section>
+</section>
+<section id="common-data-sources" class="level2">
+<h2 class="anchored" data-anchor-id="common-data-sources">Common Data Sources</h2>
+<ul>
+<li><strong>APIs</strong>: REST, GraphQL, SOAP</li>
+<li><strong>Databases</strong>: SQL, NoSQL</li>
+<li><strong>Files</strong>: CSV, JSON, XML, Parquet</li>
+<li><strong>Streaming</strong>: Kafka, message queues, logs</li>
+<li><strong>Web scraping</strong>: HTML parsing</li>
+</ul>
+</section>
+<section id="pipeline-components" class="level2">
+<h2 class="anchored" data-anchor-id="pipeline-components">Pipeline Components</h2>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    A[Data Source] --&gt; B[Extraction]
+    B --&gt; C[Validation]
+    C --&gt; D[Transformation]
+    D --&gt; E[Loading]
+    E --&gt; F[Destination]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="best-practices" class="level2">
+<h2 class="anchored" data-anchor-id="best-practices">Best Practices</h2>
+<ol type="1">
+<li><strong>Idempotency</strong>: Pipeline can run multiple times safely</li>
+<li><strong>Error Handling</strong>: Graceful failures and retries</li>
+<li><strong>Logging</strong>: Track pipeline execution</li>
+<li><strong>Monitoring</strong>: Alert on failures</li>
+<li><strong>Testing</strong>: Validate data quality</li>
+<li><strong>Documentation</strong>: Clear pipeline logic</li>
+</ol>
+</section>
+<section id="idempotency-definition" class="level2">
+<h2 class="anchored" data-anchor-id="idempotency-definition">Idempotency (Definition)</h2>
+<blockquote class="blockquote">
+<p>An operation (task, step, or entire pipeline run) is <strong>idempotent</strong> if executing it multiple times with the same inputs results in the same final state and does not create duplicate side effects (e.g., repeated inserts, duplicate files, double-charged API calls).</p>
+</blockquote>
+</section>
+<section id="idempotency-key-strategies" class="level2">
+<h2 class="anchored" data-anchor-id="idempotency-key-strategies">Idempotency Key strategies:</h2>
+<ul>
+<li>Use upserts/merges instead of plain inserts (match on a natural or surrogate key).</li>
+<li>Write outputs atomically (temp file then rename) to avoid partial artifacts.</li>
+<li>Make transformations pure: avoid relying on hidden global state or timestamps unless required.</li>
+<li>Guard external side effects (e.g., check if data already fetched; hash content before reprocessing).</li>
+<li>Design idempotent DAG tasks: each task declares its inputs and outputs; reruns only recompute what is invalidated.</li>
+</ul>
+<p>Benefits: safer reruns after failure, reproducibility, easier recovery, and confidence in scheduled (e.g., nightly) executions.</p>
+</section>
+<section id="error-handling-strategies" class="level2">
+<h2 class="anchored" data-anchor-id="error-handling-strategies">Error Handling Strategies</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Detection</strong></p>
+<ul>
+<li>Input validation</li>
+<li>Schema checks</li>
+<li>Data quality tests</li>
+<li>Exception catching</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Recovery</strong></p>
+<ul>
+<li>Retry with backoff</li>
+<li>Dead letter queues (i.e.&nbsp;Human intervention needed queue)</li>
+<li>Partial success handling</li>
+<li>Alerting and notifications</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="logging-and-monitoring" class="level2">
+<h2 class="anchored" data-anchor-id="logging-and-monitoring">Logging and Monitoring</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Logging</strong></p>
+<ul>
+<li>Structured logs (JSON)</li>
+<li>Log levels (DEBUG, INFO, WARNING, ERROR)</li>
+<li>Contextual information (timestamps, user IDs)</li>
+<li>Centralized log storage</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Monitoring</strong></p>
+<ul>
+<li>Pipeline execution metrics</li>
+<li>Data quality metrics</li>
+<li>Performance dashboards</li>
+<li>Alerting thresholds</li>
+<li>SLA (Service Level Agreement) tracking</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="documentation-best-practices" class="level2">
+<h2 class="anchored" data-anchor-id="documentation-best-practices">Documentation Best Practices</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>What to Document</strong></p>
+<ul>
+<li>Pipeline purpose and business logic</li>
+<li>Data sources and schemas</li>
+<li>Transformation rules</li>
+<li>Dependencies and prerequisites</li>
+<li>Expected runtime and resources</li>
+<li>Contact information</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>How to Document</strong></p>
+<ul>
+<li>README files in repositories</li>
+<li>Inline code comments</li>
+<li>Docstrings for functions</li>
+<li>Data dictionaries</li>
+<li>Architecture diagrams</li>
+<li>Runbooks for operators (Advanced)</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="tools-and-frameworks" class="level2">
+<h2 class="anchored" data-anchor-id="tools-and-frameworks">Tools and Frameworks</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Python</strong></p>
+<ul>
+<li><a href="https://airflow.apache.org/">Apache Airflow</a></li>
+<li><a href="https://luigi.readthedocs.io/">Luigi</a></li>
+<li><a href="https://www.prefect.io/">Prefect</a></li>
+<li><a href="https://dagster.io/">Dagster</a></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>R</strong></p>
+<ul>
+<li><a href="https://docs.ropensci.org/targets/">targets</a></li>
+<li><a href="https://books.ropensci.org/drake/">drake</a> (legacy, superceeded by targets.)</li>
+<li>custom workflows</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="development-environment-setup" class="level2">
+<h2 class="anchored" data-anchor-id="development-environment-setup">Development Environment Setup</h2>
+<section id="python-setup" class="level3">
+<h3 class="anchored" data-anchor-id="python-setup">Python Setup</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create virtual environment</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv venv</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> venv/bin/activate  <span class="co"># or venv\Scripts\activate on Windows</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Install common packages</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install requests pandas sqlalchemy</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="r-setup" class="level3">
+<h3 class="anchored" data-anchor-id="r-setup">R Setup</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install common packages</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"httr2"</span>, <span class="st">"dplyr"</span>, <span class="st">"DBI"</span>, <span class="st">"dbplyr"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="your-first-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="your-first-pipeline">Your First Pipeline</h2>
+<p>Let’s build a simple pipeline:</p>
+<ol type="1">
+<li>Fetch data from an API</li>
+<li>Clean and validate</li>
+<li>Store in a database</li>
+</ol>
+<p>We’ll start with the basics and build complexity throughout the course.</p>
+</section>
+<section id="example-pipeline-weather-data" class="level2">
+<h2 class="anchored" data-anchor-id="example-pipeline-weather-data">Example Pipeline: Weather Data</h2>
+<section id="fetch-weather-data-clean-store" class="level3">
+<h3 class="anchored" data-anchor-id="fetch-weather-data-clean-store">Fetch weather data → Clean → Store</h3>
+<p>We will be fetching daily precipitation for Brighton Ski Resort for the last year.</p>
+<p><strong>R Example:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Needed Packages #####</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr2)      <span class="co">#&lt; interacting with API (modern version)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'httr2' was built under R version 4.5.2</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)      <span class="co">#&lt; data cleaning and processing</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)        <span class="co">#&lt; generic database interface</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RSQLite)    <span class="co">#&lt; specific database we will use</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'RSQLite' was built under R version 4.5.2</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)    <span class="co">#&lt; for visualization</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="r-example-pipeline-continued" class="level2">
+<h2 class="anchored" data-anchor-id="r-example-pipeline-continued">R Example Pipeline (continued)</h2>
+<p><strong>Step 1: Fetch data from Open-Meteo API (Brighton Ski Resort)</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>end_date <span class="ot">&lt;-</span> <span class="fu">Sys.Date</span>()</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>start_date <span class="ot">&lt;-</span> end_date <span class="sc">-</span> <span class="dv">365</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">request</span>(<span class="st">"https://archive-api.open-meteo.com/v1/archive"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">req_url_query</span>(</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">latitude =</span> <span class="fl">40.5981</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">longitude =</span> <span class="sc">-</span><span class="fl">111.5831</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">start_date =</span> <span class="fu">format</span>(start_date, <span class="st">"%Y-%m-%d"</span>),</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">end_date =</span> <span class="fu">format</span>(end_date, <span class="st">"%Y-%m-%d"</span>),</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">daily =</span> <span class="st">"precipitation_sum,snowfall_sum"</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">timezone =</span> <span class="st">"America/Denver"</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">req_perform</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resp_body_json</span>() <span class="ot">-&gt;</span> data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="r-example-pipeline-continued-1" class="level2">
+<h2 class="anchored" data-anchor-id="r-example-pipeline-continued-1">R Example Pipeline (continued)</h2>
+<p><strong>Step 2: Clean and validate</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">date =</span> <span class="fu">as.Date</span>(<span class="fu">unlist</span>(data<span class="sc">$</span>daily<span class="sc">$</span>time)),</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">precipitation_mm =</span> <span class="fu">unlist</span>(data<span class="sc">$</span>daily<span class="sc">$</span>precipitation_sum),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">snowfall_cm =</span> <span class="fu">unlist</span>(data<span class="sc">$</span>daily<span class="sc">$</span>snowfall_sum)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove nulls and validate ranges</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(precipitation_mm), <span class="sc">!</span><span class="fu">is.na</span>(snowfall_cm)) <span class="sc">%&gt;%</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(precipitation_mm <span class="sc">&gt;=</span> <span class="dv">0</span>, snowfall_cm <span class="sc">&gt;=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add derived variables</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">snow_water_equiv_mm =</span> snowfall_cm <span class="sc">*</span> <span class="dv">10</span>,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">rain_mm =</span> <span class="fu">pmax</span>(<span class="dv">0</span>, precipitation_mm <span class="sc">-</span> snow_water_equiv_mm)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="r-example-pipeline-continued-2" class="level2">
+<h2 class="anchored" data-anchor-id="r-example-pipeline-continued-2">R Example Pipeline (continued)</h2>
+<p><strong>Step 3: Store in SQLite database</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>conn <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">"weather_data.db"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(conn, <span class="st">"brighton_weather"</span>, df, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(conn)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Stored %d records</span><span class="sc">\n</span><span class="st">"</span>, <span class="fu">nrow</span>(df)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Stored 366 records</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Total snowfall: %.1f cm</span><span class="sc">\n</span><span class="st">"</span>, <span class="fu">sum</span>(df<span class="sc">$</span>snowfall_cm)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total snowfall: 542.1 cm</code></pre>
+</div>
+</div>
+</section>
+<section id="r-example-pipeline-finished" class="level2">
+<h2 class="anchored" data-anchor-id="r-example-pipeline-finished">R Example Pipeline (finished)</h2>
+<p><strong>Step 4: Do something with the data</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create stacked area plot</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> date)) <span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="fu">aes</span>(<span class="at">y =</span> rain_mm, <span class="at">fill =</span> <span class="st">"Rain"</span>), <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="fu">aes</span>(<span class="at">y =</span> snow_water_equiv_mm, <span class="at">fill =</span> <span class="st">"Snow"</span>), <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Rain"</span> <span class="ot">=</span> <span class="st">"steelblue"</span>, <span class="st">"Snow"</span> <span class="ot">=</span> <span class="st">"lightblue"</span>)) <span class="sc">+</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Brighton Ski Resort: Snow vs Rain Precipitation"</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Date"</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Precipitation (mm water equivalent)"</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Type"</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="r-example-pipeline-plot" class="level2">
+<h2 class="anchored" data-anchor-id="r-example-pipeline-plot">R Example Pipeline (plot)</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01-introduction_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="python-example-pipeline-weather-data" class="level2">
+<h2 class="anchored" data-anchor-id="python-example-pipeline-weather-data">Python Example Pipeline: Weather Data</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Needed Packages #####</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests     <span class="co"># interacting with API</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd <span class="co"># data cleaning and processing</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3      <span class="co"># database interface</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime, timedelta</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="python-example-pipeline-continued" class="level2">
+<h2 class="anchored" data-anchor-id="python-example-pipeline-continued">Python Example Pipeline (continued)</h2>
+<p><strong>Step 1: Fetch data from Open-Meteo API (Brighton Ski Resort)</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>end_date <span class="op">=</span> datetime.now()</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>start_date <span class="op">=</span> end_date <span class="op">-</span> timedelta(days<span class="op">=</span><span class="dv">365</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://archive-api.open-meteo.com/v1/archive"</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> {</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'latitude'</span>: <span class="fl">40.5981</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'longitude'</span>: <span class="op">-</span><span class="fl">111.5831</span>,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'start_date'</span>: start_date.strftime(<span class="st">'%Y-%m-</span><span class="sc">%d</span><span class="st">'</span>),</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'end_date'</span>: end_date.strftime(<span class="st">'%Y-%m-</span><span class="sc">%d</span><span class="st">'</span>),</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'daily'</span>: <span class="st">'precipitation_sum,snowfall_sum'</span>,</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'timezone'</span>: <span class="st">'America/Denver'</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.get(url, params<span class="op">=</span>params)</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> response.json()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="python-example-pipeline-continued-1" class="level2">
+<h2 class="anchored" data-anchor-id="python-example-pipeline-continued-1">Python Example Pipeline (continued)</h2>
+<p><strong>Step 2: Clean and validate</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'date'</span>: pd.to_datetime(data[<span class="st">'daily'</span>][<span class="st">'time'</span>]),</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'precipitation_mm'</span>: data[<span class="st">'daily'</span>][<span class="st">'precipitation_sum'</span>],</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'snowfall_cm'</span>: data[<span class="st">'daily'</span>][<span class="st">'snowfall_sum'</span>]</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove nulls and validate ranges</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.dropna()</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[(df[<span class="st">'precipitation_mm'</span>] <span class="op">&gt;=</span> <span class="dv">0</span>) <span class="op">&amp;</span> (df[<span class="st">'snowfall_cm'</span>] <span class="op">&gt;=</span> <span class="dv">0</span>)]</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Add derived variables</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'snow_water_equiv_mm'</span>] <span class="op">=</span> df[<span class="st">'snowfall_cm'</span>] <span class="op">*</span> <span class="dv">10</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'rain_mm'</span>] <span class="op">=</span> (df[<span class="st">'precipitation_mm'</span>] <span class="op">-</span> df[<span class="st">'snow_water_equiv_mm'</span>]).clip(lower<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="python-example-pipeline-continued-2" class="level2">
+<h2 class="anchored" data-anchor-id="python-example-pipeline-continued-2">Python Example Pipeline (continued)</h2>
+<p><strong>Step 3: Store in SQLite database</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>conn <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">'weather_data_py.db'</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>df.to_sql(<span class="st">'brighton_weather'</span>, conn, if_exists<span class="op">=</span><span class="st">'replace'</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>366</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>conn.close()</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Stored </span><span class="sc">{</span><span class="bu">len</span>(df)<span class="sc">}</span><span class="ss"> records"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Stored 366 records</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total snowfall: </span><span class="sc">{</span>df[<span class="st">'snowfall_cm'</span>]<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:.1f}</span><span class="ss"> cm"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total snowfall: 542.1 cm</code></pre>
+</div>
+</div>
+</section>
+<section id="python-example-pipeline-finished" class="level2">
+<h2 class="anchored" data-anchor-id="python-example-pipeline-finished">Python Example Pipeline (finished)</h2>
+<p><strong>Step 4: Do something with the data</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create stacked area plot</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>ax.fill_between(df[<span class="st">'date'</span>], <span class="dv">0</span>, df[<span class="st">'rain_mm'</span>], </span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>                label<span class="op">=</span><span class="st">'Rain'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, color<span class="op">=</span><span class="st">'steelblue'</span>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>ax.fill_between(df[<span class="st">'date'</span>], df[<span class="st">'rain_mm'</span>], </span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>                df[<span class="st">'rain_mm'</span>] <span class="op">+</span> df[<span class="st">'snow_water_equiv_mm'</span>],</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>                label<span class="op">=</span><span class="st">'Snow'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, color<span class="op">=</span><span class="st">'lightblue'</span>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Precipitation (mm water equivalent)'</span>)</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Brighton Ski Resort: Snow vs Rain Precipitation'</span>)</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="python-example-pipeline-plot" class="level2">
+<h2 class="anchored" data-anchor-id="python-example-pipeline-plot">Python Example Pipeline (plot)</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01-introduction_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="questions" class="level2">
+<h2 class="anchored" data-anchor-id="questions">Questions?</h2>
+<p>Next session: Data Acquisition from APIs</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/epiforesite\.github\.io\/CFA-Data-Pipelines-Workshop\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

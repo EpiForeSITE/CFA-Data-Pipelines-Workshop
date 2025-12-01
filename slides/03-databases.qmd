@@ -1,0 +1,872 @@
+---
+title: "Databases"
+subtitle: "CFA Data Pipelines Workshop - Week 3"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    chalkboard: true
+    preview-links: auto
+    logo: ../ForeSITE-logo.png
+    width: 1600
+    height: 900
+---
+
+## Overview
+
+Today's topics:
+
+- SQL fundamentals review
+- Connecting to databases
+- Writing efficient queries
+- Object-Relational Mapping (ORMs)
+- Transactions and ACID properties
+
+## Why Databases?
+
+- **Structured storage**: Organized data
+- **Query power**: Filter and aggregate
+- **Concurrency**: Multiple users
+- **ACID guarantees**: Data integrity: (Atomicity, Consistency, Isolation, and Durability)
+- **Scalability**: Handle large datasets
+
+## Database Types
+
+:::: {.columns}
+
+::: {.column width="33%"}
+**Relational (SQL)**
+
+- PostgreSQL
+- MySQL
+- SQLite
+- SQL Server
+:::
+
+::: {.column width="33%"}
+**Non-relational (NoSQL)**
+
+- MongoDB
+- Redis
+- Cassandra
+- DynamoDB
+:::
+
+::: {.column width="33%"}
+**Specialized**
+
+- Neo4j (Graph)
+- Apache Spark (Big Data)
+- Hadoop (Big Data)
+- InfluxDB (Time-series)
+:::
+
+::::
+
+Focus today: SQL databases
+
+## Relational Databases
+
+**What makes a database "relational"?**
+
+- Data organized into **tables** (relations)
+- Each table has **rows** (records) and **columns** (fields)
+- Tables connected through **relationships**
+- **Primary keys** uniquely identify rows
+- **Foreign keys** link tables together
+- Enforces **data integrity** and reduces redundancy
+
+## Relational Database Example
+
+Healthcare system with related tables:
+
+```{mermaid}
+%%| fig-width: 10
+%%| fig-height: 4
+erDiagram
+    direction LR
+    PATIENTS ||--o{ OUTPATIENT_VISITS : has
+    OUTPATIENT_VISITS }o--|| PROVIDERS : seen_by
+    OUTPATIENT_VISITS }o--|| DIAGNOSES : assigned
+    
+    PATIENTS {
+        int patient_id PK "🔑"
+        string name
+        date date_of_birth
+        string insurance_id
+    }
+    
+    OUTPATIENT_VISITS {
+        int visit_id PK "🔑"
+        int patient_id FK "🔗"
+        int provider_id FK "🔗"
+        int diagnosis_id FK "🔗"
+        date visit_date
+    }
+    
+    PROVIDERS {
+        int provider_id PK "🔑"
+        string name
+        string specialty
+    }
+    
+    DIAGNOSES {
+        int diagnosis_id PK "🔑"
+        string icd_code
+        string description
+    }
+```
+
+## Workshop Database
+
+**healthcare.db** - Sample SQLite database
+
+Run `exercises/03-healthcare-database.py` to create:
+
+- **10 patients** with demographics and insurance
+- **7 providers** across 4 specialties
+- **10 diagnoses** with ICD-10 codes
+- **25 outpatient visits** over 6 months
+
+All examples today use this database!
+
+## SQL Fundamentals
+
+**Structured Query Language (SQL)**
+
+Basic operations:
+
+- `SELECT`: Retrieve data
+- `INSERT`: Add data
+- `UPDATE`: Modify data
+- `DELETE`: Remove data
+
+## SELECT Statement
+
+```sql
+-- Basic select
+SELECT patient_id, name FROM patients;
+
+-- All columns
+SELECT * FROM patients;
+
+-- With conditions
+SELECT name, date_of_birth 
+FROM patients 
+WHERE insurance_id IS NOT NULL;
+
+-- With sorting
+SELECT name, visit_date 
+FROM outpatient_visits 
+ORDER BY visit_date DESC;
+```
+
+## Select Example
+
+```{r}
+#| echo: false
+con <- DBI::dbConnect(RSQLite::SQLite(), "../exercises/healthcare.db")
+```
+
+```{sql}
+--| connection: con
+--| echo: true
+SELECT name, date_of_birth 
+FROM patients 
+WHERE insurance_id IS NOT NULL
+ORDER BY date_of_birth
+LIMIT 5;
+```
+
+
+## Filtering with WHERE
+
+```sql
+-- Comparison operators
+SELECT * FROM outpatient_visits WHERE visit_date > '2024-01-01';
+
+-- Multiple conditions
+SELECT * FROM outpatient_visits 
+WHERE visit_date >= '2024-01-01' 
+  AND provider_id = 5;
+
+-- Pattern matching
+SELECT * FROM patients 
+WHERE name LIKE 'Smith%';
+
+-- IN clause
+SELECT * FROM providers 
+WHERE specialty IN ('Cardiology', 'Neurology');
+```
+
+## WHERE Example
+
+```{sql}
+--| connection: con
+--| echo: true
+SELECT * FROM providers 
+WHERE specialty IN ('Cardiology', 'Neurology');
+```
+
+## Aggregation
+
+```sql
+-- Count records
+SELECT COUNT(*) FROM patients;
+
+-- Count visits per patient
+SELECT 
+    patient_id,
+    COUNT(*) as visit_count
+FROM outpatient_visits
+GROUP BY patient_id;
+
+-- Group by provider specialty
+SELECT 
+    specialty,
+    COUNT(*) as provider_count
+FROM providers
+GROUP BY specialty;
+```
+
+## Aggregation Example
+
+```{sql}
+--| connection: con
+--| echo: true
+SELECT 
+    specialty,
+    COUNT(*) as provider_count
+FROM providers
+GROUP BY specialty;
+```
+
+
+## Joins
+
+```sql
+-- Inner join
+SELECT p.name, v.visit_date, pr.name as provider_name
+FROM patients p
+INNER JOIN outpatient_visits v ON p.patient_id = v.patient_id
+INNER JOIN providers pr ON v.provider_id = pr.provider_id;
+
+-- Left join
+SELECT p.name, COUNT(v.visit_id) as visit_count
+FROM patients p
+LEFT JOIN outpatient_visits v ON p.patient_id = v.patient_id
+GROUP BY p.name;
+```
+
+## Joins Example
+
+```{sql}
+--| connection: con
+--| echo: true
+SELECT p.name, COUNT(v.visit_id) as visit_count
+FROM patients p
+LEFT JOIN outpatient_visits v ON p.patient_id = v.patient_id
+GROUP BY p.name
+ORDER BY visit_count DESC
+LIMIT 5;
+```
+
+
+## Database Connection Components
+
+Understanding how to connect to databases:
+
+- **Protocol**: Communication method (e.g., TCP/IP, file)
+- **Driver**: Software that translates commands for specific database
+- **Connection String**: Contains all connection details
+- **Host/Server**: Location of database server
+- **Port**: Network port (e.g., 5432 for PostgreSQL)
+- **Credentials**: Username and password
+- **Database Name**: Specific database on the server
+
+## Connection Strings
+
+**Example:**
+
+Azure SQL with Interactive Authentication, Necessary if using 2FA
+```
+Driver={ODBC Driver 18 for SQL Server};
+Server=cfa-datasbase-p1.cfa.privatelink.database.windows.net;
+Database=healthcare;
+Authentication=ActiveDirectoryInteractive;
+TrustServerCertificate=True;
+Encrypt=yes;
+```
+
+Reference: [ConnectionStrings.com](https://www.connectionstrings.com/)
+
+## Database Connectors
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**Python Libraries:**
+
+- **psycopg2**: PostgreSQL
+- **pymysql**: MySQL
+- **sqlite3**: SQLite (built-in)
+- **pyodbc**: ODBC (multiple databases)
+
+:::
+
+:::{.column width="50%"}
+**R Packages:**
+
+- **RPostgres**: PostgreSQL
+- **RMySQL**: MySQL
+- **RSQLite**: SQLite
+- **odbc**: ODBC connections
+
+:::
+
+::::
+
+
+## ODBC (Open Database Connectivity)
+
+**Universal interface** for database connections
+
+```r
+library(DBI)
+library(odbc)
+
+con <- dbConnect(
+  odbc::odbc(),
+  Driver = "PostgreSQL Unicode",
+  Server = "localhost",
+  Database = "healthcare",
+  UID = "user",
+  PWD = "password",
+  Port = 5432
+)
+```
+
+**Benefits:** 
+
+- Database-agnostic
+- widely supported
+
+**Pitfall:**
+
+- Does not universalize SQL
+
+## Connection Best Practices
+
+1. **Never hardcode credentials** in scripts
+2. **Use environment variables** or config files
+3. **Close connections** when done
+4. **Use connection pooling** for web apps
+5. **Test connectivity** before running queries
+6. **Handle timeouts** and network errors
+
+## Environment Variables Example
+
+```python
+import os
+import psycopg2
+
+# Store credentials in environment variables
+conn = psycopg2.connect(
+    host=os.getenv('DB_HOST'),
+    database=os.getenv('DB_NAME'),
+    user=os.getenv('DB_USER'),
+    password=os.getenv('DB_PASSWORD')
+)
+```
+
+```r
+# R equivalent
+con <- dbConnect(
+  RPostgres::Postgres(),
+  host = Sys.getenv('DB_HOST'),
+  dbname = Sys.getenv('DB_NAME'),
+  user = Sys.getenv('DB_USER'),
+  password = Sys.getenv('DB_PASSWORD')
+)
+```
+
+## Connecting to Databases
+
+### Python with SQLite
+
+```python
+import sqlite3
+
+# Connect to database
+conn = sqlite3.connect('database.db')
+cursor = conn.cursor()
+
+# Execute query
+cursor.execute('SELECT * FROM users')
+rows = cursor.fetchall()
+
+# Close connection
+conn.close()
+```
+
+## Python with PostgreSQL
+
+```python
+import psycopg2
+
+# Connect
+conn = psycopg2.connect(
+    host="localhost",
+    database="mydb",
+    user="user",
+    password="password"
+)
+
+cursor = conn.cursor()
+cursor.execute("SELECT * FROM users")
+rows = cursor.fetchall()
+
+conn.close()
+```
+
+## R with DBI
+
+```r
+library(DBI)
+
+# SQLite
+con <- dbConnect(RSQLite::SQLite(), "database.db")
+
+# Query
+result <- dbGetQuery(con, "SELECT * FROM users")
+
+# Close
+dbDisconnect(con)
+```
+
+## Parameterized Queries
+
+**Always use parameterized queries!**
+
+Python:
+```python
+# WRONG - SQL injection risk
+user_id = input("Enter user ID: ")
+cursor.execute(f"SELECT * FROM users WHERE id = {user_id}")
+
+# CORRECT - Safe from SQL injection
+user_id = input("Enter user ID: ")
+cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+```
+R:
+```r
+# WRONG - SQL injection risk
+user_id <- readline("Enter user ID: ")
+query <- paste0("SELECT * FROM users WHERE id = ", user_id)
+dbGetQuery(con, query)
+
+# CORRECT - Safe from SQL injection
+user_id <- readline("Enter user ID: ")
+dbGetQuery(con, "SELECT * FROM users WHERE id = ?", params = list(user_id))
+```
+
+## Object-Relational Mapping (ORM)
+
+ORMs map database tables to objects/data structures:
+
+- Write less SQL
+- Database-agnostic code
+- Type safety
+- May sacrifice performance
+
+**Examples:**
+
+- Python: SQLAlchemy, Django ORM
+- R: dbplyr (maps dplyr to SQL)
+- Java: Hibernate
+- C#: Entity Framework
+
+## SQLAlchemy (Python)
+
+```python
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    email = Column(String)
+
+# Create engine and session
+engine = create_engine('sqlite:///database.db')
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# Query
+users = session.query(User).filter(User.email.like('%@example.com')).all()
+```
+
+## dbplyr (R)
+
+```r
+library(dplyr)
+library(dbplyr)
+
+# Connect
+con <- DBI::dbConnect(RSQLite::SQLite(), "database.db")
+
+# Reference table
+users <- tbl(con, "users")
+
+# Query with dplyr syntax
+active_users <- users %>%
+  filter(status == "active") %>%
+  select(name, email) %>%
+  collect()  # Execute query
+```
+
+## SQL to dbplyr Translation
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**SQL**
+```sql
+SELECT name, email
+FROM users
+WHERE status = 'active'
+ORDER BY name
+LIMIT 10;
+```
+:::
+
+::: {.column width="50%"}
+**dbplyr (R)**
+```r
+users %>%
+  filter(status == "active") %>%
+  select(name, email) %>%
+  arrange(name) %>%
+  head(10)
+```
+:::
+
+::::
+
+| SQL Keyword | dbplyr Function |
+|------------|-----------------|
+| SELECT | `select()` |
+| WHERE | `filter()` |
+| ORDER BY | `arrange()` |
+| GROUP BY | `group_by()` |
+| HAVING | `filter()` (after group_by) |
+| JOIN | `left_join()`, `inner_join()`, etc. |
+| TOP/LIMIT | `head()` or `slice()` |
+
+
+## Reading Data from Database (R)
+
+**Pull data from database to R:**
+
+```r
+# Method 1: DBI - Read entire table
+patients <- dbReadTable(con, "patients")
+
+# Method 2: DBI - Query with SQL
+result <- dbGetQuery(con, "
+  SELECT p.name, COUNT(v.visit_id) as visits
+  FROM patients p
+  LEFT JOIN outpatient_visits v ON p.patient_id = v.patient_id
+  GROUP BY p.name
+")
+
+# Method 3: dbplyr - Lazy evaluation
+patients_tbl <- tbl(con, "patients")
+active_patients <- patients_tbl %>%
+  filter(insurance_id != "") %>%
+  collect()  # Execute and bring to R
+```
+## Writing Data to Database (R)
+
+**Push data from R to database:**
+
+```r
+library(DBI)
+
+# Assuming you have a connection 'con'
+# (Works with any DBI-compatible database)
+
+# Write data frame to new table
+dbWriteTable(con, "new_patients", patient_df, overwrite = TRUE)
+
+# Append to existing table
+dbWriteTable(con, "patients", new_records, append = TRUE)
+
+# Temporary table (auto-deleted on disconnect)
+dbWriteTable(con, "temp_analysis", temp_df, temporary = TRUE)
+```
+
+## dbplyr Data Transfer Methods
+
+**Additional dbplyr functions for data movement:**
+
+```r
+library(dbplyr)
+
+# Copy local data frame to database (temporary by default)
+copy_to(con, patient_df, "patients_temp")
+
+# Copy with indexes for better performance
+copy_to(con, patient_df, "patients_indexed", 
+        indexes = list("patient_id", "insurance_id"))
+
+# Create permanent table
+copy_to(con, patient_df, "patients_permanent", temporary = FALSE)
+
+# Compute intermediate results on database
+expensive_query <- patients_tbl %>%
+  filter(insurance_id != "") %>%
+  group_by(insurance_id) %>%
+  summarize(count = n())
+
+# Store as temp table on database (not in R)
+compute(expensive_query, name = "temp_summary")
+```
+
+## Idempotent Updates with rows_upsert()
+
+**Critical for data pipelines: Update existing or insert new rows**
+
+```r
+library(dbplyr)
+
+# Get reference to existing table
+patients_tbl <- tbl(con, "patients")
+
+# New or updated patient data
+updated_patients <- data.frame(
+  patient_id = c(1, 11),  # 1 exists, 11 is new
+  name = c("John Smith Updated", "New Patient"),
+  date_of_birth = c("1975-03-15", "2000-01-01"),
+  insurance_id = c("INS001", "INS011")
+)
+
+# Upsert: Update if exists, insert if not
+rows_upsert(patients_tbl, updated_patients, 
+            by = "patient_id",      # Key column to match on
+            in_place = TRUE)        # Modify database directly
+
+# Other useful row operations:
+# rows_insert() - Insert only (error if exists)
+# rows_update() - Update only (error if missing)
+# rows_delete() - Delete matching rows
+```
+
+## Writing Data from Python to Database
+
+**Push DataFrames to database:**
+
+```python
+import pandas as pd
+import sqlite3  # or psycopg2, pyodbc, etc.
+
+# Create connection
+conn = sqlite3.connect('healthcare.db')
+
+# Write DataFrame to new table
+patient_df.to_sql('new_patients', conn, if_exists='replace', index=False)
+
+# Append to existing table
+new_records.to_sql('patients', conn, if_exists='append', index=False)
+
+# Insert with SQLAlchemy (more powerful)
+from sqlalchemy import create_engine
+engine = create_engine('sqlite:///healthcare.db')
+patient_df.to_sql('patients', engine, if_exists='replace', 
+                  index=False, method='multi')  # Faster bulk insert
+
+conn.close()
+```
+
+**Note:** `if_exists='replace'` is idempotent (can be re-run safely)
+
+## Python Idempotent Upsert Pattern
+
+**For true upsert (INSERT or UPDATE), use raw SQL:**
+
+```python
+import pandas as pd
+import sqlite3
+
+conn = sqlite3.connect('healthcare.db')
+cursor = conn.cursor()
+
+# Example: Upsert single record
+cursor.execute("""
+    INSERT INTO patients (patient_id, name, date_of_birth, insurance_id)
+    VALUES (?, ?, ?, ?)
+    ON CONFLICT(patient_id) 
+    DO UPDATE SET 
+        name = excluded.name,
+        date_of_birth = excluded.date_of_birth,
+        insurance_id = excluded.insurance_id
+""", (1, "John Smith Updated", "1975-03-15", "INS001"))
+
+# For DataFrame, use executemany()
+data = df.values.tolist()
+cursor.executemany("INSERT INTO ... ON CONFLICT ...", data)
+
+conn.commit()
+```
+
+**PostgreSQL:** Use `ON CONFLICT`, **MySQL:** Use `ON DUPLICATE KEY UPDATE`
+
+## Transactions
+
+A transaction is a sequence of operations performed as a single logical unit of work.
+
+```python
+conn = sqlite3.connect('database.db')
+cursor = conn.cursor()
+
+try:
+    cursor.execute("BEGIN TRANSACTION")
+    cursor.execute("UPDATE accounts SET balance = balance - 100 WHERE id = 1")
+    cursor.execute("UPDATE accounts SET balance = balance + 100 WHERE id = 2")
+    conn.commit()
+except Exception as e:
+    conn.rollback()
+    print(f"Transaction failed: {e}")
+finally:
+    conn.close()
+```
+
+## ACID Properties
+
+- **Atomicity**: All or nothing
+- **Consistency**: Valid state transitions
+- **Isolation**: Concurrent transactions don't interfere
+- **Durability**: Committed data persists
+
+## Query Optimization
+
+### Use Indexes
+
+```sql
+-- Create index
+CREATE INDEX idx_users_email ON users(email);
+
+-- Query benefits from index
+SELECT * FROM users WHERE email = 'user@example.com';
+```
+
+### Avoid SELECT *
+
+```sql
+-- Less efficient
+SELECT * FROM users;
+
+-- More efficient - only needed columns
+SELECT id, name, email FROM users;
+```
+
+## Explain Query Plans
+
+```sql
+-- See how database executes query
+EXPLAIN QUERY PLAN
+SELECT u.name, COUNT(o.id)
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+GROUP BY u.name;
+```
+
+Helps identify:
+
+- Missing indexes
+- Inefficient joins
+- Full table scans
+
+
+## Explain Query Plans Output
+
+```{sql}
+--| connection: con
+EXPLAIN QUERY PLAN
+SELECT p.name, COUNT(v.visit_id) as visit_count
+FROM patients p
+LEFT JOIN outpatient_visits v ON p.patient_id = v.patient_id
+GROUP BY p.name
+ORDER BY visit_count DESC
+```
+
+
+## Connection Pooling
+
+Reuse database connections:
+
+```python
+from sqlalchemy import create_engine
+from sqlalchemy.pool import QueuePool
+
+engine = create_engine(
+    'postgresql://user:pass@localhost/db',
+    poolclass=QueuePool,
+    pool_size=10,
+    max_overflow=20
+)
+```
+
+Benefits:
+
+- Faster connections
+- Limited concurrent connections
+- Better resource management
+
+## Best Practices
+
+1. **Use parameterized queries**: Prevent SQL injection
+2. **Index appropriately**: Balance read/write performance
+3. **Use transactions**: Ensure data consistency
+4. **Close connections**: Avoid resource leaks
+5. **Handle errors**: Catch and log database errors
+6. **Limit result sets**: Use LIMIT/pagination
+7. **Monitor performance**: Log slow queries
+
+## Common Pitfalls
+
+- SQL injection vulnerabilities
+- Not closing connections
+- N+1 query problem (ORMs)
+- Missing indexes on large tables
+- Not using transactions for multi-step operations
+- Fetching too much data at once
+
+## Hands-on Exercise
+
+Build a script that:
+
+1. Connects to a database
+2. Creates a table
+3. Inserts sample data
+4. Queries and filters data
+5. (BONUS) Uses transactions
+6. (BONUS) Handles errors properly
+
+
+## Questions?
+
+Next session: Data Cleaning
+
+## Resources
+
+- [SQL Tutorial](https://www.w3schools.com/sql/)
+- [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+- [PostgreSQL Tutorial](https://www.postgresqltutorial.com/)
+- [dbplyr Documentation](https://dbplyr.tidyverse.org/)

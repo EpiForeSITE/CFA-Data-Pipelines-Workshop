@@ -1,0 +1,56 @@
+# R Package Dependencies for CFA Data Pipelines Workshop
+# This file lists all R packages needed to render the Quarto site
+
+# Core packages for data manipulation and APIs
+httr2
+httr
+jsonlite
+dplyr
+DBI
+
+# httr2 dependencies (commonly missing)
+curl
+openssl
+magrittr
+rlang
+glue
+lifecycle
+rappdirs
+withr
+
+# Database drivers
+RSQLite
+RPostgres
+odbc
+
+# Database query translation
+dbplyr
+
+# Rendering and documentation
+knitr
+rmarkdown
+ggplot2
+
+# Data validation and logging
+validate
+logger
+
+# Object-oriented programming
+R6
+
+# Configuration and scheduling
+config
+taskscheduleR
+cronR
+
+# Testing
+testthat
+
+# API development (for docker examples)
+plumber
+
+# Encoding utilities
+base64enc
+
+# Python integration
+reticulate

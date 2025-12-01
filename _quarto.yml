@@ -1,0 +1,35 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  site-url: "https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/"
+  title: "CFA Data Pipelines Workshop"
+  navbar:
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Syllabus"
+        href: syllabus.qmd
+      - text: "Schedule"
+        href: schedule.qmd
+      - text: "Slides"
+        menu:
+          - text: "Introduction"
+            href: slides/01-introduction.qmd
+          - text: "Data Acquisition from APIs"
+            href: slides/02-apis.qmd
+          - text: "Database Queries"
+            href: slides/03-databases.qmd
+          - text: "Data Cleaning"
+            href: slides/04-data-cleaning.qmd
+    right:
+      - icon: github
+        href: https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    toc-depth: 3

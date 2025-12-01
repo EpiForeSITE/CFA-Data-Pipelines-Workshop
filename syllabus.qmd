@@ -1,0 +1,65 @@
+---
+title: "Syllabus"
+---
+
+## Course Information
+
+**Course Title**: CFA Data Pipelines Workshop
+
+**Instructor**: Andrew Redd, PhD
+
+## Course Description
+
+This workshop provides hands-on training in building data pipelines, acquiring data from databases and APIs, and implementing effective data cleaning strategies. Students will learn industry best practices and gain practical experience through real-world examples.
+
+## Learning Objectives
+
+By the end of this course, students will be able to:
+
+1. Design and implement efficient data pipelines
+2. Acquire data from RESTful APIs using authentication and pagination
+3. Query databases effectively using SQL and ORMs
+4. Clean and validate data for analysis
+5. Handle common data quality issues
+6. Implement error handling and logging in data pipelines
+7. Apply best practices for reproducible data workflows
+
+## Course Topics
+
+### Module 1: Introduction to Data Pipelines
+- What are data pipelines?
+- Pipeline design patterns
+- Tools and frameworks
+
+### Module 2: Databases
+- SQL fundamentals review
+- Connecting to databases
+- Writing efficient queries
+- Working with ORMs
+- Transaction management
+
+### Module 3: Data Acquisition from APIs
+- RESTful API fundamentals
+- Authentication methods (API keys, OAuth)
+- Handling pagination and rate limits
+- Error handling and retries
+- Practical examples with real APIs
+
+### Module 4: Data Cleaning
+- Common data quality issues
+- Missing data handling
+- Data validation techniques
+- Data transformation and normalization
+- Documentation and reproducibility
+
+
+## Required Materials
+
+- Laptop with Python 3.8+ or R 4.0+ installed
+- Internet connection for API access
+- Text editor or IDE you are familiar with (VS Code, RStudio, or PyCharm recommended)
+
+## Resources
+
+- GitHub Repository: [https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop](https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop)
+- Additional resources will be provided throughout the course

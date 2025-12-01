@@ -1,0 +1,3139 @@
+---
+title: "Data Cleaning & Pipeline Integration"
+subtitle: "CFA Data Pipelines Workshop - Session 4"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    chalkboard: true
+    preview-links: auto
+    logo: ../ForeSITE-logo.png
+    width: 1280
+    height: 720
+    css: |
+      .reveal {
+        font-size: 0.8em;
+      }
+---
+
+## Overview
+
+This sessions's topics:
+
+- Recap: Building blocks of data pipelines
+- Data quality and cleaning strategies
+- Integrating API → Database → Clean Data
+- Building reusable, idempotent pipelines
+- Error handling and monitoring
+- Documentation and deployment
+
+## Workshop Recap
+
+**What we've covered:**
+
+- **Session 1**: Python/R fundamentals, environment setup
+- **Session 2**: API data acquisition (REST, GraphQL, authentication)
+- **Session 3**: Database operations (SQL, connections, upserts)
+- **Session 4**: Bringing it all together
+
+## The Complete Pipeline
+
+```{mermaid}
+%%| fig-width: 7
+%%| fig-height: 5
+flowchart LR
+    A[API Source] -->|Fetch| B[Validate]
+    B -->|Clean| C[Transform]
+    C --> CB[Combine]
+
+    D[(Database)] -->|Fetch| V2[Validate]
+    V2 -->|Clean| C2[Transform]
+    C2 --> CB[Combine]
+    
+    CB -->|Upsert| W[(Warehouse)]
+    W -->|Export| P[Python Analysis]
+    W -->|Export| R[R Analysis]
+    W -->|Export| PBI[Power BI]
+    
+    B  -.->|Errors| F[Log]
+    V2 -.->|Errors| F[Log]
+    C  -.->|Errors| F
+    C2 -.->|Errors| F
+    F  -->|Alert| G[Monitor]
+    
+    style A fill:#e1f5ff
+    style D fill:#fff4e1
+    style CB fill:#f3e5f5
+    style P fill:#e8f5e9
+    style R fill:#e8f5e9
+    style PBI fill:#e8f5e9
+    style F fill:#ffebee
+```
+
+## Why Data Cleaning?
+
+> "Data scientists spend 80% of their time cleaning data"
+
+**Real data is messy:**
+
+- Missing values (NULL, empty strings, placeholders)
+- Inconsistent formats (dates, phone numbers, addresses)
+- Duplicates (same record multiple times)
+- Outliers (extreme or impossible values)
+- Type mismatches (numbers as strings)
+- Encoding issues (character sets)
+
+## Data Quality in Context
+
+**Pipeline perspective:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R:**
+```r
+# What we've learned:
+# 1. Get data from API
+response <- GET(api_url, 
+  add_headers(Authorization = token))
+data <- content(response)
+
+# 2. Store in database
+dbWriteTable(con, "raw_table", df, 
+  append = TRUE)
+
+# 3. NOW: Clean before/after storage?
+# Answer: Both! Validate early, 
+# clean for analysis
+```
+:::
+
+::: {.column width="50%"}
+**Python:**
+```python
+# What we've learned:
+# 1. Get data from API
+response = requests.get(api_url, 
+  headers=headers)
+data = response.json()
+
+# 2. Store in database
+df.to_sql('raw_table', engine, 
+  if_exists='append')
+
+# 3. NOW: Clean before/after storage?
+# Answer: Both! Validate early, 
+# clean for analysis
+```
+:::
+
+::::
+
+## Common Data Quality Issues
+
+1. **Missing data**: NULL insurance_id, empty provider names
+2. **Duplicates**: Same patient_id appearing twice
+3. **Inconsistency**: Date formats ("2024-01-15" vs "01/15/2024")
+4. **Outliers**: visit_date in year 2099, age = -5
+5. **Type mismatches**: patient_id stored as string "001"
+6. **Invalid data**: ICD codes that don't exist
+
+**Remember**: These issues affect both API data AND database queries!
+
+## Logging Tools
+
+**Essential packages for pipeline logging:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R: [logger](https://cran.r-project.org/package=logger)**
+
+- Multiple log levels (DEBUG, INFO, WARN, ERROR)
+- Flexible log formatting (glue syntax)
+- Multiple appenders (console, file, syslog)
+- Easy to configure
+:::
+
+::: {.column width="50%"}
+**Python: [logging](https://docs.python.org/3/library/logging.html)**
+
+- Built-in standard library
+- Multiple log levels (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+- Handlers for console, file, HTTP, etc.
+- Industry-standard logging framework
+:::
+
+::::
+
+## Logging Tools: Installation & Setup
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R:**
+```r
+# Install
+install.packages("logger")
+
+# Load
+library(logger)
+
+# Basic usage
+log_info("Processing {n} records")
+log_error("Failed: {error_msg}")
+```
+:::
+
+::: {.column width="50%"}
+**Python:**
+```python
+# Import (built-in, no install needed)
+import logging
+
+# Configure
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Basic usage
+logger.info(f"Processing {n} records")
+logger.error(f"Failed: {error_msg}")
+```
+:::
+
+::::
+
+## Why Logging is Critical
+
+**Documentation and accountability:**
+
+- **Track transformations**: Record what data was cleaned and why
+- **Debug failures**: Understand exactly where and why pipelines break
+- **Monitor quality**: Track data quality metrics over time
+- **Audit trails**: Create compliance documentation for regulatory requirements
+- **Team communication**: Document decisions for future maintainers
+
+**Best practice**: Log before and after each transformation step
+
+## Pipeline-First Thinking
+
+**Where to clean data?**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Option 1: Clean at API**
+```r
+# Validate immediately
+data <- fetch_api()
+if (validate(data)) {
+  store_in_db(data)
+} else {
+  log_error(data)
+}
+```
+
+**Pros:** Bad data never enters system  
+**Cons:** May lose raw data for debugging
+:::
+
+::: {.column width="50%"}
+**Option 2: Store Raw, Clean Later**
+```r
+# Store everything
+store_raw(api_data)
+
+# Clean for analysis
+clean_data <- query_raw_data() %>%
+  transform()
+```
+
+**Pros:** Keep raw data, flexible cleaning  
+**Cons:** Storage costs, duplicate effort
+:::
+
+::::
+
+**Best practice:** Both! Validate early, keep raw, clean for use
+
+## Validation at API Layer
+
+**Remember Session 2: Error handling at source**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R:**
+```r
+fetch_and_validate_patients <- function(
+  api_url, token) {
+  
+  tryCatch({
+    response <- GET(
+      api_url,
+      add_headers(
+        Authorization = paste("Bearer", token)
+      ),
+      timeout(30)
+    )
+    stop_for_status(response)
+    
+    data <- content(response)
+    
+    # Immediate validation
+    validated <- validate_patient_schema(data)
+    log_info("Fetched {nrow(validated)} records")
+    
+    validated
+  }, error = function(e) {
+    log_error("API fetch failed: {e$message}")
+    NULL
+  })
+}
+```
+:::
+
+::: {.column width="50%"}
+**Python:**
+```python
+def fetch_and_validate_patients(
+  api_url, token):
+  """Fetch patient data with validation"""
+  try:
+    response = requests.get(
+      api_url,
+      headers={'Authorization': f'Bearer {token}'},
+      timeout=30
+    )
+    response.raise_for_status()
+    
+    data = response.json()
+    
+    # Immediate validation
+    validated = validate_patient_schema(data)
+    logger.info(f"Fetched {len(validated)} records")
+    
+    return validated
+    
+  except requests.exceptions.RequestException as e:
+    logger.error(f"API fetch failed: {e}")
+    return None
+```
+:::
+
+::::
+
+## Data Validation Tools
+
+**Essential packages for schema validation:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R: [validate](https://cran.r-project.org/package=validate)\([book](https://data-cleaning.github.io/validate/)\)**
+
+- Define data validation rules
+- Confront data with rules
+- Get detailed validation reports
+- Export results for documentation
+
+```r
+# Install
+install.packages("validate")
+
+# Load
+library(validate)
+```
+:::
+
+::: {.column width="50%"}
+**Python: [pandera](https://pandera.readthedocs.io/)([docs](https://pandera.readthedocs.io/en/stable/index.html))**
+
+- Type checking and validation
+- Statistical hypothesis testing
+- Schema inference from data
+- Integration with pandas
+
+```python
+# Install
+pip install pandera
+
+# Import
+import pandera as pa
+```
+:::
+
+::::
+
+## Data Validation with Schema
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R: [validate](https://cran.r-project.org/package=validate) package**
+```r
+library(validate)
+library(dplyr)
+
+# Define validation rules
+patient_rules <- validator(
+  patient_id > 0,
+  !is.na(patient_id),
+  !is.na(name),
+  nchar(name) > 0,
+  date_of_birth <= Sys.Date(),
+  grepl("^[^@]+@[^@]+\\.[^@]+", email) | 
+    is.na(email)
+)
+
+# Validate and handle errors
+results <- confront(df, patient_rules)
+
+if (all(results)) {
+  dbWriteTable(con, "patients", df, 
+    append = TRUE)
+} else {
+  errors <- summary(results) %>%
+    filter(!passes)
+  log_error("Validation failed: {nrow(errors)} rules")
+  dbWriteTable(con, "validation_errors", 
+    errors, append = TRUE)
+}
+```
+:::
+
+::: {.column width="50%"}
+**Python: [pandera](https://pypi.org/project/pandera/)**
+```python
+import pandera as pa
+from datetime import datetime
+
+# Define expected schema
+patient_schema = pa.DataFrameSchema({
+  "patient_id": pa.Column(
+    int, pa.Check.greater_than(0), 
+    nullable=False),
+  "name": pa.Column(
+    str, pa.Check.str_length(min_value=1), 
+    nullable=False),
+  "date_of_birth": pa.Column(
+    pa.DateTime, 
+    pa.Check.less_than_or_equal_to(
+      datetime.now())),
+  "insurance_id": pa.Column(
+    str, nullable=True),
+  "email": pa.Column(
+    str, pa.Check.str_matches(
+      r'^[^@]+@[^@]+\.[^@]+'), 
+    nullable=True)
+})
+
+# Validate data from API
+try:
+  validated_df = patient_schema.validate(
+    df, lazy=True)
+  validated_df.to_sql('patients', 
+    engine, if_exists='append')
+except pa.errors.SchemaErrors as e:
+  logger.error(f"Validation failed")
+  e.failure_cases.to_sql(
+    'validation_errors', engine, 
+    if_exists='append')
+```
+:::
+
+::::
+
+## Missing Data Strategies
+
+**Types of missingness:**
+
+- **MCAR**: Missing Completely At Random (safe to drop)
+- **MAR**: Missing At Random (can impute)
+- **MNAR**: Missing Not At Random (domain knowledge needed)
+
+## MCAR: Missing Completely At Random
+
+**Properties:**
+
+- Missingness is independent of both observed and unobserved data
+- No systematic pattern to the missing values
+- Probability of being missing is the same for all observations
+
+**How to identify:**
+
+- Statistical tests (Little's MCAR test)
+- Visual inspection shows no patterns
+- Missing values distributed randomly across all groups
+
+**Safe handling:** Can drop rows or use any imputation method
+
+## MAR: Missing At Random
+
+**Properties:**
+
+- Missingness depends on observed data, not the missing value itself
+- Systematic pattern related to other variables
+- Can be predicted from other available information
+
+**How to identify:**
+
+- Compare missingness rates across groups
+- Correlation between missingness and other variables
+- Different missing rates in different subgroups
+
+**Safe handling:** Imputation using observed data (mean, median, regression)
+
+## MNAR: Missing Not At Random
+
+**Properties:**
+
+- Missingness depends on the unobserved missing value itself
+- Systematic relationship between missing value and its missingness
+- Cannot be predicted from observed data alone
+
+**How to identify:**
+
+- Domain knowledge and subject matter expertise
+- Missing pattern makes logical sense given the nature of data
+- Cannot be explained by other observed variables
+
+**Safe handling:** Requires domain expertise, sensitivity analysis, or specialized models
+
+## Healthcare Examples of Missing Data Types {.smaller}
+
+| MCAR | MAR | MNAR |
+|------|-----|------|
+| Random equipment failures during data collection | Older patients more likely to skip income questions | Patients with severe illness don't report weight (too sick) |
+| Lab results missing due to random computer glitches | Men less likely to report weight than women | Very high income earners refuse to disclose income |
+| Survey responses lost due to random technical errors | Insurance_id missing more often for certain visit types | Patients with no insurance leave insurance_id blank |
+| | | Abnormal lab results not recorded (measurement failed) |
+
+## Missing Data Strategies
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R:**
+```r
+handle_missing_patients <- function(df) {
+  # Critical fields: Drop if missing
+  df <- df %>%
+    filter(!is.na(patient_id), 
+           !is.na(name))
+  log_info("Kept {nrow(df)} rows")
+  
+  # Optional fields: Keep but flag
+  df <- df %>%
+    mutate(
+      has_insurance = !is.na(insurance_id)
+    )
+  
+  # Numeric fields: Impute with care
+  median_age <- median(df$age, 
+    na.rm = TRUE)
+  df <- df %>%
+    mutate(
+      age_imputed = is.na(age),
+      age = if_else(is.na(age), 
+        median_age, age)
+    )
+  
+  df
+}
+```
+:::
+
+::: {.column width="50%"}
+**Python:**
+```python
+def handle_missing_patients(df):
+  """Handle missing values"""
+  
+  # Critical fields: Drop if missing
+  df = df.dropna(
+    subset=['patient_id', 'name'])
+  logger.info(
+    f"Kept {len(df)} rows")
+  
+  # Optional fields: Keep but flag
+  df['has_insurance'] = \
+    df['insurance_id'].notna()
+  
+  # Numeric fields: Impute with care
+  median_age = df['age'].median()
+  df['age_imputed'] = df['age'].isna()
+  df['age'] = df['age'].fillna(
+    median_age)
+  
+  return df
+```
+:::
+
+::::
+
+## Handling Duplicates in Pipelines {.smaller}
+
+**Idempotent pipelines prevent duplicates!**
+
+<table width="100%">
+<tr>
+<th>R</th>
+<th>Python</th>
+</tr>
+<tr>
+<td colspan="2">BAD: Creates duplicates</td>
+</tr>
+<tr>
+<td>
+```r
+bad_pipeline <- function() {
+  data <- fetch_api()
+  dbWriteTable(con, "patients", data, 
+    append = TRUE)  # Duplicates!
+}
+```
+</td>
+<td>
+```python
+def bad_pipeline():
+  data = fetch_api()
+  df.to_sql('patients', engine, 
+    if_exists='append')  # Duplicates!
+```
+</td>
+</tr>
+<tr>
+<td colspan="2"><emph>GOOD: Upsert prevents duplicates</emph></td>
+</tr>
+<tr>
+<td>
+```r
+good_pipeline <- function() {
+  data <- fetch_api()
+  
+  # Using rows_upsert from Session 3
+  patients_tbl <- tbl(con, "patients")
+  rows_upsert(
+    patients_tbl, 
+    data, 
+    by = "patient_id", 
+    in_place = TRUE
+  )
+}
+```
+</td>
+<td>
+```python
+def good_pipeline():
+  data = fetch_api()
+  
+  # Using ON CONFLICT
+  for row in data:
+    cursor.execute("""
+      INSERT INTO patients 
+        (patient_id, name, 
+         date_of_birth, insurance_id)
+      VALUES (?, ?, ?, ?)
+      ON CONFLICT(patient_id) 
+      DO UPDATE SET 
+        name = excluded.name,
+        date_of_birth = excluded.date_of_birth,
+        insurance_id = excluded.insurance_id
+    """, (row['patient_id'], 
+          row['name'], 
+          row['dob'], 
+          row['insurance']))
+  
+  conn.commit()
+```
+</td>
+</tr>
+</table>
+
+## Complete Pipeline Example
+
+**Integrating Sessions 2 + 3 + 4:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R:**
+```r
+library(httr)
+library(dplyr)
+library(DBI)
+library(logger)
+
+healthcare_pipeline <- function(
+  api_url, api_token, db_conn) {
+  
+  log_info("Starting pipeline...")
+  
+  tryCatch({
+    # 1. FETCH (Session 2: API)
+    response <- GET(
+      api_url,
+      add_headers(
+        Authorization = paste("Bearer", api_token)
+      ),
+      timeout(30)
+    )
+    stop_for_status(response)
+    data <- content(response) %>% 
+      bind_rows()
+    log_info("Fetched {nrow(data)} records")
+    
+    # 2. VALIDATE (Session 4)
+    data <- validate_schema(data)
+    
+    # 3. CLEAN (Session 4)
+    data <- clean_patient_data(data)
+    
+    # 4. STORE (Session 3: Upsert)
+    con <- dbConnect(
+      odbc::odbc(), 
+      .connection_string = db_conn
+    )
+    patients_tbl <- tbl(con, "patients")
+    rows_upsert(patients_tbl, data, 
+      by = "patient_id", 
+      in_place = TRUE)
+    dbDisconnect(con)
+    
+    log_info("Pipeline completed")
+    TRUE
+  }, error = function(e) {
+    log_error("Pipeline failed: {e$message}")
+    FALSE
+  })
+}
+```
+:::
+
+::: {.column width="50%"}
+**Python:**
+```python
+import requests
+import pandas as pd
+from sqlalchemy import create_engine
+import logging
+
+def healthcare_pipeline(
+  api_url, api_token, db_conn):
+  """Complete pipeline: 
+  API → Validate → Clean → DB"""
+  
+  logger = logging.getLogger(__name__)
+  engine = create_engine(db_conn)
+  
+  try:
+    # 1. FETCH (Session 2: API)
+    logger.info("Fetching from API...")
+    response = requests.get(
+      api_url,
+      headers={
+        'Authorization': f'Bearer {api_token}'
+      },
+      timeout=30
+    )
+    response.raise_for_status()
+    data = response.json()
+    df = pd.DataFrame(data)
+    logger.info(f"Fetched {len(df)} records")
+    
+    # 2. VALIDATE (Session 4)
+    df = patient_schema.validate(df)
+    
+    # 3. CLEAN (Session 4)
+    df = clean_patient_data(df)
+    
+    # 4. STORE (Session 3: Upsert)
+    for _, row in df.iterrows():
+      upsert_patient(engine, row)
+    
+    logger.info(f"Pipeline completed")
+    return True
+    
+  except Exception as e:
+    logger.error(f"Pipeline failed: {e}")
+    return False
+```
+:::
+
+::::
+
+## Data Transformation Functions
+
+**Reusable cleaning functions:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R:**
+```r
+clean_patient_data <- function(df) {
+  original_count <- nrow(df)
+  
+  # Remove duplicates (by patient_id)
+  df <- df %>%
+    distinct(patient_id, .keep_all = TRUE)
+  log_info("Removed {original_count - nrow(df)} dupes")
+  
+  # Standardize text fields
+  df <- df %>%
+    mutate(
+      name = str_to_title(str_trim(name)),
+      insurance_id = str_to_upper(
+        str_trim(insurance_id)
+      )
+    )
+  
+  # Convert dates
+  df <- df %>%
+    mutate(
+      date_of_birth = as.Date(date_of_birth)
+    )
+  
+  # Validate age (0-120)
+  df <- df %>%
+    mutate(
+      age = as.numeric(
+        difftime(Sys.Date(), 
+                 date_of_birth, 
+                 units = "days") / 365.25
+      )
+    ) %>%
+    filter(age >= 0, age <= 120)
+  
+  # Handle missing insurance
+  df <- df %>%
+    mutate(
+      insurance_id = coalesce(
+        insurance_id, "SELF_PAY"
+      )
+    )
+  
+  df
+}
+```
+:::
+
+::: {.column width="50%"}
+**Python:**
+```python
+def clean_patient_data(df):
+  """Transform and standardize"""
+  df = df.copy()
+  
+  # Remove duplicates
+  original_count = len(df)
+  df = df.drop_duplicates(
+    subset=['patient_id'], 
+    keep='last'
+  )
+  logger.info(
+    f"Removed {original_count - len(df)} dupes"
+  )
+  
+  # Standardize text
+  df['name'] = df['name'].str.strip()\
+    .str.title()
+  df['insurance_id'] = df['insurance_id']\
+    .str.upper().str.strip()
+  
+  # Convert dates
+  df['date_of_birth'] = pd.to_datetime(
+    df['date_of_birth'], 
+    errors='coerce'
+  )
+  
+  # Validate age (0-120)
+  df['age'] = (
+    (pd.Timestamp.now() - 
+     df['date_of_birth']).dt.days / 365.25
+  )
+  df = df[
+    (df['age'] >= 0) & (df['age'] <= 120)
+  ]
+  
+  # Handle missing insurance
+  df['insurance_id'] = df['insurance_id']\
+    .fillna('SELF_PAY')
+  
+  return df
+```
+:::
+
+::::
+
+## Object-Oriented Programming Tools
+
+**Building reusable class-based pipelines:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R: [R6](https://cran.r-project.org/package=R6)**
+
+- Object-oriented programming for R
+- Reference semantics (mutable objects)
+- Inheritance and polymorphism
+- Similar to Python classes
+:::
+
+::: {.column width="50%"}
+**Python: [Classes](https://docs.python.org/3/tutorial/classes.html)**
+
+- Built-in object-oriented programming
+- Inheritance and composition
+- Special methods (dunder methods)
+- Foundation for reusable code
+:::
+
+::::
+
+## OOP Tools: Code Examples
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R:**
+```r
+# Install
+install.packages("R6")
+
+# Load
+library(R6)
+
+# Create class
+MyClass <- R6Class("MyClass",
+  public = list(
+    initialize = function(x) {
+      self$x <- x
+    },
+    print = function() {
+      print(self$x)
+    }
+  )
+)
+
+# Use class
+obj <- MyClass$new("hello")
+obj$print()
+```
+:::
+
+::: {.column width="50%"}
+**Python:**
+```python
+# Built-in, no install needed
+
+# Create class
+class MyClass:
+    def __init__(self, x):
+        self.x = x
+    
+    def print(self):
+        print(self.x)
+
+# Use class
+obj = MyClass("hello")
+obj.print()
+```
+:::
+
+::::
+
+## Pipeline Class Architecture
+
+**Object-oriented design pattern:**
+
+```{mermaid}
+%%| fig-width: 8
+%%| fig-height: 6
+classDiagram
+direction LR
+    class DataPipeline {
+        +config
+        +logger
+        +engine/con
+        +initialize(config)
+        +extract()
+        +validate(df)
+        +transform(df)
+        +load(df)
+        +run()
+    }
+    
+    class HealthcarePipeline {
+        +extract()
+        +validate(df)
+        +transform(df)
+        +load(df)
+    }
+    
+    DataPipeline <|-- HealthcarePipeline : inherits
+    
+    note for DataPipeline "Base class with framework logic"
+    note for HealthcarePipeline "Concrete implementation"
+```
+
+## Building Reusable Pipelines
+
+**Modular design for flexibility:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R (R6 Class):**
+```r
+library(R6)
+
+#' DataPipeline Class
+#' 
+#' @description Reusable pipeline framework
+#' @field config Configuration list
+#' @field logger Logger instance
+#' @field con Database connection
+DataPipeline <- R6Class("DataPipeline",
+  public = list(
+    config = NULL,
+    logger = NULL,
+    con = NULL,
+    
+    #' @description Initialize pipeline
+    #' @param config Configuration list
+    initialize = function(config) {
+      self$config <- config
+      self$logger <- log_appender(appender_file(
+        paste0("pipeline_", Sys.Date(), ".log")
+      ))
+      self$con <- dbConnect(
+        odbc::odbc(),
+        .connection_string = config$db_conn
+      )
+    },
+    
+    #' @description Override: Fetch from source
+    extract = function() {
+      stop("Override: Fetch from source")
+    },
+    
+    #' @description Override: Validate schema
+    #' @param df Data frame to validate
+    validate = function(df) {
+      stop("Override: Validate schema")
+    },
+    
+    #' @description Override: Clean data
+    #' @param df Data frame to transform
+    transform = function(df) {
+      stop("Override: Clean data")
+    },
+    
+    #' @description Override: Load to dest
+    #' @param df Data frame to load
+    load = function(df) {
+      stop("Override: Load to dest")
+    },
+    
+    #' @description Execute full ETL
+    #' @return TRUE on success, FALSE on failure
+    run = function() {
+      tryCatch({
+        log_info("Starting pipeline...")
+        
+        df <- self$extract()
+        log_info("Extracted {nrow(df)} records")
+        
+        df <- self$validate(df)
+        log_info("Validated {nrow(df)} records")
+        
+        df <- self$transform(df)
+        log_info("Transformed {nrow(df)} records")
+        
+        self$load(df)
+        log_info("Pipeline completed")
+        
+        TRUE
+      }, error = function(e) {
+        log_error("Pipeline failed: {e$message}")
+        FALSE
+      })
+    }
+  )
+)
+```
+:::
+
+::: {.column width="50%"}
+**Python (Class):**
+```python
+class DataPipeline:
+  """Reusable pipeline framework"""
+  
+  def __init__(self, config):
+    self.config = config
+    self.logger = logging.getLogger(
+      self.__class__.__name__
+    )
+    self.engine = create_engine(
+      config['db_connection']
+    )
+  
+  def extract(self):
+    """Override: Fetch data"""
+    raise NotImplementedError
+  
+  def validate(self, df):
+    """Override: Validate schema"""
+    raise NotImplementedError
+  
+  def transform(self, df):
+    """Override: Clean data"""
+    raise NotImplementedError
+  
+  def load(self, df):
+    """Override: Load to dest"""
+    raise NotImplementedError
+  
+  def run(self):
+    """Execute full ETL"""
+    try:
+      self.logger.info("Starting...")
+      
+      df = self.extract()
+      self.logger.info(
+        f"Extracted {len(df)} records"
+      )
+      
+      df = self.validate(df)
+      self.logger.info(
+        f"Validated {len(df)} records"
+      )
+      
+      df = self.transform(df)
+      self.logger.info(
+        f"Transformed {len(df)} records"
+      )
+      
+      self.load(df)
+      self.logger.info("Completed")
+      
+      return True
+    except Exception as e:
+      self.logger.error(
+        f"Pipeline failed: {e}"
+      )
+      return False
+```
+:::
+
+::::
+
+## Implementing Healthcare Pipeline
+
+**Concrete implementation:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R:**
+```r
+HealthcarePipeline <- R6Class(
+  "HealthcarePipeline",
+  inherit = DataPipeline,
+  
+  public = list(
+    extract = function() {
+      # Fetch from API (Session 2)
+      response <- GET(
+        self$config$api_url,
+        add_headers(
+          Authorization = paste(
+            "Bearer", 
+            self$config$api_token
+          )
+        ),
+        timeout(30)
+      )
+      stop_for_status(response)
+      content(response) %>% bind_rows()
+    },
+    
+    validate = function(df) {
+      # Validate schema (Session 4)
+      validate_patient_schema(df)
+    },
+    
+    transform = function(df) {
+      # Clean data (Session 4)
+      clean_patient_data(df)
+    },
+    
+    load = function(df) {
+      # Upsert to DB (Session 3)
+      patients_tbl <- tbl(
+        self$con, "patients"
+      )
+      rows_upsert(
+        patients_tbl, 
+        df, 
+        by = "patient_id", 
+        in_place = TRUE
+      )
+    }
+  )
+)
+
+# Use the pipeline
+config <- list(
+  api_url = "https://api.example.com/patients",
+  api_token = Sys.getenv("API_TOKEN"),
+  db_conn = Sys.getenv("DB_CONNECTION")
+)
+
+pipeline <- HealthcarePipeline$new(config)
+success <- pipeline$run()
+```
+:::
+
+::: {.column width="50%"}
+**Python:**
+```python
+class HealthcarePipeline(DataPipeline):
+  """Specific pipeline for healthcare"""
+  
+  def extract(self):
+    """Fetch from API (Session 2)"""
+    response = requests.get(
+      self.config['api_url'],
+      headers={
+        'Authorization': 
+          f"Bearer {self.config['api_token']}"
+      },
+      timeout=30
+    )
+    response.raise_for_status()
+    return pd.DataFrame(response.json())
+  
+  def validate(self, df):
+    """Validate schema (Session 4)"""
+    return patient_schema.validate(df)
+  
+  def transform(self, df):
+    """Clean data (Session 4)"""
+    return clean_patient_data(df)
+  
+  def load(self, df):
+    """Upsert to DB (Session 3)"""
+    for _, row in df.iterrows():
+      self.engine.execute("""
+        INSERT INTO patients 
+          (patient_id, name, 
+           date_of_birth, insurance_id)
+        VALUES (?, ?, ?, ?)
+        ON CONFLICT(patient_id) 
+        DO UPDATE SET 
+          name=excluded.name,
+          date_of_birth=excluded.date_of_birth,
+          insurance_id=excluded.insurance_id
+      """, (row['patient_id'], 
+            row['name'], 
+            row['date_of_birth'], 
+            row['insurance_id']))
+
+# Use the pipeline
+config = {
+  'api_url': 'https://api.example.com/patients',
+  'api_token': os.getenv('API_TOKEN'),
+  'db_connection': os.getenv('DB_CONNECTION')
+}
+
+pipeline = HealthcarePipeline(config)
+success = pipeline.run()
+```
+:::
+
+::::
+
+## Error Handling & Retry Logic
+
+**Robust pipelines handle failures gracefully:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R:**
+```r
+# Retry with exponential backoff
+retry_with_backoff <- function(
+  func, max_retries = 3, delay = 5) {
+  
+  for (attempt in 1:max_retries) {
+    result <- tryCatch({
+      func()
+    }, error = function(e) {
+      if (attempt == max_retries) {
+        stop(e)
+      }
+      log_warn(
+        "Attempt {attempt} failed: {e$message}. 
+         Retrying in {delay}s..."
+      )
+      Sys.sleep(delay)
+      NULL
+    })
+    
+    if (!is.null(result)) {
+      return(result)
+    }
+  }
+}
+
+RobustHealthcarePipeline <- R6Class(
+  "RobustHealthcarePipeline",
+  inherit = HealthcarePipeline,
+  
+  public = list(
+    extract = function() {
+      # Fetch with retry
+      retry_with_backoff(
+        function() super$extract(),
+        max_retries = 3,
+        delay = 10
+      )
+    },
+    
+    run = function() {
+      tryCatch({
+        super$run()
+      }, validation_error = function(e) {
+        log_error("Validation failed: {e}")
+        self$save_errors(e)
+        FALSE
+      }, error = function(e) {
+        log_critical(
+          "Unexpected error: {e$message}"
+        )
+        self$send_alert(e$message)
+        FALSE
+      })
+    }
+  )
+)
+```
+:::
+
+::: {.column width="50%"}
+**Python:**
+```python
+import time
+from functools import wraps
+
+def retry_on_failure(
+  max_retries=3, delay=5):
+  """Decorator for retry logic"""
+  def decorator(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+      for attempt in range(max_retries):
+        try:
+          return func(*args, **kwargs)
+        except requests.exceptions\
+          .RequestException as e:
+          if attempt == max_retries - 1:
+            raise
+          logger.warning(
+            f"Attempt {attempt + 1} failed: 
+             {e}. Retrying in {delay}s..."
+          )
+          time.sleep(delay)
+    return wrapper
+  return decorator
+
+class RobustHealthcarePipeline(
+  HealthcarePipeline):
+  """Pipeline with error handling"""
+  
+  @retry_on_failure(
+    max_retries=3, delay=10)
+  def extract(self):
+    """Fetch with automatic retry"""
+    return super().extract()
+  
+  def run(self):
+    """Run with error handling"""
+    try:
+      return super().run()
+    except pa.errors.SchemaErrors as e:
+      # Validation errors
+      logger.error(
+        f"Data validation failed: {e}"
+      )
+      self.save_errors(e.failure_cases)
+      return False
+    except Exception as e:
+      # Unexpected errors
+      logger.critical(
+        f"Unexpected error: {e}", 
+        exc_info=True
+      )
+      self.send_alert(str(e))
+      return False
+```
+:::
+
+::::
+
+## Pipeline Class Architecture (Updated)
+
+**Object-oriented design pattern:**
+
+```{mermaid}
+%%| fig-width: 8
+%%| fig-height: 6
+classDiagram
+direction LR
+    class DataPipeline {
+        +config
+        +logger
+        +engine/con
+        +initialize(config)
+        +extract()
+        +validate(df)
+        +transform(df)
+        +load(df)
+        +run()
+    }
+    
+    class HealthcarePipeline {
+        +extract()
+        +validate(df)
+        +transform(df)
+        +load(df)
+    }
+
+    class RobustHealthcarePipeline {
+        +extract()
+        +run()
+    }
+    
+    DataPipeline <|-- HealthcarePipeline : inherits
+    HealthcarePipeline <|-- RobustHealthcarePipeline : inherits
+    
+    note for DataPipeline "Base class with framework logic"
+    note for HealthcarePipeline "Concrete implementation"
+    note for RobustHealthcarePipeline "Added retry & error handling"
+```
+
+## Monitoring & Logging
+
+**Track pipeline performance:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R:**
+```r
+library(logger)
+
+# Configure structured logging
+log_threshold(INFO)
+log_appender(appender_tee(
+  appender_file(
+    paste0("pipeline_", Sys.Date(), ".log")
+  )
+))
+log_formatter(formatter_glue)
+
+MonitoredPipeline <- R6Class(
+  "MonitoredPipeline",
+  inherit = RobustHealthcarePipeline,
+  
+  public = list(
+    metrics = NULL,
+    
+    initialize = function(config) {
+      super$initialize(config)
+      self$metrics <- list(
+        start_time = NULL,
+        end_time = NULL,
+        records_extracted = 0,
+        records_validated = 0,
+        records_loaded = 0,
+        errors = list()
+      )
+    },
+    
+    run = function() {
+      self$metrics$start_time <- Sys.time()
+      
+      success <- super$run()
+      
+      self$metrics$end_time <- Sys.time()
+      self$metrics$duration <- 
+        as.numeric(
+          difftime(
+            self$metrics$end_time,
+            self$metrics$start_time,
+            units = "secs"
+          )
+        )
+      
+      # Log metrics
+      log_info("Pipeline metrics: 
+        {self$metrics}")
+      
+      # Store metrics in DB
+      self$save_metrics()
+      
+      success
+    }
+  )
+)
+```
+:::
+
+::: {.column width="50%"}
+**Python:**
+```python
+import logging
+from datetime import datetime
+
+# Configure structured logging
+logging.basicConfig(
+  level=logging.INFO,
+  format=
+    '%(asctime)s - %(name)s - 
+     %(levelname)s - %(message)s',
+  handlers=[
+    logging.FileHandler(
+      f'pipeline_{datetime.now():%Y%m%d}.log'
+    ),
+    logging.StreamHandler()
+  ]
+)
+
+class MonitoredPipeline(
+  RobustHealthcarePipeline):
+  """Pipeline with monitoring metrics"""
+  
+  def __init__(self, config):
+    super().__init__(config)
+    self.metrics = {
+      'start_time': None,
+      'end_time': None,
+      'records_extracted': 0,
+      'records_validated': 0,
+      'records_loaded': 0,
+      'errors': []
+    }
+  
+  def run(self):
+    """Run with metrics tracking"""
+    self.metrics['start_time'] = \
+      datetime.now()
+    
+    success = super().run()
+    
+    self.metrics['end_time'] = \
+      datetime.now()
+    self.metrics['duration'] = (
+      self.metrics['end_time'] - 
+      self.metrics['start_time']
+    ).total_seconds()
+    
+    # Log metrics
+    self.logger.info(
+      f"Pipeline metrics: {self.metrics}"
+    )
+    
+    # Store metrics in database
+    self.save_metrics()
+    
+    return success
+```
+:::
+
+::::
+
+## Pipeline Class Architecture (Final)
+
+**Complete class hierarchy with monitoring:**
+
+```{mermaid}
+%%| fig-width: 8
+%%| fig-height: 6
+classDiagram
+direction LR
+    class DataPipeline {
+        +config
+        +logger
+        +engine/con
+        +initialize(config)
+        +extract()
+        +validate(df)
+        +transform(df)
+        +load(df)
+        +run()
+    }
+    
+    class HealthcarePipeline {
+        +extract()
+        +validate(df)
+        +transform(df)
+        +load(df)
+    }
+
+    class RobustHealthcarePipeline {
+        +extract()
+        +run()
+    }
+    
+    class MonitoredPipeline {
+        +metrics
+        +initialize(config)
+        +run()
+    }
+    
+    DataPipeline <|-- HealthcarePipeline : inherits
+    HealthcarePipeline <|-- RobustHealthcarePipeline : inherits
+    RobustHealthcarePipeline <|-- MonitoredPipeline : inherits
+    
+    note for DataPipeline "Base framework"
+    note for HealthcarePipeline "Domain logic"
+    note for RobustHealthcarePipeline "Error handling"
+    note for MonitoredPipeline "Metrics tracking"
+```
+
+## Configuration Management
+
+**Environment-based configuration with unified config file:**
+
+**config.yaml (works for both R and Python):**
+```yaml
+development:
+  api_url: "https://api-dev.example.com"
+  db_connection: "sqlite:///dev.db"
+  log_level: "DEBUG"
+  retry_attempts: 3
+  timeout_seconds: 30
+  
+production:
+  api_url: "https://api.example.com"
+  db_connection: "postgresql://prod/db"  
+  log_level: "INFO"
+  retry_attempts: 5
+  timeout_seconds: 60
+
+staging:
+  api_url: "https://api-staging.example.com"
+  db_connection: "postgresql://staging/db"
+  log_level: "INFO"
+  retry_attempts: 3
+  timeout_seconds: 45
+```
+
+**Key principles:**
+- Environment variables override config file values
+- Sensitive data (tokens, passwords) stored in environment variables only
+- Same config structure works for both languages
+
+## Configuration Management: Implementation
+
+**Language-specific implementations:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R:**
+```r
+library(config)
+library(yaml)
+
+# Option 1: Using config package
+load_config <- function(env = "development") {
+  Sys.setenv(R_CONFIG_ACTIVE = env)
+  cfg <- config::get(file = "config.yaml")
+  
+  # Override with environment variables
+  cfg$api_token <- Sys.getenv("API_TOKEN")
+  cfg$db_password <- Sys.getenv("DB_PASSWORD")
+  
+  cfg
+}
+
+# Option 2: Using yaml package
+load_config_yaml <- function(env = "development") {
+  cfg <- yaml::read_yaml("config.yaml")[[env]]
+  
+  # Override with environment variables  
+  cfg$api_token <- Sys.getenv("API_TOKEN")
+  cfg$db_password <- Sys.getenv("DB_PASSWORD")
+  
+  cfg
+}
+
+# Use in pipeline
+env <- Sys.getenv("ENVIRONMENT", "development")
+config <- load_config(env)
+pipeline <- MonitoredPipeline$new(config)
+```
+:::
+
+::: {.column width="50%"}
+**Python:**
+```python
+import yaml
+import os
+
+def load_config(env='development'):
+  """Load environment-specific config"""
+  with open('config.yaml') as f:
+    all_configs = yaml.safe_load(f)
+  
+  if env not in all_configs:
+    raise ValueError(f"Environment '{env}' not found")
+  
+  config = all_configs[env].copy()
+  
+  # Override with environment variables
+  config['api_token'] = os.getenv('API_TOKEN')
+  config['db_password'] = os.getenv('DB_PASSWORD')
+  
+  # Validate required settings
+  required = ['api_url', 'db_connection']
+  missing = [k for k in required if not config.get(k)]
+  if missing:
+    raise ValueError(f"Missing config: {missing}")
+  
+  return config
+
+# Use in pipeline
+env = os.getenv('ENVIRONMENT', 'development')
+config = load_config(env)
+pipeline = MonitoredPipeline(config)
+```
+:::
+
+::::
+
+## Pipeline Execution Patterns {.smaller data-transition="slide-in fade-out"}
+
+**Choose the right execution model for your use case:**
+
+### 🔄 On-Demand (Manual)
+
+- Trigger when needed (button click, API call)
+- Best for: Ad-hoc analysis, debugging, one-time migrations
+- Pros: Full control, immediate feedback
+- Cons: Requires manual intervention
+
+## Pipeline Execution Patterns {.smaller data-transition="fade" data-visibility="uncounted"}
+
+**Choose the right execution model for your use case:**
+
+### 🔄 On-Demand (Manual)
+### 📦 Batch Processing
+
+- Scheduled runs at regular intervals  
+- Best for: Daily reports, periodic ETL, data warehousing
+- Pros: Predictable, efficient for large datasets
+- Cons: Delayed processing, fixed schedules
+
+## Pipeline Execution Patterns {.smaller data-transition="fade-in slide-out" data-visibility="uncounted"}
+
+**Choose the right execution model for your use case:**
+
+### 🔄 On-Demand (Manual)
+### 📦 Batch Processing
+### ⚡ Event-Triggered (Real-time)
+
+- React to external events (file upload, webhook, queue message)
+- Best for: Real-time alerts, streaming data, API integrations
+- Pros: Immediate response, efficient resource usage
+- Cons: Complex error handling, potential cascading failures
+
+## Scheduling Considerations & Warnings {.smaller data-transition="slide-in fade-out"}
+
+**⚠️ Critical considerations before automating:**
+
+### Resource Management
+
+- **CPU/Memory**: Pipelines can consume significant resources
+- **Database Load**: Batch operations can impact production systems
+- **Network**: API calls may hit rate limits during peak hours
+
+## Scheduling Considerations & Warnings {.smaller data-transition="fade" data-visibility="uncounted"}
+
+**⚠️ Critical considerations before automating:**
+
+### Resource Management
+### Failure Scenarios
+
+- **Silent Failures**: Scheduled jobs may fail without notification
+- **Infrastructure**: Network outages, server downtime, disk space
+- **Timing**: Computer hibernation, power failures, user logged out
+- **Data Corruption**: Bad data can propagate through systems
+- **Cascade Effects**: Failed pipeline can break downstream processes
+
+## Scheduling Considerations & Warnings {.smaller data-transition="fade-in slide-out" data-visibility="uncounted"}
+
+**⚠️ Critical considerations before automating:**
+
+### Resource Management
+### Failure Scenarios
+### Operational Complexity
+
+- **Monitoring**: Need alerts, logs, and health checks
+- **Debugging**: Harder to troubleshoot scheduled failures
+- **Maintenance**: Updates require coordination with schedules
+
+## Scheduling Options & Tools {.smaller data-transition="slide-in fade-out"}
+
+**Platform-specific scheduling tools:**
+
+### Windows
+
+- **Task Scheduler**: Built-in, GUI-based, reliable
+- **taskscheduleR**: R package for Windows scheduling
+- **PowerShell**: Script-based automation
+
+## Scheduling Options & Tools {.smaller data-transition="fade" data-visibility="uncounted"}
+
+**Platform-specific scheduling tools:**
+
+### Windows
+### Linux/Mac
+
+- **cron**: Standard Unix scheduler, text-based configuration
+- **cronR**: R package wrapper for cron
+- **systemd timers**: Modern alternative to cron
+
+## Scheduling Options & Tools {.smaller data-transition="fade-in slide-out" data-visibility="uncounted"}
+
+**Platform-specific scheduling tools:**
+
+### Windows
+### Linux/Mac
+### Cloud/Modern
+
+- **GitHub Actions**: CI/CD with scheduled workflows
+- **Azure Logic Apps / AWS Lambda**: Serverless scheduling
+- **Apache Airflow**: Enterprise workflow orchestration
+- **APScheduler (Python)**: In-process scheduling
+
+## Scheduling Best Practices {.smaller data-transition="slide-in fade-out"}
+
+**Design principles for reliable automation:**
+
+### Start Simple
+
+- Begin with manual execution, then automate
+- Test thoroughly before scheduling
+- Use development environment first
+
+## Scheduling Best Practices {.smaller data-transition="fade" data-visibility="uncounted"}
+
+**Design principles for reliable automation:**
+
+### Start Simple
+### Idempotency is Critical
+
+- Pipeline should produce same result if run multiple times
+- Use upserts instead of inserts
+- Handle partial failures gracefully
+
+## Scheduling Best Practices {.smaller data-transition="fade" data-visibility="uncounted"}
+
+**Design principles for reliable automation:**
+
+### Start Simple
+### Idempotency is Critical
+### Monitoring & Alerting
+
+- Log all operations with timestamps
+- Set up failure notifications (email, Slack, Teams)
+- Track execution metrics and performance
+
+## Scheduling Best Practices {.smaller data-transition="fade-in slide-out" data-visibility="uncounted"}
+
+**Design principles for reliable automation:**
+
+### Start Simple
+### Idempotency is Critical
+### Monitoring & Alerting
+### Resource Isolation
+
+- Run during off-peak hours when possible
+- Use separate environments for scheduled jobs
+- Implement connection pooling and timeouts
+
+## Scheduling & Automation Overview
+
+**Three main approaches for running pipelines:**
+
+1. **Platform-specific tools** (Windows Task Scheduler, cron)
+2. **Language-specific libraries** (APScheduler, taskscheduleR, cronR)
+3. **Cloud/Enterprise solutions** (GitHub Actions, Airflow)
+
+**Key considerations:**
+
+- **Timing**: When should the pipeline run?
+- **Dependencies**: What needs to be available?
+- **Monitoring**: How do you know if it worked?
+- **Recovery**: What happens when it fails?
+
+## R Scheduling Solutions
+
+**Multiple options for different environments:**
+
+::: {.panel-tabset}
+
+### Windows (taskscheduleR)
+
+```r
+library(taskscheduleR)
+
+# Schedule daily at 2 AM
+taskscheduler_create(
+  taskname = "healthcare_pipeline",
+  rscript = "pipeline.R",
+  schedule = "DAILY",
+  starttime = "02:00",
+  startdate = format(Sys.Date(), "%d/%m/%Y")
+)
+```
+
+### Unix/Linux (cronR)
+
+```r
+library(cronR)
+
+cron_add(
+  command = cron_rscript(
+    "pipeline.R",
+    rscript_args = c(Sys.getenv("ENVIRONMENT"))
+  ),
+  frequency = "daily",
+  at = "2AM",
+  id = "healthcare_pipeline",
+  description = "Daily healthcare data sync"
+)
+```
+
+### `pipeline.R`
+
+```r
+#!/usr/bin/env Rscript
+source("healthcare_pipeline.R")
+
+run_daily_pipeline <- function() {
+  config <- load_config(
+    Sys.getenv("ENVIRONMENT", "production")
+  )
+  pipeline <- MonitoredPipeline$new(config)
+  
+  success <- pipeline$run()
+  
+  if (!success) {
+    send_alert("Pipeline failed!")
+  }
+}
+
+run_daily_pipeline()
+```
+
+:::
+
+## Python Scheduling Solutions
+
+**Multiple options for different environments:**
+
+::: {.panel-tabset}
+
+### APScheduler (In-process)
+
+```python
+from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.triggers.cron import CronTrigger
+
+def run_daily_pipeline():
+  """Daily pipeline execution"""
+  config = load_config(
+    os.getenv('ENVIRONMENT', 'production')
+  )
+  pipeline = MonitoredPipeline(config)
+  
+  success = pipeline.run()
+  
+  if not success:
+    send_alert("Pipeline failed!")
+
+# Schedule daily at 2 AM
+scheduler = BlockingScheduler()
+scheduler.add_job(
+  run_daily_pipeline,
+  trigger=CronTrigger(hour=2, minute=0),
+  id='healthcare_pipeline',
+  name='Daily healthcare data sync'
+)
+
+scheduler.start()
+```
+
+### System cron
+
+```bash
+# crontab -e
+0 2 * * * /path/to/venv/bin/python /path/to/pipeline.py
+```
+
+### `pipeline.py`
+
+```python
+#!/usr/bin/env python3
+import os
+from healthcare_pipeline import MonitoredPipeline, load_config
+
+def main():
+  config = load_config(
+    os.getenv('ENVIRONMENT', 'production')
+  )
+  pipeline = MonitoredPipeline(config)
+  
+  success = pipeline.run()
+  
+  if not success:
+    send_alert("Pipeline failed!")
+    exit(1)
+
+if __name__ == '__main__':
+  main()
+```
+
+:::
+
+## Testing Pipelines
+
+**Unit tests for pipeline components:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R (testthat):**
+```r
+library(testthat)
+
+test_that(
+  "clean_patient_data removes duplicates", {
+  df <- tibble(
+    patient_id = c(1, 1, 2),
+    name = c("John", "John", "Jane"),
+    date_of_birth = as.Date(
+      c("1990-01-01", "1990-01-01", 
+        "1990-01-01")
+    )
+  )
+  
+  cleaned <- clean_patient_data(df)
+  
+  expect_equal(nrow(cleaned), 2)
+  expect_true(
+    !any(duplicated(cleaned$patient_id))
+  )
+})
+
+test_that(
+  "clean_patient_data standardizes names", {
+  df <- tibble(
+    patient_id = 1,
+    name = "  john doe  ",
+    date_of_birth = as.Date("1990-01-01")
+  )
+  
+  cleaned <- clean_patient_data(df)
+  
+  expect_equal(cleaned$name[1], "John Doe")
+})
+
+test_that("pipeline handles API errors", {
+  config <- list(
+    api_url = "http://invalid-url"
+  )
+  pipeline <- HealthcarePipeline$new(config)
+  
+  success <- pipeline$run()
+  
+  expect_false(success)
+})
+
+# Run tests
+test_dir("tests/testthat")
+```
+:::
+
+::: {.column width="50%"}
+**Python (pytest):**
+```python
+import pytest
+import pandas as pd
+
+class TestHealthcarePipeline:
+  
+  def test_clean_patient_data_removes_dupes(
+    self):
+    """Test duplicate removal"""
+    df = pd.DataFrame({
+      'patient_id': [1, 1, 2],
+      'name': ['John', 'John', 'Jane'],
+      'date_of_birth': ['1990-01-01'] * 3
+    })
+    
+    cleaned = clean_patient_data(df)
+    
+    assert len(cleaned) == 2
+    assert cleaned['patient_id'].is_unique
+  
+  def test_clean_patient_data_standardizes(
+    self):
+    """Test name standardization"""
+    df = pd.DataFrame({
+      'patient_id': [1],
+      'name': ['  john doe  '],
+      'date_of_birth': ['1990-01-01']
+    })
+    
+    cleaned = clean_patient_data(df)
+    
+    assert cleaned['name'].iloc[0] == \
+      'John Doe'
+  
+  def test_pipeline_handles_api_errors(
+    self):
+    """Test error handling"""
+    config = {
+      'api_url': 'http://invalid-url'
+    }
+    pipeline = HealthcarePipeline(config)
+    
+    success = pipeline.run()
+    
+    assert success == False
+
+# Run tests
+pytest.main([__file__, '-v'])
+```
+:::
+
+::::
+
+## R Pipeline Example
+
+**Same concepts in R:**
+
+```r
+library(httr)
+library(dplyr)
+library(dbplyr)
+library(DBI)
+library(logger)
+
+healthcare_pipeline <- function(config) {
+  log_info("Starting pipeline...")
+  
+  tryCatch({
+    # 1. Extract (Session 2: API)
+    response <- GET(
+      config$api_url,
+      add_headers(Authorization = paste("Bearer", config$api_token))
+    )
+    stop_for_status(response)
+    data <- content(response) %>% bind_rows()
+    log_info("Extracted {nrow(data)} records")
+    
+    # 2. Transform (Session 4: Clean)
+    data <- data %>%
+      distinct(patient_id, .keep_all = TRUE) %>%
+      mutate(
+        name = str_to_title(str_trim(name)),
+        insurance_id = coalesce(insurance_id, "SELF_PAY")
+      )
+    log_info("Cleaned {nrow(data)} records")
+    
+    # 3. Load (Session 3: Database upsert)
+    con <- dbConnect(odbc::odbc(), .connection_string = config$db_connection)
+    patients_tbl <- tbl(con, "patients")
+    rows_upsert(patients_tbl, data, by = "patient_id", in_place = TRUE)
+    dbDisconnect(con)
+    
+    log_info("Pipeline completed successfully")
+    TRUE
+  }, error = function(e) {
+    log_error("Pipeline failed: {e$message}")
+    FALSE
+  })
+}
+```
+
+## Documentation Strategy Overview {.smaller}
+
+**Why documentation matters in data pipelines:**
+
+- **Future you**: Remember decisions made months ago
+- **Team collaboration**: Enable others to understand and maintain
+- **Troubleshooting**: Debug issues faster with clear context
+- **Compliance**: Meet regulatory requirements (HIPAA, SOX, etc.)
+- **Knowledge transfer**: Onboard new team members effectively
+
+**Documentation layers:**
+
+1. **Repository documentation** (README, architecture)
+2. **Code documentation** (functions, classes, inline comments)
+3. **Pipeline documentation** (data flow, business rules)
+4. **Version control** (commit messages, change history)
+
+## Repository Documentation: README
+
+**The first impression - make it count:**
+
+````markdown
+# Healthcare Data Pipeline
+
+![Pipeline Status](https://img.shields.io/badge/pipeline-passing-green)
+
+## Overview
+Automated ETL pipeline that syncs patient data from external healthcare APIs to our internal database. Runs daily at 2 AM EST.
+
+## Quick Start
+```bash
+# Clone repository
+git clone https://github.com/yourorg/healthcare-pipeline.git
+cd healthcare-pipeline
+
+# Setup environment (Python)
+pip install -r requirements.txt
+cp .env.example .env  # Edit with your credentials
+
+# Setup environment (R)
+renv::restore()
+# Edit config.yaml with your settings
+
+# Run pipeline
+python healthcare_pipeline.py
+# OR
+Rscript pipeline.R
+```
+
+## Architecture
+```
+API Source → Validation → Transformation → Database
+     ↓           ↓            ↓            ↓
+  Raw Data → Schema Check → Clean Data → Upserted Records
+```
+
+## Configuration
+See [CONFIGURATION.md](docs/CONFIGURATION.md) for detailed setup.
+
+## Contributing
+See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for development guidelines.
+
+## License
+MIT License - see [LICENSE](LICENSE) for details.
+````
+
+## Repository Documentation: Structure
+
+**Organize supporting documentation:**
+
+```
+project/
+├── README.md                 # Main entry point
+├── docs/
+│   ├── ARCHITECTURE.md       # System design
+│   ├── CONFIGURATION.md      # Setup and config
+│   ├── DEPLOYMENT.md         # How to deploy
+│   ├── TROUBLESHOOTING.md    # Common issues
+│   └── API_REFERENCE.md      # Function docs
+├── examples/
+│   ├── sample_config.yaml    # Example configurations
+│   └── test_pipeline.py      # Usage examples
+├── tests/
+│   ├── test_extraction.py    # Unit tests
+│   └── fixtures/             # Test data
+├── .env.example              # Template env vars
+├── requirements.txt          # Python deps
+├── renv.lock                 # R dependencies
+└── CHANGELOG.md              # Version history
+```
+
+**Each document serves a specific purpose**
+
+## Function & Method Documentation {.smaller}
+
+**Self-documenting code with clear docstrings:**
+
+::: {.panel-tabset}
+
+### Python (docstring)
+
+```python
+def clean_patient_data(df: pd.DataFrame, 
+                      config: dict = None) -> pd.DataFrame:
+    """Clean and standardize patient data.
+    
+    Performs the following transformations:
+    - Removes duplicate patient_id records (keeps most recent)
+    - Standardizes name formatting (Title Case, trimmed)
+    - Handles missing insurance_id (defaults to 'SELF_PAY')
+    - Validates age range (0-120 years)
+    
+    Args:
+        df: Raw patient DataFrame with columns: 
+            patient_id, name, date_of_birth, insurance_id
+        config: Optional configuration dict for custom rules
+            
+    Returns:
+        Cleaned DataFrame with same schema but standardized values
+        
+    Raises:
+        ValueError: If required columns are missing
+        pandas.errors.DataError: If date parsing fails
+        
+    Example:
+        >>> raw_data = pd.DataFrame({
+        ...     'patient_id': [1, 1, 2],
+        ...     'name': ['  john doe  ', 'john doe', 'Jane Smith'],
+        ...     'date_of_birth': ['1990-01-01', '1990-01-01', '1985-05-15'],
+        ...     'insurance_id': [None, 'BC123', 'AETNA456']
+        ... })
+        >>> cleaned = clean_patient_data(raw_data)
+        >>> len(cleaned)  # Duplicates removed
+        2
+        >>> cleaned.loc[0, 'name']  # Standardized
+        'John Doe'
+    """
+    df = df.copy()
+    logger.info(f"Cleaning {len(df)} patient records")
+    
+    # Validate required columns
+    required_cols = ['patient_id', 'name', 'date_of_birth']
+    missing_cols = [col for col in required_cols if col not in df.columns]
+    if missing_cols:
+        raise ValueError(f"Missing required columns: {missing_cols}")
+    
+    # Remove duplicates (keep latest)
+    original_count = len(df)
+    df = df.sort_values('date_of_birth').drop_duplicates(
+        subset=['patient_id'], keep='last'
+    )
+    if len(df) < original_count:
+        logger.info(f"Removed {original_count - len(df)} duplicate records")
+    
+    # Standardize names
+    df['name'] = df['name'].str.strip().str.title()
+    
+    # Handle missing insurance
+    df['insurance_id'] = df['insurance_id'].fillna('SELF_PAY')
+    
+    # Validate age range
+    df['date_of_birth'] = pd.to_datetime(df['date_of_birth'])
+    df['age'] = ((pd.Timestamp.now() - df['date_of_birth']).dt.days / 365.25)
+    invalid_ages = (df['age'] < 0) | (df['age'] > 120)
+    if invalid_ages.any():
+        logger.warning(f"Removing {invalid_ages.sum()} records with invalid ages")
+        df = df[~invalid_ages]
+    
+    logger.info(f"Cleaning complete: {len(df)} valid records")
+    return df[['patient_id', 'name', 'date_of_birth', 'insurance_id']]
+```
+
+### R (roxygen2)
+
+```r
+#' Clean and Standardize Patient Data
+#'
+#' Performs comprehensive cleaning of raw patient data including
+#' deduplication, standardization, and validation.
+#'
+#' @description
+#' This function applies a series of data quality rules to ensure
+#' patient data meets our database standards. All transformations
+#' are logged for audit purposes.
+#'
+#' @param df Data frame containing raw patient data
+#' @param config List of optional configuration parameters
+#'   \describe{
+#'     \item{max_age}{Maximum valid age (default: 120)}
+#'     \item{min_age}{Minimum valid age (default: 0)}
+#'     \item{default_insurance}{Default insurance code (default: "SELF_PAY")}
+#'   }
+#'
+#' @return Data frame with cleaned patient records containing columns:
+#'   \describe{
+#'     \item{patient_id}{Unique patient identifier (integer)}
+#'     \item{name}{Standardized patient name (Title Case)}
+#'     \item{date_of_birth}{Patient birth date (Date)}
+#'     \item{insurance_id}{Insurance identifier or "SELF_PAY"}
+#'   }
+#'
+#' @details
+#' The cleaning process follows these steps:
+#' \enumerate{
+#'   \item Validate required columns exist
+#'   \item Remove duplicate patient_id records (keeps most recent)
+#'   \item Standardize name formatting (Title Case, trimmed)
+#'   \item Convert date_of_birth to Date type
+#'   \item Calculate and validate age (0-120 years)
+#'   \item Fill missing insurance_id with default value
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' # Basic usage
+#' raw_data <- data.frame(
+#'   patient_id = c(1, 1, 2),
+#'   name = c("  john doe  ", "john doe", "Jane Smith"),
+#'   date_of_birth = as.Date(c("1990-01-01", "1990-01-01", "1985-05-15")),
+#'   insurance_id = c(NA, "BC123", "AETNA456")
+#' )
+#' cleaned <- clean_patient_data(raw_data)
+#' 
+#' # With custom config
+#' config <- list(max_age = 100, default_insurance = "UNINSURED")
+#' cleaned <- clean_patient_data(raw_data, config)
+#' }
+#'
+#' @importFrom dplyr filter mutate distinct arrange
+#' @importFrom stringr str_trim str_to_title
+#' @importFrom logger log_info log_warning
+#'
+#' @export
+clean_patient_data <- function(df, config = NULL) {
+  # Set default configuration
+  default_config <- list(
+    max_age = 120,
+    min_age = 0,
+    default_insurance = "SELF_PAY"
+  )
+  config <- modifyList(default_config, config %||% list())
+  
+  log_info("Cleaning {nrow(df)} patient records")
+  
+  # Validate required columns
+  required_cols <- c("patient_id", "name", "date_of_birth")
+  missing_cols <- setdiff(required_cols, names(df))
+  if (length(missing_cols) > 0) {
+    stop("Missing required columns: ", paste(missing_cols, collapse = ", "))
+  }
+  
+  original_count <- nrow(df)
+  
+  # Remove duplicates (keep latest by date_of_birth)
+  df <- df %>%
+    arrange(date_of_birth) %>%
+    distinct(patient_id, .keep_all = TRUE)
+  
+  if (nrow(df) < original_count) {
+    log_info("Removed {original_count - nrow(df)} duplicate records")
+  }
+  
+  # Standardize and validate
+  df <- df %>%
+    mutate(
+      name = str_to_title(str_trim(name)),
+      date_of_birth = as.Date(date_of_birth),
+      age = as.numeric(difftime(Sys.Date(), date_of_birth, units = "days")) / 365.25,
+      insurance_id = coalesce(insurance_id, config$default_insurance)
+    ) %>%
+    filter(
+      age >= config$min_age,
+      age <= config$max_age
+    ) %>%
+    select(patient_id, name, date_of_birth, insurance_id)
+  
+  log_info("Cleaning complete: {nrow(df)} valid records")
+  df
+}
+```
+
+:::
+
+## Inline Code Documentation {.smaller}
+
+**Strategic commenting for complex logic:**
+
+::: {.panel-tabset}
+
+### Good (Why, not What)
+
+```python
+def upsert_patients(engine, df):
+    """Upsert patient records using PostgreSQL syntax"""
+    
+    # Use ON CONFLICT for idempotency - critical for scheduled runs
+    # This prevents duplicate records when pipeline runs multiple times
+    # with overlapping data (common in healthcare APIs)
+    for _, row in df.iterrows():
+        engine.execute("""
+            INSERT INTO patients (patient_id, name, date_of_birth, insurance_id)
+            VALUES (%(patient_id)s, %(name)s, %(dob)s, %(insurance)s)
+            ON CONFLICT (patient_id) 
+            DO UPDATE SET 
+                name = EXCLUDED.name,
+                date_of_birth = EXCLUDED.date_of_birth,
+                insurance_id = EXCLUDED.insurance_id,
+                updated_at = CURRENT_TIMESTAMP
+        """, {
+            'patient_id': row['patient_id'],
+            'name': row['name'],
+            'dob': row['date_of_birth'],
+            'insurance': row['insurance_id']
+        })
+    
+    # Commit after all records to maintain transaction consistency
+    # If any record fails, entire batch is rolled back
+    engine.commit()
+```
+
+### Bad (Obvious statements)
+
+```python
+def upsert_patients(engine, df):
+    # Loop through dataframe
+    for _, row in df.iterrows():
+        # Execute SQL statement
+        engine.execute("""
+            INSERT INTO patients (patient_id, name, date_of_birth, insurance_id)
+            VALUES (%(patient_id)s, %(name)s, %(dob)s, %(insurance)s)
+            ON CONFLICT (patient_id) DO UPDATE SET name = EXCLUDED.name
+        """, {
+            'patient_id': row['patient_id'],  # Set patient ID
+            'name': row['name'],              # Set name
+            'dob': row['date_of_birth'],      # Set date of birth
+            'insurance': row['insurance_id']  # Set insurance
+        })
+    
+    engine.commit()  # Commit transaction
+```
+
+:::
+
+## Version Control Documentation (Git){.smaller}
+
+::: {.panel-tabset}
+
+### Commits
+
+Use [Commit Conventions](https://www.conventionalcommits.org/).
+
+```bash
+# Good commit messages (follow conventional commits)
+feat: add patient data validation with pandera schema
+fix: handle missing insurance_id in clean_patient_data()  
+docs: add API authentication setup guide
+refactor: extract database connection into config class
+chore: update requirements.txt with latest pandas version
+
+# Include context for data changes
+fix: correct age calculation to use fractional years
+
+Previously using integer division which caused patients 
+born in December to appear 1 year younger. Now using 
+365.25 for more accurate age calculation.
+
+Fixes #123
+Tested with patients born 1990-12-31, 1991-01-01
+```
+
+### Branchs
+
+```bash
+# Feature branches for new functionality
+git checkout -b feature/add-graphql-api-support
+git checkout -b feature/implement-data-validation
+git checkout -b fix/database-connection-timeout
+
+# Use descriptive branch names
+git checkout -b refactor/split-pipeline-into-classes
+git checkout -b docs/add-deployment-guide
+git checkout -b test/add-integration-tests
+```
+
+### `.gitignore`
+
+```gitignore
+# Environment and secrets
+.env
+.env.*
+config/production.yaml
+*.key
+*.pem
+
+# Data files (never commit actual data)
+data/
+*.csv
+*.json
+*.xlsx
+!data/sample/  # Except sample/test data
+!*_example.csv
+
+# Logs and outputs
+logs/
+*.log
+pipeline_metrics_*.json
+
+# Language-specific
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# R
+.RData
+.Rhistory
+renv/library/
+packrat/lib*/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.Rproj
+.Rproj.user
+
+# OS
+.DS_Store
+Thumbs.db
+```
+
+:::
+
+## Pipeline-Specific Documentation
+
+**Document the data flow and business rules:**
+
+````markdown
+# Data Pipeline Documentation
+
+## Data Sources
+
+### Healthcare API (Primary)
+- **Endpoint**: `https://api.healthcare-provider.com/v2/patients`
+- **Authentication**: Bearer token (expires every 24 hours)
+- **Rate Limits**: 1000 requests/hour, 10 requests/second
+- **Data Freshness**: Updated every 4 hours
+- **Expected Volume**: ~500 new patients/day, ~2000 updates/day
+
+### Legacy Database (Backup)
+- **Connection**: PostgreSQL on `legacy-db.internal:5432`
+- **Tables**: `patients`, `insurance_providers`, `visit_history`
+- **Update Frequency**: Real-time for active patients
+- **Data Quality**: Known issues with pre-2020 records
+
+## Business Rules
+
+### Patient Data Validation
+1. **patient_id**: Must be positive integer, unique across all sources
+2. **name**: Required, must be 2-100 characters after trimming
+3. **date_of_birth**: Required, cannot be future date, must be after 1900-01-01
+4. **insurance_id**: Optional, but if present must match active provider list
+
+### Data Transformation Rules
+- **Name standardization**: Convert to Title Case, remove extra whitespace
+- **Insurance handling**: Missing values become "SELF_PAY"
+- **Duplicate resolution**: For same patient_id, keep record with latest update timestamp
+
+### Error Handling
+- **Validation failures**: Log error, store in `validation_errors` table, continue processing
+- **API timeouts**: Retry up to 3 times with exponential backoff
+- **Database errors**: Rollback transaction, alert #data-alerts channel
+
+## Monitoring & Alerts
+
+### Success Metrics
+- **Daily volume**: Expected 400-600 new/updated records
+- **Processing time**: Should complete within 15 minutes
+- **Error rate**: Should be <1% of total records
+
+### Alert Conditions
+- No data received in 6+ hours → **CRITICAL**
+- Error rate >5% → **WARNING**
+- Processing time >30 minutes → **WARNING**
+- Database connection fails → **CRITICAL**
+
+### Log Locations
+- **Application logs**: `/var/log/healthcare-pipeline/`
+- **Database logs**: CloudWatch LogGroup `/aws/rds/healthcare-db`
+- **Metrics dashboard**: `https://grafana.internal/dashboard/healthcare-pipeline`
+````
+
+## Best Practices Summary {data-transition="slide-in fade-out"}
+
+**From all 4 sessions:**
+
+### API Layer (Session 2)
+
+- Use authentication tokens securely (env variables)
+- Handle rate limiting and pagination
+- Retry on transient failures
+
+## Best Practices Summary {data-transition="fade" data-visibility="uncounted"}
+
+**From all 4 sessions:**
+
+### API Layer (Session 2)
+### Database Layer (Session 3)
+
+- Use parameterized queries (prevent SQL injection)
+- Implement upserts for idempotency
+- Close connections properly
+
+## Best Practices Summary {data-transition="fade" data-visibility="uncounted"}
+
+**From all 4 sessions:**
+
+### API Layer (Session 2)
+### Database Layer (Session 3)
+### Data Quality (Session 4)
+
+- Validate early and often
+- Keep raw data separate from clean data
+- Document all transformations
+
+## Best Practices Summary {data-transition="fade-in slide-out" data-visibility="uncounted"}
+
+**From all 4 sessions:**
+
+### API Layer (Session 2)
+### Database Layer (Session 3)
+### Data Quality (Session 4)
+### Pipeline Design
+
+- Modular, reusable components
+- Comprehensive error handling
+- Monitor and log everything
+
+## Common Pitfalls (Revisited)
+
+**Lessons from the workshop:**
+
+- **Session 2**: Hardcoding API tokens in code
+- **Session 2**: Not handling pagination (missing data)
+- **Session 3**: Using string concatenation for SQL (injection risk)
+- **Session 3**: Appending without checking for duplicates
+- **Session 4**: Deleting outliers without domain knowledge
+- **Session 4**: Not documenting why data was removed
+- **All Sessions**: Not logging errors and metrics
+- **All Sessions**: Not making pipelines idempotent
+
+## Deployment Checklist
+
+**Before going to production:**
+
+- [ ] **Security**: No credentials in code, use env variables
+- [ ] **Testing**: Unit tests for all pipeline components
+- [ ] **Error Handling**: Try-catch blocks, retry logic
+- [ ] **Logging**: Structured logs with appropriate levels
+- [ ] **Monitoring**: Metrics tracked and alerts configured
+- [ ] **Idempotency**: Pipeline can be safely re-run
+- [ ] **Documentation**: README, comments, data dictionary
+- [ ] **Configuration**: Environment-based config files
+- [ ] **Dependencies**: requirements.txt or renv.lock
+- [ ] **Scheduling**: Cron or scheduler configured
+- [ ] **Backups**: Database backups automated
+- [ ] **Rollback Plan**: Know how to revert changes
+
+## Hands-on Exercise
+
+**Build a complete healthcare data pipeline:**
+
+1. **Extract**: Fetch patient data from mock API
+2. **Validate**: Check schema with pandera/validate
+3. **Transform**: Clean names, dates, handle missing insurance
+4. **Load**: Upsert to SQLite database
+5. **Monitor**: Log metrics and errors
+6. **Test**: Write unit tests for cleaning functions
+7. **Document**: Create README with data flow
+8. **Schedule**: Set up to run every 15 minutes
+
+**Use the healthcare.db from Session 3 as your target!**
+
+## Docker Example vs Exercise Requirements
+
+**How does our `docker-example/` compare?**
+
+::: {.panel-tabset}
+
+### ✅ Completed Features
+
+| Requirement | Docker Example | Status |
+|------------|----------------|---------|
+| **Extract** | ✅ R Plumber API + PostgreSQL | **EXCEEDS** - Multiple sources |
+| **Load** | ✅ `rows_upsert()` in tidyverse version | **MEETS** - Uses upsert pattern |
+| **Monitor** | ✅ `logger` package with structured logging | **MEETS** - Production-ready logging |
+| **Document** | ✅ Comprehensive README + architecture docs | **EXCEEDS** - Multiple doc types |
+
+### ⚠️ Partially Completed
+
+| Requirement | Docker Example | Gap |
+|------------|----------------|-----|
+| **Validate** | ⚠️ Basic error handling, no schema validation | **MISSING** - No pandera/validate |
+| **Transform** | ⚠️ Basic joins, no standardization | **MISSING** - No name cleaning, date parsing |
+| **Test** | ⚠️ Integration tests (validate.ps1/sh), no unit tests | **MISSING** - No function-level tests |
+| **Schedule** | ⚠️ Manual execution only | **MISSING** - No cron/scheduler |
+
+### 🔄 What's Different
+
+**Database Target:**
+- **Exercise**: SQLite (`healthcare.db`)  
+- **Docker**: PostgreSQL (more enterprise-like)
+
+**API Source:**
+- **Exercise**: "Mock API" (undefined)
+- **Docker**: Real R Plumber API with sample data
+
+**Scope:**
+- **Exercise**: Simple single-source pipeline
+- **Docker**: Multi-source integration (API + DB)
+
+:::
+
+## Exercise Enhancement Opportunities
+
+**Building on the Docker example:**
+
+::: {.panel-tabset}
+
+### Add Missing Components
+
+```r
+# 1. Add schema validation to docker example
+library(validate)
+
+patient_rules <- validator(
+  patient_id > 0,
+  !is.na(name),
+  nchar(name) > 0,
+  !is.na(date_of_birth)
+)
+
+# Add to healthcare_pipeline_tidyverse.R:
+validated_patients <- patients_api %>%
+  confront(patient_rules) %>%
+  # Only keep valid records
+  filter(passes)
+```
+
+### Add Data Cleaning
+
+```r
+# 2. Add transformation functions
+clean_patient_data <- function(df) {
+  df %>%
+    # Remove duplicates
+    distinct(patient_id, .keep_all = TRUE) %>%
+    # Standardize names
+    mutate(
+      name = str_to_title(str_trim(name)),
+      insurance_id = coalesce(insurance_id, "SELF_PAY")
+    ) %>%
+    # Validate age
+    filter(
+      date_of_birth <= today(),
+      date_of_birth >= as.Date("1900-01-01")
+    )
+}
+```
+
+### Add Unit Tests
+
+```r
+# 3. Create tests/test-cleaning.R
+library(testthat)
+
+test_that("clean_patient_data removes duplicates", {
+  df <- tibble(
+    patient_id = c(1, 1, 2),
+    name = c("john", "john", "jane"),
+    date_of_birth = as.Date(c("1990-01-01", "1990-01-01", "1985-01-01")),
+    insurance_id = c(NA, "INS1", "INS2")
+  )
+  
+  result <- clean_patient_data(df)
+  
+  expect_equal(nrow(result), 2)
+  expect_true(!any(duplicated(result$patient_id)))
+  expect_equal(result$name[1], "John")  # Title case
+})
+```
+
+### Add Scheduling
+
+```r
+# 4. Add scheduler.R
+library(cronR)
+
+# Schedule every 15 minutes
+cron_add(
+  command = cron_rscript(
+    "docker-example/r-client/healthcare_pipeline_tidyverse.R"
+  ),
+  frequency = "*/15 * * * *",  # Every 15 minutes
+  id = "healthcare_pipeline",
+  description = "Healthcare data sync"
+)
+```
+
+:::
+
+## Complete Example: End-to-End
+
+**Full working example tying everything together:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R (complete_pipeline.R):**
+```r
+#!/usr/bin/env Rscript
+library(httr)
+library(dplyr)
+library(DBI)
+library(validate)
+library(logger)
+
+# Setup logging
+log_threshold(INFO)
+
+# Validation rules
+patient_rules <- validator(
+  patient_id > 0,
+  !is.na(patient_id),
+  !is.na(name),
+  nchar(name) > 0,
+  date_of_birth <= Sys.Date()
+)
+
+run_pipeline <- function() {
+  # Configuration from environment
+  api_url <- Sys.getenv("API_URL")
+  api_token <- Sys.getenv("API_TOKEN")
+  db_conn <- Sys.getenv(
+    "DB_CONNECTION", 
+    "sqlite:///healthcare.db"
+  )
+  
+  tryCatch({
+    # EXTRACT (Session 2: API)
+    log_info("Fetching from API...")
+    response <- GET(
+      api_url,
+      add_headers(
+        Authorization = paste("Bearer", api_token)
+      ),
+      timeout(30)
+    )
+    stop_for_status(response)
+    df <- content(response) %>% bind_rows()
+    log_info("Fetched {nrow(df)} records")
+    
+    # VALIDATE (Session 4: Quality)
+    log_info("Validating data...")
+    results <- confront(df, patient_rules)
+    if (!all(results)) {
+      stop("Validation failed")
+    }
+    
+    # TRANSFORM (Session 4: Clean)
+    log_info("Cleaning data...")
+    df <- df %>%
+      distinct(patient_id, .keep_all = TRUE) %>%
+      mutate(
+        name = str_to_title(str_trim(name)),
+        insurance_id = coalesce(
+          insurance_id, "SELF_PAY"
+        )
+      )
+    
+    # LOAD (Session 3: Database upsert)
+    log_info("Loading to database...")
+    con <- dbConnect(
+      RSQLite::SQLite(), 
+      "healthcare.db"
+    )
+    
+    patients_tbl <- tbl(con, "patients")
+    rows_upsert(
+      patients_tbl, 
+      df, 
+      by = "patient_id", 
+      in_place = TRUE
+    )
+    
+    dbDisconnect(con)
+    
+    log_info("Pipeline completed: {nrow(df)} records")
+    TRUE
+  }, error = function(e) {
+    log_error("Pipeline failed: {e$message}")
+    FALSE
+  })
+}
+
+# Run pipeline
+success <- run_pipeline()
+quit(status = if (success) 0 else 1)
+```
+:::
+
+::: {.column width="50%"}
+**Python (complete_pipeline.py):**
+```python
+#!/usr/bin/env python3
+import os
+import requests
+import pandas as pd
+import pandera as pa
+from sqlalchemy import create_engine
+import logging
+
+# Setup logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Schema from Session 4
+patient_schema = pa.DataFrameSchema({
+  "patient_id": pa.Column(
+    int, pa.Check.greater_than(0)
+  ),
+  "name": pa.Column(
+    str, pa.Check.str_length(min_value=1)
+  ),
+  "date_of_birth": pa.Column(pa.DateTime),
+  "insurance_id": pa.Column(str, nullable=True)
+})
+
+def run_pipeline():
+  """Complete ETL pipeline"""
+  # Configuration from environment
+  api_url = os.getenv('API_URL')
+  api_token = os.getenv('API_TOKEN')
+  db_conn = os.getenv(
+    'DB_CONNECTION', 
+    'sqlite:///healthcare.db'
+  )
+  
+  try:
+    # EXTRACT (Session 2: API)
+    logger.info("Fetching from API...")
+    response = requests.get(
+      api_url,
+      headers={
+        'Authorization': f'Bearer {api_token}'
+      },
+      timeout=30
+    )
+    response.raise_for_status()
+    df = pd.DataFrame(response.json())
+    logger.info(f"Fetched {len(df)} records")
+    
+    # VALIDATE (Session 4: Quality)
+    logger.info("Validating data...")
+    df = patient_schema.validate(df)
+    
+    # TRANSFORM (Session 4: Clean)
+    logger.info("Cleaning data...")
+    df = df.drop_duplicates(
+      subset=['patient_id']
+    )
+    df['name'] = df['name'].str.strip()\\\n      .str.title()
+    df['insurance_id'] = df['insurance_id']\\\n      .fillna('SELF_PAY')
+    
+    # LOAD (Session 3: Database upsert)
+    logger.info("Loading to database...")
+    engine = create_engine(db_conn)
+    
+    for _, row in df.iterrows():
+      engine.execute(\"\"\"
+        INSERT INTO patients 
+          (patient_id, name, 
+           date_of_birth, insurance_id)
+        VALUES (?, ?, ?, ?)
+        ON CONFLICT(patient_id) DO UPDATE SET
+          name=excluded.name,
+          date_of_birth=excluded.date_of_birth,
+          insurance_id=excluded.insurance_id
+      \"\"\", (row['patient_id'], 
+            row['name'], 
+            row['date_of_birth'], 
+            row['insurance_id']))
+    
+    logger.info(
+      f"Pipeline completed: {len(df)} records"
+    )
+    return True
+    
+  except Exception as e:
+    logger.error(f"Pipeline failed: {e}")
+    return False
+
+if __name__ == '__main__':
+  success = run_pipeline()
+  exit(0 if success else 1)
+```
+:::
+
+::::
+
+## Workshop Recap
+
+**You now know how to:**
+
+1. **Session 1**: Set up Python/R environments and use git
+2. **Session 2**: Fetch data from REST and GraphQL APIs
+3. **Session 3**: Connect to databases and perform upserts
+4. **Session 4**: Clean data and build complete pipelines
+
+**Key concepts:**
+- Idempotency (upserts, safe re-runs)
+- Error handling (retries, logging)
+- Security (env variables, parameterized queries)
+- Modularity (reusable components)
+- Testing (validate assumptions)
+
+## Next Steps
+
+**Continue learning:**
+
+- **Advanced scheduling**: Apache Airflow, Prefect
+- **Data validation**: Great Expectations, dbt tests
+- **Monitoring**: Prometheus, Grafana, Datadog
+- **Containerization**: Docker, Kubernetes
+- **Cloud platforms**: AWS Lambda, Azure Functions
+- **Stream processing**: Apache Kafka, Apache Spark
+- **Data warehousing**: Snowflake, BigQuery, Redshift
+
+## Questions?
+
+Thank you for attending!
+
+## Resources
+
+**From the workshop:**
+- [Course Website](https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/)
+- [GitHub Repository](https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop)
+- Healthcare database example: `exercises/healthcare.db`
+
+**Additional resources:**
+- [pandas Documentation](https://pandas.pydata.org/)
+- [requests Documentation](https://requests.readthedocs.io/)
+- [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+- [pandera Documentation](https://pandera.readthedocs.io/)
+- [Great Expectations](https://greatexpectations.io/)
+- [Tidy Data Principles](https://vita.had.co.nz/papers/tidy-data.pdf)
+- [ConnectionStrings.com](https://www.connectionstrings.com/)
