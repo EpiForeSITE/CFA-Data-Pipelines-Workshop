@@ -29,7 +29,14 @@ jobs:
 
       - name: Install R packages
         run: |
-          install.packages(c("httr2", "jsonlite", "DBI", "RPostgres", "dplyr", "knitr", "rmarkdown"))
+          # Read package names from dependencies file (excluding comments and empty lines)
+          packages <- readLines("r_dependencies.txt")
+          packages <- packages[!grepl("^#|^$", packages)]
+          packages <- trimws(packages)
+          packages <- packages[packages != ""]
+          
+          # Install all packages
+          install.packages(packages, repos = "https://cloud.r-project.org/")
         shell: Rscript {0}
 
       - name: Setup Quarto
