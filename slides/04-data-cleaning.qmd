@@ -136,6 +136,81 @@ df.to_sql('raw_table', engine,
 
 **Remember**: These issues affect both API data AND database queries!
 
+## Logging Tools
+
+**Essential packages for pipeline logging:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R: [logger](https://cran.r-project.org/package=logger)**
+
+- Multiple log levels (DEBUG, INFO, WARN, ERROR)
+- Flexible log formatting (glue syntax)
+- Multiple appenders (console, file, syslog)
+- Easy to configure
+:::
+
+::: {.column width="50%"}
+**Python: [logging](https://docs.python.org/3/library/logging.html)**
+
+- Built-in standard library
+- Multiple log levels (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+- Handlers for console, file, HTTP, etc.
+- Industry-standard logging framework
+:::
+
+::::
+
+## Logging Tools: Installation & Setup
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R:**
+```r
+# Install
+install.packages("logger")
+
+# Load
+library(logger)
+
+# Basic usage
+log_info("Processing {n} records")
+log_error("Failed: {error_msg}")
+```
+:::
+
+::: {.column width="50%"}
+**Python:**
+```python
+# Import (built-in, no install needed)
+import logging
+
+# Configure
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Basic usage
+logger.info(f"Processing {n} records")
+logger.error(f"Failed: {error_msg}")
+```
+:::
+
+::::
+
+## Why Logging is Critical
+
+**Documentation and accountability:**
+
+- **Track transformations**: Record what data was cleaned and why
+- **Debug failures**: Understand exactly where and why pipelines break
+- **Monitor quality**: Track data quality metrics over time
+- **Audit trails**: Create compliance documentation for regulatory requirements
+- **Team communication**: Document decisions for future maintainers
+
+**Best practice**: Log before and after each transformation step
+
 ## Pipeline-First Thinking
 
 **Where to clean data?**
@@ -239,6 +314,48 @@ def fetch_and_validate_patients(
   except requests.exceptions.RequestException as e:
     logger.error(f"API fetch failed: {e}")
     return None
+```
+:::
+
+::::
+
+## Data Validation Tools
+
+**Essential packages for schema validation:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R: [validate](https://cran.r-project.org/package=validate)\([book](https://data-cleaning.github.io/validate/)\)**
+
+- Define data validation rules
+- Confront data with rules
+- Get detailed validation reports
+- Export results for documentation
+
+```r
+# Install
+install.packages("validate")
+
+# Load
+library(validate)
+```
+:::
+
+::: {.column width="50%"}
+**Python: [pandera](https://pandera.readthedocs.io/)([docs](https://pandera.readthedocs.io/en/stable/index.html))**
+
+- Type checking and validation
+- Statistical hypothesis testing
+- Schema inference from data
+- Integration with pandas
+
+```python
+# Install
+pip install pandera
+
+# Import
+import pandera as pa
 ```
 :::
 
@@ -674,6 +791,72 @@ def clean_patient_data(df):
     .fillna('SELF_PAY')
   
   return df
+```
+:::
+
+::::
+
+## Object-Oriented Programming Tools
+
+**Building reusable class-based pipelines:**
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R: [R6](https://cran.r-project.org/package=R6)**
+
+- Object-oriented programming for R
+- Reference semantics (mutable objects)
+- Inheritance and polymorphism
+- Similar to Python classes
+
+```r
+# Install
+install.packages("R6")
+
+# Load
+library(R6)
+
+# Create class
+MyClass <- R6Class("MyClass",
+  public = list(
+    initialize = function(x) {
+      self$x <- x
+    },
+    print = function() {
+      print(self$x)
+    }
+  )
+)
+
+# Use class
+obj <- MyClass$new("hello")
+obj$print()
+```
+:::
+
+::: {.column width="50%"}
+**Python: [Classes](https://docs.python.org/3/tutorial/classes.html)**
+
+- Built-in object-oriented programming
+- Inheritance and composition
+- Special methods (dunder methods)
+- Foundation for reusable code
+
+```python
+# Built-in, no install needed
+
+# Create class
+class MyClass:
+    def __init__(self, x):
+        self.x = x
+    
+    def print(self):
+        print(self.x)
+
+# Use class
+obj = MyClass("hello")
+obj.print()
 ```
 :::
 
