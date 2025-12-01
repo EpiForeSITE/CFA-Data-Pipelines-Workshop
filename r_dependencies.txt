@@ -51,3 +51,6 @@ plumber
 
 # Encoding utilities
 base64enc
+
+# Python integration
+reticulate
