@@ -1,6 +1,6 @@
 project:
   type: website
-  output-dir: _site
+  output-dir: docs
 
 website:
   site-url: "https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/"
