@@ -457,6 +457,10 @@ ggplot(df, aes(x = date)) +
 
 ## Python Example Pipeline: Weather Data
 
+```{r}
+#| echo: false
+reticulate::py_require(c('requests', 'pandas', 'matplotlib'))
+```
 ```{python}
 ## Needed Packages #####
 import requests     # interacting with API

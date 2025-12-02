@@ -151,15 +151,32 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#course-information" id="toc-course-information" class="nav-link active" data-scroll-target="#course-information">Course Information</a></li>
   <li><a href="#course-description" id="toc-course-description" class="nav-link" data-scroll-target="#course-description">Course Description</a></li>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
-  <li><a href="#course-topics" id="toc-course-topics" class="nav-link" data-scroll-target="#course-topics">Course Topics</a>
+  <li><a href="#course-structure" id="toc-course-structure" class="nav-link" data-scroll-target="#course-structure">Course Structure</a>
   <ul class="collapse">
-  <li><a href="#module-1-introduction-to-data-pipelines" id="toc-module-1-introduction-to-data-pipelines" class="nav-link" data-scroll-target="#module-1-introduction-to-data-pipelines">Module 1: Introduction to Data Pipelines</a></li>
-  <li><a href="#module-2-databases" id="toc-module-2-databases" class="nav-link" data-scroll-target="#module-2-databases">Module 2: Databases</a></li>
-  <li><a href="#module-3-data-acquisition-from-apis" id="toc-module-3-data-acquisition-from-apis" class="nav-link" data-scroll-target="#module-3-data-acquisition-from-apis">Module 3: Data Acquisition from APIs</a></li>
-  <li><a href="#module-4-data-cleaning" id="toc-module-4-data-cleaning" class="nav-link" data-scroll-target="#module-4-data-cleaning">Module 4: Data Cleaning</a></li>
+  <li><a href="#session-1-introduction-to-data-pipelines" id="toc-session-1-introduction-to-data-pipelines" class="nav-link" data-scroll-target="#session-1-introduction-to-data-pipelines">Session 1: Introduction to Data Pipelines</a></li>
+  <li><a href="#session-2-data-acquisition-from-apis" id="toc-session-2-data-acquisition-from-apis" class="nav-link" data-scroll-target="#session-2-data-acquisition-from-apis">Session 2: Data Acquisition from APIs</a></li>
+  <li><a href="#session-3-database-queries-and-management" id="toc-session-3-database-queries-and-management" class="nav-link" data-scroll-target="#session-3-database-queries-and-management">Session 3: Database Queries and Management</a></li>
+  <li><a href="#session-4-data-cleaning-pipeline-integration" id="toc-session-4-data-cleaning-pipeline-integration" class="nav-link" data-scroll-target="#session-4-data-cleaning-pipeline-integration">Session 4: Data Cleaning &amp; Pipeline Integration</a></li>
   </ul></li>
-  <li><a href="#required-materials" id="toc-required-materials" class="nav-link" data-scroll-target="#required-materials">Required Materials</a></li>
-  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources">Resources</a></li>
+  <li><a href="#docker-example-complete-healthcare-data-pipeline" id="toc-docker-example-complete-healthcare-data-pipeline" class="nav-link" data-scroll-target="#docker-example-complete-healthcare-data-pipeline">Docker Example: Complete Healthcare Data Pipeline</a>
+  <ul class="collapse">
+  <li><a href="#whats-included" id="toc-whats-included" class="nav-link" data-scroll-target="#whats-included">What’s Included</a></li>
+  <li><a href="#learning-outcomes" id="toc-learning-outcomes" class="nav-link" data-scroll-target="#learning-outcomes">Learning Outcomes</a></li>
+  <li><a href="#architecture" id="toc-architecture" class="nav-link" data-scroll-target="#architecture">Architecture</a></li>
+  </ul></li>
+  <li><a href="#prerequisites-and-setup" id="toc-prerequisites-and-setup" class="nav-link" data-scroll-target="#prerequisites-and-setup">Prerequisites and Setup</a>
+  <ul class="collapse">
+  <li><a href="#required-software" id="toc-required-software" class="nav-link" data-scroll-target="#required-software">Required Software</a></li>
+  <li><a href="#development-environment" id="toc-development-environment" class="nav-link" data-scroll-target="#development-environment">Development Environment</a></li>
+  </ul></li>
+  <li><a href="#workshop-materials-and-resources" id="toc-workshop-materials-and-resources" class="nav-link" data-scroll-target="#workshop-materials-and-resources">Workshop Materials and Resources</a>
+  <ul class="collapse">
+  <li><a href="#primary-repository" id="toc-primary-repository" class="nav-link" data-scroll-target="#primary-repository">Primary Repository</a></li>
+  <li><a href="#additional-resources" id="toc-additional-resources" class="nav-link" data-scroll-target="#additional-resources">Additional Resources</a></li>
+  </ul></li>
+  <li><a href="#assessment-and-hands-on-components" id="toc-assessment-and-hands-on-components" class="nav-link" data-scroll-target="#assessment-and-hands-on-components">Assessment and Hands-on Components</a></li>
+  <li><a href="#disclaimer" id="toc-disclaimer" class="nav-link" data-scroll-target="#disclaimer">Disclaimer</a></li>
+  <li><a href="#ai-disclosure" id="toc-ai-disclosure" class="nav-link" data-scroll-target="#ai-disclosure">AI Disclosure</a></li>
   </ul>
 </nav>
     </div>
@@ -189,79 +206,152 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="course-information">Course Information</h2>
 <p><strong>Course Title</strong>: CFA Data Pipelines Workshop</p>
 <p><strong>Instructor</strong>: Andrew Redd, PhD</p>
+<p><strong>Format</strong>: 4-session hands-on workshop</p>
+<p><strong>Duration</strong>: 4 sessions (timing flexible based on participant needs)</p>
 </section>
 <section id="course-description" class="level2">
 <h2 class="anchored" data-anchor-id="course-description">Course Description</h2>
-<p>This workshop provides hands-on training in building data pipelines, acquiring data from databases and APIs, and implementing effective data cleaning strategies. Students will learn industry best practices and gain practical experience through real-world examples.</p>
+<p>This workshop provides comprehensive training in building robust, production-ready data pipelines for public health and epidemiological applications. Participants will learn to extract data from APIs, work with databases, implement data cleaning strategies, and deploy containerized solutions. The course emphasizes practical, real-world examples using both R and Python, with a focus on reproducibility, error handling, and best practices.</p>
 </section>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
-<p>By the end of this course, students will be able to:</p>
+<p>By the end of this workshop, participants will be able to:</p>
 <ol type="1">
-<li>Design and implement efficient data pipelines</li>
-<li>Acquire data from RESTful APIs using authentication and pagination</li>
-<li>Query databases effectively using SQL and ORMs</li>
-<li>Clean and validate data for analysis</li>
-<li>Handle common data quality issues</li>
-<li>Implement error handling and logging in data pipelines</li>
-<li>Apply best practices for reproducible data workflows</li>
+<li><strong>Design and implement efficient data pipelines</strong> using modern programming conventions (pipe operators, lambda functions)</li>
+<li><strong>Extract data from RESTful APIs</strong> with proper authentication, pagination handling, and rate limiting</li>
+<li><strong>Query databases effectively</strong> using both raw SQL and Object-Relational Mapping (ORM) approaches</li>
+<li><strong>Clean and validate data</strong> for analysis with robust error handling and quality assurance</li>
+<li><strong>Apply best practices</strong> for idempotency, logging, monitoring, and documentation</li>
+<li><strong>Deploy containerized data pipelines</strong> using Docker for reproducible, scalable solutions</li>
+<li><strong>Integrate multiple data sources</strong> (APIs + databases) into unified analytical workflows</li>
+<li><strong>Implement proper error handling and recovery</strong> mechanisms for production environments</li>
 </ol>
 </section>
-<section id="course-topics" class="level2">
-<h2 class="anchored" data-anchor-id="course-topics">Course Topics</h2>
-<section id="module-1-introduction-to-data-pipelines" class="level3">
-<h3 class="anchored" data-anchor-id="module-1-introduction-to-data-pipelines">Module 1: Introduction to Data Pipelines</h3>
-<ul>
-<li>What are data pipelines?</li>
-<li>Pipeline design patterns</li>
-<li>Tools and frameworks</li>
-</ul>
+<section id="course-structure" class="level2">
+<h2 class="anchored" data-anchor-id="course-structure">Course Structure</h2>
+<section id="session-1-introduction-to-data-pipelines" class="level3">
+<h3 class="anchored" data-anchor-id="session-1-introduction-to-data-pipelines">Session 1: Introduction to Data Pipelines</h3>
+<p><strong>Duration</strong>: ~90 minutes</p>
+<p><strong>Topics Covered</strong>: - What are data pipelines and why they matter - Modern R and Python conventions (pipe operators, lambda functions) - Pipeline design patterns: ETL vs ELT - Best practices: idempotency, error handling, logging, monitoring - Tools and frameworks overview - <strong>Hands-on Example</strong>: Building a weather data pipeline (Brighton Ski Resort precipitation data)</p>
+<p><strong>Key Concepts</strong>: - Extract-Transform-Load (ETL) and Extract-Load-Transform (ELT) patterns - Idempotency and why it matters for reliable pipelines - Error detection and recovery strategies - Documentation best practices</p>
 </section>
-<section id="module-2-databases" class="level3">
-<h3 class="anchored" data-anchor-id="module-2-databases">Module 2: Databases</h3>
-<ul>
-<li>SQL fundamentals review</li>
-<li>Connecting to databases</li>
-<li>Writing efficient queries</li>
-<li>Working with ORMs</li>
-<li>Transaction management</li>
-</ul>
+<section id="session-2-data-acquisition-from-apis" class="level3">
+<h3 class="anchored" data-anchor-id="session-2-data-acquisition-from-apis">Session 2: Data Acquisition from APIs</h3>
+<p><strong>Duration</strong>: ~2 hours</p>
+<p><strong>Topics Covered</strong>: - RESTful API fundamentals and HTTP methods - Authentication methods (API keys, OAuth 2.0, Bearer tokens) - Handling pagination and rate limiting - Error handling and retry strategies with exponential backoff - Working with JSON and nested data structures - <strong>Hands-on Exercise</strong>: GitHub API with authentication</p>
+<p><strong>Key Skills</strong>: - Making authenticated API requests in both R (<code>httr2</code>) and Python (<code>requests</code>) - Implementing robust error handling and retries - Parsing complex JSON responses - Managing API rate limits and pagination</p>
 </section>
-<section id="module-3-data-acquisition-from-apis" class="level3">
-<h3 class="anchored" data-anchor-id="module-3-data-acquisition-from-apis">Module 3: Data Acquisition from APIs</h3>
-<ul>
-<li>RESTful API fundamentals</li>
-<li>Authentication methods (API keys, OAuth)</li>
-<li>Handling pagination and rate limits</li>
-<li>Error handling and retries</li>
-<li>Practical examples with real APIs</li>
-</ul>
+<section id="session-3-database-queries-and-management" class="level3">
+<h3 class="anchored" data-anchor-id="session-3-database-queries-and-management">Session 3: Database Queries and Management</h3>
+<p><strong>Duration</strong>: ~2 hours</p>
+<p><strong>Topics Covered</strong>: - SQL fundamentals review and best practices - Database connections and connection pooling - Writing efficient queries and understanding query optimization - Object-Relational Mapping (ORMs) vs raw SQL - Transactions and ACID properties - <strong>Hands-on Exercise</strong>: Healthcare database queries with patient, visit, and prescription data</p>
+<p><strong>Key Skills</strong>: - Connecting to databases using R (<code>DBI</code>, <code>RPostgres</code>) and Python (<code>sqlalchemy</code>, <code>psycopg2</code>) - Writing optimized SQL queries for analytics - Understanding when to use ORMs vs raw SQL - Managing database transactions and ensuring data integrity</p>
 </section>
-<section id="module-4-data-cleaning" class="level3">
-<h3 class="anchored" data-anchor-id="module-4-data-cleaning">Module 4: Data Cleaning</h3>
-<ul>
-<li>Common data quality issues</li>
-<li>Missing data handling</li>
-<li>Data validation techniques</li>
-<li>Data transformation and normalization</li>
-<li>Documentation and reproducibility</li>
-</ul>
+<section id="session-4-data-cleaning-pipeline-integration" class="level3">
+<h3 class="anchored" data-anchor-id="session-4-data-cleaning-pipeline-integration">Session 4: Data Cleaning &amp; Pipeline Integration</h3>
+<p><strong>Duration</strong>: ~2.5 hours</p>
+<p><strong>Topics Covered</strong>: - Data quality assessment and common issues - Missing data strategies and imputation techniques - Data validation and constraint checking - Building integrated pipelines (API → Database → Clean Data) - Testing and monitoring pipeline health - <strong>Capstone Project</strong>: Complete healthcare analytics pipeline</p>
+<p><strong>Key Skills</strong>: - Implementing comprehensive data cleaning workflows - Building end-to-end pipelines that integrate multiple data sources - Setting up monitoring and alerting for production pipelines - Creating maintainable, documented pipeline code</p>
 </section>
 </section>
-<section id="required-materials" class="level2">
-<h2 class="anchored" data-anchor-id="required-materials">Required Materials</h2>
+<section id="docker-example-complete-healthcare-data-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="docker-example-complete-healthcare-data-pipeline">Docker Example: Complete Healthcare Data Pipeline</h2>
+<p>In addition to the core sessions, this workshop includes a comprehensive <strong>Docker-based example</strong> that demonstrates a production-ready data pipeline architecture:</p>
+<section id="whats-included" class="level3">
+<h3 class="anchored" data-anchor-id="whats-included">What’s Included</h3>
 <ul>
-<li>Laptop with Python 3.8+ or R 4.0+ installed</li>
-<li>Internet connection for API access</li>
-<li>Text editor or IDE you are familiar with (VS Code, RStudio, or PyCharm recommended)</li>
+<li><strong>R Plumber API Container</strong>: RESTful API serving patient demographic data</li>
+<li><strong>PostgreSQL Database Container</strong>: Healthcare database with visits, prescriptions, and lab results</li>
+<li><strong>R Client Pipeline</strong>: Demonstrates API + database integration using tidyverse</li>
+<li><strong>Python Client Pipeline</strong>: Equivalent functionality using pandas and requests</li>
 </ul>
 </section>
-<section id="resources" class="level2">
-<h2 class="anchored" data-anchor-id="resources">Resources</h2>
+<section id="learning-outcomes" class="level3">
+<h3 class="anchored" data-anchor-id="learning-outcomes">Learning Outcomes</h3>
 <ul>
-<li>GitHub Repository: <a href="https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop">https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop</a></li>
-<li>Additional resources will be provided throughout the course</li>
+<li>Deploy multi-container applications using Docker Compose</li>
+<li>Build APIs that serve as data sources for pipelines</li>
+<li>Integrate data from multiple sources (API + database)</li>
+<li>Create reproducible, containerized analytics environments</li>
 </ul>
+</section>
+<section id="architecture" class="level3">
+<h3 class="anchored" data-anchor-id="architecture">Architecture</h3>
+<pre><code>Docker Environment
+├── R Plumber API (Port 8000) - Patient demographics
+├── PostgreSQL DB (Port 5432) - Visits, prescriptions, labs
+├── R Client - Pipeline integration with dplyr
+└── Python Client - Pipeline integration with pandas</code></pre>
+</section>
+</section>
+<section id="prerequisites-and-setup" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites-and-setup">Prerequisites and Setup</h2>
+<section id="required-software" class="level3">
+<h3 class="anchored" data-anchor-id="required-software">Required Software</h3>
+<ul>
+<li><strong>R</strong> (version 4.1+) with packages:
+<ul>
+<li><code>httr2</code> (modern HTTP client)</li>
+<li><code>dplyr</code> (data manipulation)</li>
+<li><code>DBI</code> and <code>RPostgres</code> (database connectivity)</li>
+<li><code>jsonlite</code> (JSON handling)</li>
+</ul></li>
+<li><strong>Python</strong> (version 3.8+) with packages:
+<ul>
+<li><code>requests</code> (HTTP client)</li>
+<li><code>pandas</code> (data manipulation)</li>
+<li><code>sqlalchemy</code> and <code>psycopg2</code> (database connectivity)</li>
+<li><code>matplotlib</code> (visualization)</li>
+</ul></li>
+<li><strong>Docker Desktop</strong> (for containerized examples)</li>
+<li><strong>Text Editor/IDE</strong>: VS Code, RStudio, or PyCharm recommended</li>
+</ul>
+</section>
+<section id="development-environment" class="level3">
+<h3 class="anchored" data-anchor-id="development-environment">Development Environment</h3>
+<ul>
+<li>Laptop with reliable internet connection</li>
+<li>Administrative privileges to install packages and Docker</li>
+<li>GitHub account (for API exercises)</li>
+</ul>
+</section>
+</section>
+<section id="workshop-materials-and-resources" class="level2">
+<h2 class="anchored" data-anchor-id="workshop-materials-and-resources">Workshop Materials and Resources</h2>
+<section id="primary-repository" class="level3">
+<h3 class="anchored" data-anchor-id="primary-repository">Primary Repository</h3>
+<ul>
+<li><strong>GitHub</strong>: <a href="https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop">https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop</a></li>
+<li><strong>Course Website</strong>: <a href="https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/">https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/</a></li>
+</ul>
+</section>
+<section id="additional-resources" class="level3">
+<h3 class="anchored" data-anchor-id="additional-resources">Additional Resources</h3>
+<ul>
+<li>All slide materials and code examples</li>
+<li>Exercise starter files and solutions</li>
+<li>Docker example with complete healthcare pipeline</li>
+<li>Reference documentation and best practices guides</li>
+</ul>
+</section>
+</section>
+<section id="assessment-and-hands-on-components" class="level2">
+<h2 class="anchored" data-anchor-id="assessment-and-hands-on-components">Assessment and Hands-on Components</h2>
+<p>This workshop is <strong>100% hands-on</strong> with no formal assessments. Participants will:</p>
+<ul>
+<li>Work through guided coding exercises during each session</li>
+<li>Complete a capstone project integrating all learned concepts</li>
+<li>Deploy and test the Docker healthcare pipeline example</li>
+<li>Receive individual feedback on pipeline implementations</li>
+</ul>
+</section>
+<section id="disclaimer" class="level2">
+<h2 class="anchored" data-anchor-id="disclaimer">Disclaimer</h2>
+<p>The views and opinions expressed in this workshop are those of the presenter and do not necessarily reflect the official policy or position of the University of Utah, the Center for Forecasting and Outbreak Analytics (CFA), or any other affiliated organizations.</p>
+</section>
+<section id="ai-disclosure" class="level2">
+<h2 class="anchored" data-anchor-id="ai-disclosure">AI Disclosure</h2>
+<p>This workshop content was created with the assistance of artificial intelligence tools, including GitHub Copilot for code generation and large language models for content development. All materials have been reviewed and validated by the instructor for accuracy and pedagogical effectiveness.</p>
 
 
 </section>

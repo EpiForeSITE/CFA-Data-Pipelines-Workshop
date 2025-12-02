@@ -4,63 +4,84 @@
     "href": "syllabus.html",
     "title": "Syllabus",
     "section": "",
-    "text": "Course Title: CFA Data Pipelines Workshop\nInstructor: Andrew Redd, PhD"
+    "text": "Course Title: CFA Data Pipelines Workshop\nInstructor: Andrew Redd, PhD\nFormat: 4-session hands-on workshop\nDuration: 4 sessions (timing flexible based on participant needs)"
   },
   {
     "objectID": "syllabus.html#course-information",
     "href": "syllabus.html#course-information",
     "title": "Syllabus",
     "section": "",
-    "text": "Course Title: CFA Data Pipelines Workshop\nInstructor: Andrew Redd, PhD"
+    "text": "Course Title: CFA Data Pipelines Workshop\nInstructor: Andrew Redd, PhD\nFormat: 4-session hands-on workshop\nDuration: 4 sessions (timing flexible based on participant needs)"
   },
   {
     "objectID": "syllabus.html#course-description",
     "href": "syllabus.html#course-description",
     "title": "Syllabus",
     "section": "Course Description",
-    "text": "Course Description\nThis workshop provides hands-on training in building data pipelines, acquiring data from databases and APIs, and implementing effective data cleaning strategies. Students will learn industry best practices and gain practical experience through real-world examples."
+    "text": "Course Description\nThis workshop provides comprehensive training in building robust, production-ready data pipelines for public health and epidemiological applications. Participants will learn to extract data from APIs, work with databases, implement data cleaning strategies, and deploy containerized solutions. The course emphasizes practical, real-world examples using both R and Python, with a focus on reproducibility, error handling, and best practices."
   },
   {
     "objectID": "syllabus.html#learning-objectives",
     "href": "syllabus.html#learning-objectives",
     "title": "Syllabus",
     "section": "Learning Objectives",
-    "text": "Learning Objectives\nBy the end of this course, students will be able to:\n\nDesign and implement efficient data pipelines\nAcquire data from RESTful APIs using authentication and pagination\nQuery databases effectively using SQL and ORMs\nClean and validate data for analysis\nHandle common data quality issues\nImplement error handling and logging in data pipelines\nApply best practices for reproducible data workflows"
+    "text": "Learning Objectives\nBy the end of this workshop, participants will be able to:\n\nDesign and implement efficient data pipelines using modern programming conventions (pipe operators, lambda functions)\nExtract data from RESTful APIs with proper authentication, pagination handling, and rate limiting\nQuery databases effectively using both raw SQL and Object-Relational Mapping (ORM) approaches\nClean and validate data for analysis with robust error handling and quality assurance\nApply best practices for idempotency, logging, monitoring, and documentation\nDeploy containerized data pipelines using Docker for reproducible, scalable solutions\nIntegrate multiple data sources (APIs + databases) into unified analytical workflows\nImplement proper error handling and recovery mechanisms for production environments"
   },
   {
-    "objectID": "syllabus.html#course-topics",
-    "href": "syllabus.html#course-topics",
+    "objectID": "syllabus.html#course-structure",
+    "href": "syllabus.html#course-structure",
     "title": "Syllabus",
-    "section": "Course Topics",
-    "text": "Course Topics\n\nModule 1: Introduction to Data Pipelines\n\nWhat are data pipelines?\nPipeline design patterns\nTools and frameworks\n\n\n\nModule 2: Databases\n\nSQL fundamentals review\nConnecting to databases\nWriting efficient queries\nWorking with ORMs\nTransaction management\n\n\n\nModule 3: Data Acquisition from APIs\n\nRESTful API fundamentals\nAuthentication methods (API keys, OAuth)\nHandling pagination and rate limits\nError handling and retries\nPractical examples with real APIs\n\n\n\nModule 4: Data Cleaning\n\nCommon data quality issues\nMissing data handling\nData validation techniques\nData transformation and normalization\nDocumentation and reproducibility"
+    "section": "Course Structure",
+    "text": "Course Structure\n\nSession 1: Introduction to Data Pipelines\nDuration: ~90 minutes\nTopics Covered: - What are data pipelines and why they matter - Modern R and Python conventions (pipe operators, lambda functions) - Pipeline design patterns: ETL vs ELT - Best practices: idempotency, error handling, logging, monitoring - Tools and frameworks overview - Hands-on Example: Building a weather data pipeline (Brighton Ski Resort precipitation data)\nKey Concepts: - Extract-Transform-Load (ETL) and Extract-Load-Transform (ELT) patterns - Idempotency and why it matters for reliable pipelines - Error detection and recovery strategies - Documentation best practices\n\n\nSession 2: Data Acquisition from APIs\nDuration: ~2 hours\nTopics Covered: - RESTful API fundamentals and HTTP methods - Authentication methods (API keys, OAuth 2.0, Bearer tokens) - Handling pagination and rate limiting - Error handling and retry strategies with exponential backoff - Working with JSON and nested data structures - Hands-on Exercise: GitHub API with authentication\nKey Skills: - Making authenticated API requests in both R (httr2) and Python (requests) - Implementing robust error handling and retries - Parsing complex JSON responses - Managing API rate limits and pagination\n\n\nSession 3: Database Queries and Management\nDuration: ~2 hours\nTopics Covered: - SQL fundamentals review and best practices - Database connections and connection pooling - Writing efficient queries and understanding query optimization - Object-Relational Mapping (ORMs) vs raw SQL - Transactions and ACID properties - Hands-on Exercise: Healthcare database queries with patient, visit, and prescription data\nKey Skills: - Connecting to databases using R (DBI, RPostgres) and Python (sqlalchemy, psycopg2) - Writing optimized SQL queries for analytics - Understanding when to use ORMs vs raw SQL - Managing database transactions and ensuring data integrity\n\n\nSession 4: Data Cleaning & Pipeline Integration\nDuration: ~2.5 hours\nTopics Covered: - Data quality assessment and common issues - Missing data strategies and imputation techniques - Data validation and constraint checking - Building integrated pipelines (API → Database → Clean Data) - Testing and monitoring pipeline health - Capstone Project: Complete healthcare analytics pipeline\nKey Skills: - Implementing comprehensive data cleaning workflows - Building end-to-end pipelines that integrate multiple data sources - Setting up monitoring and alerting for production pipelines - Creating maintainable, documented pipeline code"
   },
   {
-    "objectID": "syllabus.html#required-materials",
-    "href": "syllabus.html#required-materials",
+    "objectID": "syllabus.html#docker-example-complete-healthcare-data-pipeline",
+    "href": "syllabus.html#docker-example-complete-healthcare-data-pipeline",
     "title": "Syllabus",
-    "section": "Required Materials",
-    "text": "Required Materials\n\nLaptop with Python 3.8+ or R 4.0+ installed\nInternet connection for API access\nText editor or IDE you are familiar with (VS Code, RStudio, or PyCharm recommended)"
+    "section": "Docker Example: Complete Healthcare Data Pipeline",
+    "text": "Docker Example: Complete Healthcare Data Pipeline\nIn addition to the core sessions, this workshop includes a comprehensive Docker-based example that demonstrates a production-ready data pipeline architecture:\n\nWhat’s Included\n\nR Plumber API Container: RESTful API serving patient demographic data\nPostgreSQL Database Container: Healthcare database with visits, prescriptions, and lab results\nR Client Pipeline: Demonstrates API + database integration using tidyverse\nPython Client Pipeline: Equivalent functionality using pandas and requests\n\n\n\nLearning Outcomes\n\nDeploy multi-container applications using Docker Compose\nBuild APIs that serve as data sources for pipelines\nIntegrate data from multiple sources (API + database)\nCreate reproducible, containerized analytics environments\n\n\n\nArchitecture\nDocker Environment\n├── R Plumber API (Port 8000) - Patient demographics\n├── PostgreSQL DB (Port 5432) - Visits, prescriptions, labs\n├── R Client - Pipeline integration with dplyr\n└── Python Client - Pipeline integration with pandas"
   },
   {
-    "objectID": "syllabus.html#resources",
-    "href": "syllabus.html#resources",
+    "objectID": "syllabus.html#prerequisites-and-setup",
+    "href": "syllabus.html#prerequisites-and-setup",
     "title": "Syllabus",
-    "section": "Resources",
-    "text": "Resources\n\nGitHub Repository: https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop\nAdditional resources will be provided throughout the course"
+    "section": "Prerequisites and Setup",
+    "text": "Prerequisites and Setup\n\nRequired Software\n\nR (version 4.1+) with packages:\n\nhttr2 (modern HTTP client)\ndplyr (data manipulation)\nDBI and RPostgres (database connectivity)\njsonlite (JSON handling)\n\nPython (version 3.8+) with packages:\n\nrequests (HTTP client)\npandas (data manipulation)\nsqlalchemy and psycopg2 (database connectivity)\nmatplotlib (visualization)\n\nDocker Desktop (for containerized examples)\nText Editor/IDE: VS Code, RStudio, or PyCharm recommended\n\n\n\nDevelopment Environment\n\nLaptop with reliable internet connection\nAdministrative privileges to install packages and Docker\nGitHub account (for API exercises)"
   },
   {
-    "objectID": "slides/03-databases.html",
-    "href": "slides/03-databases.html",
-    "title": "Databases",
-    "section": "",
-    "text": "Today’s topics:\n\nSQL fundamentals review\nConnecting to databases\nWriting efficient queries\nObject-Relational Mapping (ORMs)\nTransactions and ACID properties"
+    "objectID": "syllabus.html#workshop-materials-and-resources",
+    "href": "syllabus.html#workshop-materials-and-resources",
+    "title": "Syllabus",
+    "section": "Workshop Materials and Resources",
+    "text": "Workshop Materials and Resources\n\nPrimary Repository\n\nGitHub: https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop\nCourse Website: https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/\n\n\n\nAdditional Resources\n\nAll slide materials and code examples\nExercise starter files and solutions\nDocker example with complete healthcare pipeline\nReference documentation and best practices guides"
+  },
+  {
+    "objectID": "syllabus.html#assessment-and-hands-on-components",
+    "href": "syllabus.html#assessment-and-hands-on-components",
+    "title": "Syllabus",
+    "section": "Assessment and Hands-on Components",
+    "text": "Assessment and Hands-on Components\nThis workshop is 100% hands-on with no formal assessments. Participants will:\n\nWork through guided coding exercises during each session\nComplete a capstone project integrating all learned concepts\nDeploy and test the Docker healthcare pipeline example\nReceive individual feedback on pipeline implementations"
+  },
+  {
+    "objectID": "syllabus.html#disclaimer",
+    "href": "syllabus.html#disclaimer",
+    "title": "Syllabus",
+    "section": "Disclaimer",
+    "text": "Disclaimer\nThe views and opinions expressed in this workshop are those of the presenter and do not necessarily reflect the official policy or position of the University of Utah, the Center for Forecasting and Outbreak Analytics (CFA), or any other affiliated organizations."
+  },
+  {
+    "objectID": "syllabus.html#ai-disclosure",
+    "href": "syllabus.html#ai-disclosure",
+    "title": "Syllabus",
+    "section": "AI Disclosure",
+    "text": "AI Disclosure\nThis workshop content was created with the assistance of artificial intelligence tools, including GitHub Copilot for code generation and large language models for content development. All materials have been reviewed and validated by the instructor for accuracy and pedagogical effectiveness."
   },
   {
     "objectID": "slides/03-databases.html#overview",
     "href": "slides/03-databases.html#overview",
     "title": "Databases",
-    "section": "",
-    "text": "Today’s topics:\n\nSQL fundamentals review\nConnecting to databases\nWriting efficient queries\nObject-Relational Mapping (ORMs)\nTransactions and ACID properties"
+    "section": "Overview",
+    "text": "Overview\nToday’s topics:\n\nSQL fundamentals review\nConnecting to databases\nWriting efficient queries\nObject-Relational Mapping (ORMs)\nTransactions and ACID properties"
   },
   {
     "objectID": "slides/03-databases.html#why-databases",
@@ -74,7 +95,7 @@
     "href": "slides/03-databases.html#database-types",
     "title": "Databases",
     "section": "Database Types",
-    "text": "Database Types\n\n\nRelational (SQL)\n\nPostgreSQL\nMySQL\nSQLite\nSQL Server\n\n\nNon-relational (NoSQL)\n\nMongoDB\nRedis\nCassandra\nDynamoDB\n\n\nSpecialized\n\nNeo4j (Graph)\nApache Spark (Big Data)\nHadoop (Big Data)\nInfluxDB (Time-series)\n\n\n\nFocus today: SQL databases"
+    "text": "Database Types\n\n\nRelational (SQL)\n\nPostgreSQL\nMySQL\nSQLite\nSQL Server\n\n\nNon-relational (NoSQL)\n\nMongoDB\nRedis\nCassandra\nDynamoDB\n\n\nSpecialized\n\nNeo4j (Graph)\nApache Spark (Big Data)\nHadoop (Big Data)\nInfluxDB (Time-series)\n\n\nFocus today: SQL databases"
   },
   {
     "objectID": "slides/03-databases.html#relational-databases",
@@ -158,7 +179,7 @@
     "href": "slides/03-databases.html#joins-example",
     "title": "Databases",
     "section": "Joins Example",
-    "text": "Joins Example\n\nSELECT p.name, COUNT(v.visit_id) as visit_count\nFROM patients p\nLEFT JOIN outpatient_visits v ON p.patient_id = v.patient_id\nGROUP BY p.name\nORDER BY visit_count DESC\nLIMIT 5;\n\n\n5 records\n\n\nname\nvisit_count\n\n\n\n\nDavid Rodriguez\n4\n\n\nPatricia Brown\n4\n\n\nSarah Martinez\n3\n\n\nJohn Smith\n2\n\n\nMary Johnson\n2"
+    "text": "Joins Example\n\nSELECT p.name, COUNT(v.visit_id) as visit_count\nFROM patients p\nLEFT JOIN outpatient_visits v ON p.patient_id = v.patient_id\nGROUP BY p.name\nORDER BY visit_count DESC\nLIMIT 5;\n\n\n5 records\n\n\nname\nvisit_count\n\n\n\n\nSarah Martinez\n4\n\n\nDavid Rodriguez\n3\n\n\nElizabeth Davis\n3\n\n\nMary Johnson\n3\n\n\nMichael Jones\n3"
   },
   {
     "objectID": "slides/03-databases.html#database-connection-components",
@@ -207,7 +228,7 @@
     "href": "slides/03-databases.html#connecting-to-databases",
     "title": "Databases",
     "section": "Connecting to Databases",
-    "text": "Connecting to Databases\n\nPython with SQLite\nimport sqlite3\n\n# Connect to database\nconn = sqlite3.connect('database.db')\ncursor = conn.cursor()\n\n# Execute query\ncursor.execute('SELECT * FROM users')\nrows = cursor.fetchall()\n\n# Close connection\nconn.close()"
+    "text": "Connecting to Databases\nPython with SQLite\nimport sqlite3\n\n# Connect to database\nconn = sqlite3.connect('database.db')\ncursor = conn.cursor()\n\n# Execute query\ncursor.execute('SELECT * FROM users')\nrows = cursor.fetchall()\n\n# Close connection\nconn.close()"
   },
   {
     "objectID": "slides/03-databases.html#python-with-postgresql",
@@ -256,7 +277,7 @@
     "href": "slides/03-databases.html#sql-to-dbplyr-translation",
     "title": "Databases",
     "section": "SQL to dbplyr Translation",
-    "text": "SQL to dbplyr Translation\n\n\nSQL\nSELECT name, email\nFROM users\nWHERE status = 'active'\nORDER BY name\nLIMIT 10;\n\ndbplyr (R)\nusers %&gt;%\n  filter(status == \"active\") %&gt;%\n  select(name, email) %&gt;%\n  arrange(name) %&gt;%\n  head(10)\n\n\n\n\n\nSQL Keyword\ndbplyr Function\n\n\n\n\nSELECT\nselect()\n\n\nWHERE\nfilter()\n\n\nORDER BY\narrange()\n\n\nGROUP BY\ngroup_by()\n\n\nHAVING\nfilter() (after group_by)\n\n\nJOIN\nleft_join(), inner_join(), etc.\n\n\nTOP/LIMIT\nhead() or slice()"
+    "text": "SQL to dbplyr Translation\n\n\nSQL\nSELECT name, email\nFROM users\nWHERE status = 'active'\nORDER BY name\nLIMIT 10;\n\ndbplyr (R)\nusers %&gt;%\n  filter(status == \"active\") %&gt;%\n  select(name, email) %&gt;%\n  arrange(name) %&gt;%\n  head(10)\n\n\n\n\nSQL Keyword\ndbplyr Function\n\n\n\n\nSELECT\nselect()\n\n\nWHERE\nfilter()\n\n\nORDER BY\narrange()\n\n\nGROUP BY\ngroup_by()\n\n\nHAVING\nfilter() (after group_by)\n\n\nJOIN\nleft_join(), inner_join(), etc.\n\n\nTOP/LIMIT\nhead() or slice()"
   },
   {
     "objectID": "slides/03-databases.html#reading-data-from-database-r",
@@ -319,7 +340,7 @@
     "href": "slides/03-databases.html#query-optimization",
     "title": "Databases",
     "section": "Query Optimization",
-    "text": "Query Optimization\n\nUse Indexes\n-- Create index\nCREATE INDEX idx_users_email ON users(email);\n\n-- Query benefits from index\nSELECT * FROM users WHERE email = 'user@example.com';\n\n\nAvoid SELECT *\n-- Less efficient\nSELECT * FROM users;\n\n-- More efficient - only needed columns\nSELECT id, name, email FROM users;"
+    "text": "Query Optimization\nUse Indexes\n-- Create index\nCREATE INDEX idx_users_email ON users(email);\n\n-- Query benefits from index\nSELECT * FROM users WHERE email = 'user@example.com';\nAvoid SELECT *\n-- Less efficient\nSELECT * FROM users;\n\n-- More efficient - only needed columns\nSELECT id, name, email FROM users;"
   },
   {
     "objectID": "slides/03-databases.html#explain-query-plans",
@@ -333,7 +354,7 @@
     "href": "slides/03-databases.html#explain-query-plans-output",
     "title": "Databases",
     "section": "Explain Query Plans Output",
-    "text": "Explain Query Plans Output\n\nEXPLAIN QUERY PLAN\nSELECT p.name, COUNT(v.visit_id) as visit_count\nFROM patients p\nLEFT JOIN outpatient_visits v ON p.patient_id = v.patient_id\nGROUP BY p.name\nORDER BY visit_count DESC\n\n\n3 records\n\n\n\n\n\n\n\n\nid\nparent\nnotused\ndetail\n\n\n\n\n8\n0\n213\nSCAN p USING COVERING INDEX idx_patients_name\n\n\n10\n0\n54\nSEARCH v USING COVERING INDEX idx_visits_patient (patient_id=?) LEFT-JOIN\n\n\n48\n0\n0\nUSE TEMP B-TREE FOR ORDER BY"
+    "text": "Explain Query Plans Output\n\n\n\n3 records\n\n\n\n\n\n\n\n\nid\nparent\nnotused\ndetail\n\n\n\n\n8\n0\n213\nSCAN p USING COVERING INDEX idx_patients_name\n\n\n10\n0\n54\nSEARCH v USING COVERING INDEX idx_visits_patient (patient_id=?) LEFT-JOIN\n\n\n48\n0\n0\nUSE TEMP B-TREE FOR ORDER BY"
   },
   {
     "objectID": "slides/03-databases.html#connection-pooling",
@@ -378,18 +399,11 @@
     "text": "Resources\n\nSQL Tutorial\nSQLAlchemy Documentation\nPostgreSQL Tutorial\ndbplyr Documentation"
   },
   {
-    "objectID": "slides/01-introduction.html",
-    "href": "slides/01-introduction.html",
-    "title": "Introduction to Data Pipelines",
-    "section": "",
-    "text": "Welcome to the CFA Data Pipelines Workshop\n\nIntroduction to workshop objectives\nOverview of data pipelines\nSetting up your environment"
-  },
-  {
     "objectID": "slides/01-introduction.html#welcome",
     "href": "slides/01-introduction.html#welcome",
     "title": "Introduction to Data Pipelines",
-    "section": "",
-    "text": "Welcome to the CFA Data Pipelines Workshop\n\nIntroduction to workshop objectives\nOverview of data pipelines\nSetting up your environment"
+    "section": "Welcome!",
+    "text": "Welcome!\nWelcome to the CFA Data Pipelines Workshop\n\nIntroduction to workshop objectives\nOverview of data pipelines\nSetting up your environment"
   },
   {
     "objectID": "slides/01-introduction.html#course-structure",
@@ -459,7 +473,7 @@
     "href": "slides/01-introduction.html#pipeline-design-patterns",
     "title": "Introduction to Data Pipelines",
     "section": "Pipeline Design Patterns",
-    "text": "Pipeline Design Patterns\n\n1. Extract-Transform-Load (ETL)\n\nExtract data from sources\nTransform in staging area\nLoad into destination\n\n\n\n2. Extract-Load-Transform (ELT)\n\nExtract data from sources\nLoad into destination\nTransform in destination"
+    "text": "Pipeline Design Patterns\n1. Extract-Transform-Load (ETL)\n\nExtract data from sources\nTransform in staging area\nLoad into destination\n\n2. Extract-Load-Transform (ELT)\n\nExtract data from sources\nLoad into destination\nTransform in destination"
   },
   {
     "objectID": "slides/01-introduction.html#common-data-sources",
@@ -529,7 +543,7 @@
     "href": "slides/01-introduction.html#development-environment-setup",
     "title": "Introduction to Data Pipelines",
     "section": "Development Environment Setup",
-    "text": "Development Environment Setup\n\nPython Setup\n# Create virtual environment\npython -m venv venv\nsource venv/bin/activate  # or venv\\Scripts\\activate on Windows\n\n# Install common packages\npip install requests pandas sqlalchemy\n\n\nR Setup\n# Install common packages\ninstall.packages(c(\"httr2\", \"dplyr\", \"DBI\", \"dbplyr\"))"
+    "text": "Development Environment Setup\nPython Setup\n# Create virtual environment\npython -m venv venv\nsource venv/bin/activate  # or venv\\Scripts\\activate on Windows\n\n# Install common packages\npip install requests pandas sqlalchemy\nR Setup\n# Install common packages\ninstall.packages(c(\"httr2\", \"dplyr\", \"DBI\", \"dbplyr\"))"
   },
   {
     "objectID": "slides/01-introduction.html#your-first-pipeline",
@@ -543,7 +557,7 @@
     "href": "slides/01-introduction.html#example-pipeline-weather-data",
     "title": "Introduction to Data Pipelines",
     "section": "Example Pipeline: Weather Data",
-    "text": "Example Pipeline: Weather Data\n\nFetch weather data → Clean → Store\nWe will be fetching daily precipitation for Brighton Ski Resort for the last year.\nR Example:\n\n## Needed Packages #####\nlibrary(httr2)      #&lt; interacting with API (modern version)\n\nWarning: package 'httr2' was built under R version 4.5.2\n\nlibrary(dplyr)      #&lt; data cleaning and processing\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\nlibrary(DBI)        #&lt; generic database interface\nlibrary(RSQLite)    #&lt; specific database we will use\n\nWarning: package 'RSQLite' was built under R version 4.5.2\n\nlibrary(ggplot2)    #&lt; for visualization"
+    "text": "Example Pipeline: Weather Data\nFetch weather data → Clean → Store\nWe will be fetching daily precipitation for Brighton Ski Resort for the last year.\nR Example:\n\n## Needed Packages #####\nlibrary(httr2)      #&lt; interacting with API (modern version)\nlibrary(dplyr)      #&lt; data cleaning and processing\nlibrary(DBI)        #&lt; generic database interface\nlibrary(RSQLite)    #&lt; specific database we will use\nlibrary(ggplot2)    #&lt; for visualization"
   },
   {
     "objectID": "slides/01-introduction.html#r-example-pipeline-continued",
@@ -1225,18 +1239,11 @@
     "text": "quarto render slides/01-introduction.qmd\nOr preview:\nquarto preview slides/01-introduction.qmd"
   },
   {
-    "objectID": "slides/02-apis.html",
-    "href": "slides/02-apis.html",
-    "title": "Data Acquisition from APIs",
-    "section": "",
-    "text": "This sessions’s topics:\n\nRESTful API fundamentals\nHTTP methods and status codes\nAuthentication\nPagination\nRate limiting\nError handling"
-  },
-  {
     "objectID": "slides/02-apis.html#overview",
     "href": "slides/02-apis.html#overview",
     "title": "Data Acquisition from APIs",
-    "section": "",
-    "text": "This sessions’s topics:\n\nRESTful API fundamentals\nHTTP methods and status codes\nAuthentication\nPagination\nRate limiting\nError handling"
+    "section": "Overview",
+    "text": "Overview\nThis sessions’s topics:\n\nRESTful API fundamentals\nHTTP methods and status codes\nAuthentication\nPagination\nRate limiting\nError handling"
   },
   {
     "objectID": "slides/02-apis.html#what-is-an-api",
@@ -1306,14 +1313,14 @@
     "href": "slides/02-apis.html#request-body",
     "title": "Data Acquisition from APIs",
     "section": "Request Body",
-    "text": "Request Body\nUsed with POST, PUT, and PATCH methods to send data to the server.\n\nJSON Body Example\n{\n    \"title\": \"CFA-Data-Pipelines-Workshop\",\n    \"start_date\": \"2025-12-02\"\n}"
+    "text": "Request Body\nUsed with POST, PUT, and PATCH methods to send data to the server.\nJSON Body Example\n{\n    \"title\": \"CFA-Data-Pipelines-Workshop\",\n    \"start_date\": \"2025-12-02\"\n}"
   },
   {
     "objectID": "slides/02-apis.html#revisit-example",
     "href": "slides/02-apis.html#revisit-example",
     "title": "Data Acquisition from APIs",
     "section": "Revisit Example",
-    "text": "Revisit Example\n\n\nWarning: package 'httr2' was built under R version 4.5.2\n\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\n\nWarning: package 'RSQLite' was built under R version 4.5.2\n\n\n\n\nCode:\n\nend_date &lt;- Sys.Date()\nstart_date &lt;- end_date - 365\n\nurl &lt;- \"https://archive-api.open-meteo.com/v1/archive\"\nresponse &lt;- request(url) |&gt;\n  req_url_query(\n    latitude = 40.5981,\n    longitude = -111.5831,\n    start_date = format(start_date, \"%Y-%m-%d\"),\n    end_date = format(end_date, \"%Y-%m-%d\"),\n    daily = \"precipitation_sum,snowfall_sum\",\n    timezone = \"America/Denver\"\n  ) |&gt;\n  httr2::req_perform()\n\n\nComponents:\n\nEndpoint: https://archive-api.open-meteo.com/v1/archive\nMethod: GET\nHeaders: None\nQuery:\n\nlatitude=40.5981&\nlongitude=-111.5831&\nstart_date=2024-11-26&\nend_date=2025-11-26&\ndaily=precipitation_sum%2Csnowfall_sum&\ntimezone=America%2FDenver"
+    "text": "Revisit Example\n\n\nCode:\n\nend_date &lt;- Sys.Date()\nstart_date &lt;- end_date - 365\n\nurl &lt;- \"https://archive-api.open-meteo.com/v1/archive\"\nresponse &lt;- request(url) |&gt;\n  req_url_query(\n    latitude = 40.5981,\n    longitude = -111.5831,\n    start_date = format(start_date, \"%Y-%m-%d\"),\n    end_date = format(end_date, \"%Y-%m-%d\"),\n    daily = \"precipitation_sum,snowfall_sum\",\n    timezone = \"America/Denver\"\n  ) |&gt;\n  httr2::req_perform()\n\n\nComponents:\n\nEndpoint: https://archive-api.open-meteo.com/v1/archive\nMethod: GET\nHeaders: None\nQuery:\n\nlatitude=40.5981&\nlongitude=-111.5831&\nstart_date=2024-11-26&\nend_date=2025-11-26&\ndaily=precipitation_sum%2Csnowfall_sum&\ntimezone=America%2FDenver"
   },
   {
     "objectID": "slides/02-apis.html#api-response",
@@ -1334,7 +1341,7 @@
     "href": "slides/02-apis.html#response-headers",
     "title": "Data Acquisition from APIs",
     "section": "Response Headers",
-    "text": "Response Headers\n\nglimpse(response$headers)\n\n &lt;httr2_headers&gt;\n $ Date             : chr \"Mon, 01 Dec 2025 20:52:55 GMT\"\n $ Content-Type     : chr \"application/json; charset=utf-8\"\n $ Transfer-Encoding: chr \"chunked\"\n $ Connection       : chr \"keep-alive\"\n $ Content-Encoding : chr \"deflate\"\n\n\n\n\n\nHeader\nPurpose\nExample\n\n\n\n\nContent-Type\nFormat of response\napplication/json\n\n\nX-RateLimit-Limit\nMax requests allowed\n1000\n\n\nX-RateLimit-Remaining\nRequests left\n742\n\n\nX-RateLimit-Reset\nWhen limit resets\n1640995200"
+    "text": "Response Headers\n\nglimpse(response$headers)\n\n &lt;httr2_headers&gt;\n $ Date             : chr \"Tue, 02 Dec 2025 01:12:33 GMT\"\n $ Content-Type     : chr \"application/json; charset=utf-8\"\n $ Transfer-Encoding: chr \"chunked\"\n $ Connection       : chr \"keep-alive\"\n $ Content-Encoding : chr \"deflate\"\n\n\n\n\n\nHeader\nPurpose\nExample\n\n\n\n\nContent-Type\nFormat of response\napplication/json\n\n\nX-RateLimit-Limit\nMax requests allowed\n1000\n\n\nX-RateLimit-Remaining\nRequests left\n742\n\n\nX-RateLimit-Reset\nWhen limit resets\n1640995200"
   },
   {
     "objectID": "slides/02-apis.html#response-body",
@@ -1355,7 +1362,7 @@
     "href": "slides/02-apis.html#authentication-personal-access-token",
     "title": "Data Acquisition from APIs",
     "section": "Authentication: Personal Access Token",
-    "text": "Authentication: Personal Access Token\nGitHub API Example (students will follow along)\nGitHub Rest API Documentation\n\nStep 1: Generate Token\n\nGo to GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)\nClick “Generate new token (classic)”\nGive it a note (e.g., “Workshop API Demo”)\nSelect scopes: repo, read:user\nGenerate and copy token (starts with ghp_)\n\n⚠️ Save immediately — you won’t see it again!"
+    "text": "Authentication: Personal Access Token\nGitHub API Example (students will follow along)\nGitHub Rest API Documentation\nStep 1: Generate Token\n\nGo to GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)\nClick “Generate new token (classic)”\nGive it a note (e.g., “Workshop API Demo”)\nSelect scopes: repo, read:user\nGenerate and copy token (starts with ghp_)\n\n⚠️ Save immediately — you won’t see it again!"
   },
   {
     "objectID": "slides/02-apis.html#storing-tokens-securely",
@@ -1446,14 +1453,14 @@
     "href": "slides/02-apis.html#pagination",
     "title": "Data Acquisition from APIs",
     "section": "Pagination",
-    "text": "Pagination\nAPIs limit response size. Common patterns:\n\nOffset-based\npage = 0\nper_page = 100\n\nwhile True:\n    response = requests.get(url, params={\n        'offset': page * per_page,\n        'limit': per_page\n    })\n    data = response.json()\n    if not data:\n        break\n    # Process data\n    page += 1"
+    "text": "Pagination\nAPIs limit response size. Common patterns:\nOffset-based\npage = 0\nper_page = 100\n\nwhile True:\n    response = requests.get(url, params={\n        'offset': page * per_page,\n        'limit': per_page\n    })\n    data = response.json()\n    if not data:\n        break\n    # Process data\n    page += 1"
   },
   {
     "objectID": "slides/02-apis.html#pagination-continued",
     "href": "slides/02-apis.html#pagination-continued",
     "title": "Data Acquisition from APIs",
     "section": "Pagination (continued)",
-    "text": "Pagination (continued)\n\nCursor-based\ncursor = None\n\nwhile True:\n    params = {'cursor': cursor} if cursor else {}\n    response = requests.get(url, params=params)\n    data = response.json()\n    \n    # Process data['results']\n    \n    cursor = data.get('next_cursor')\n    if not cursor:\n        break"
+    "text": "Pagination (continued)\nCursor-based\ncursor = None\n\nwhile True:\n    params = {'cursor': cursor} if cursor else {}\n    response = requests.get(url, params=params)\n    data = response.json()\n    \n    # Process data['results']\n    \n    cursor = data.get('next_cursor')\n    if not cursor:\n        break"
   },
   {
     "objectID": "slides/02-apis.html#rate-limiting",
@@ -1488,7 +1495,7 @@
     "href": "slides/02-apis.html#real-world-example-weather-data",
     "title": "Data Acquisition from APIs",
     "section": "Real-world Example: Weather Data",
-    "text": "Real-world Example: Weather Data\n\nOpen-Meteo Historical API (Brighton Ski Resort)\nBrighton Mountain Resort coordinates: 40.5981° N, 111.5831° W\nimport requests\nimport pandas as pd\nfrom datetime import datetime, timedelta\n\n# Calculate date range (last 365 days)\nend_date = datetime.now()\nstart_date = end_date - timedelta(days=365)\n\n# API endpoint\nurl = \"https://archive-api.open-meteo.com/v1/archive\"\n\nparams = {\n    'latitude': 40.5981,\n    'longitude': -111.5831,\n    'start_date': start_date.strftime('%Y-%m-%d'),\n    'end_date': end_date.strftime('%Y-%m-%d'),\n    'daily': 'precipitation_sum,snowfall_sum',\n    'timezone': 'America/Denver'\n}\n\nresponse = requests.get(url, params=params)\ndata = response.json()\n\n# Convert to DataFrame\ndf = pd.DataFrame({\n    'date': data['daily']['time'],\n    'precipitation_mm': data['daily']['precipitation_sum'],\n    'snowfall_cm': data['daily']['snowfall_sum']\n})\n\nprint(f\"Total precipitation: {df['precipitation_mm'].sum():.1f} mm\")\nprint(f\"Total snowfall: {df['snowfall_cm'].sum():.1f} cm\")"
+    "text": "Real-world Example: Weather Data\nOpen-Meteo Historical API (Brighton Ski Resort)\nBrighton Mountain Resort coordinates: 40.5981° N, 111.5831° W\nimport requests\nimport pandas as pd\nfrom datetime import datetime, timedelta\n\n# Calculate date range (last 365 days)\nend_date = datetime.now()\nstart_date = end_date - timedelta(days=365)\n\n# API endpoint\nurl = \"https://archive-api.open-meteo.com/v1/archive\"\n\nparams = {\n    'latitude': 40.5981,\n    'longitude': -111.5831,\n    'start_date': start_date.strftime('%Y-%m-%d'),\n    'end_date': end_date.strftime('%Y-%m-%d'),\n    'daily': 'precipitation_sum,snowfall_sum',\n    'timezone': 'America/Denver'\n}\n\nresponse = requests.get(url, params=params)\ndata = response.json()\n\n# Convert to DataFrame\ndf = pd.DataFrame({\n    'date': data['daily']['time'],\n    'precipitation_mm': data['daily']['precipitation_sum'],\n    'snowfall_cm': data['daily']['snowfall_sum']\n})\n\nprint(f\"Total precipitation: {df['precipitation_mm'].sum():.1f} mm\")\nprint(f\"Total snowfall: {df['snowfall_cm'].sum():.1f} cm\")"
   },
   {
     "objectID": "slides/02-apis.html#hands-on-exercise",
@@ -1519,18 +1526,11 @@
     "text": "Resources\n\nREST API Tutorial\nHTTP Status Codes\nRequests Documentation\nhttr2 Documentation"
   },
   {
-    "objectID": "slides/04-data-cleaning.html",
-    "href": "slides/04-data-cleaning.html",
-    "title": "Data Cleaning & Pipeline Integration",
-    "section": "",
-    "text": "This sessions’s topics:\n\nRecap: Building blocks of data pipelines\nData quality and cleaning strategies\nIntegrating API → Database → Clean Data\nBuilding reusable, idempotent pipelines\nError handling and monitoring\nDocumentation and deployment"
-  },
-  {
     "objectID": "slides/04-data-cleaning.html#overview",
     "href": "slides/04-data-cleaning.html#overview",
     "title": "Data Cleaning & Pipeline Integration",
-    "section": "",
-    "text": "This sessions’s topics:\n\nRecap: Building blocks of data pipelines\nData quality and cleaning strategies\nIntegrating API → Database → Clean Data\nBuilding reusable, idempotent pipelines\nError handling and monitoring\nDocumentation and deployment"
+    "section": "Overview",
+    "text": "Overview\nThis sessions’s topics:\n\nRecap: Building blocks of data pipelines\nData quality and cleaning strategies\nIntegrating API → Database → Clean Data\nBuilding reusable, idempotent pipelines\nError handling and monitoring\nDocumentation and deployment"
   },
   {
     "objectID": "slides/04-data-cleaning.html#workshop-recap",
@@ -1593,7 +1593,7 @@
     "href": "slides/04-data-cleaning.html#pipeline-first-thinking",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Pipeline-First Thinking",
-    "text": "Pipeline-First Thinking\nWhere to clean data?\n\n\nOption 1: Clean at API\n# Validate immediately\ndata &lt;- fetch_api()\nif (validate(data)) {\n  store_in_db(data)\n} else {\n  log_error(data)\n}\nPros: Bad data never enters system\nCons: May lose raw data for debugging\n\nOption 2: Store Raw, Clean Later\n# Store everything\nstore_raw(api_data)\n\n# Clean for analysis\nclean_data &lt;- query_raw_data() %&gt;%\n  transform()\nPros: Keep raw data, flexible cleaning\nCons: Storage costs, duplicate effort\n\n\nBest practice: Both! Validate early, keep raw, clean for use"
+    "text": "Pipeline-First Thinking\nWhere to clean data?\n\n\nOption 1: Clean at API\n# Validate immediately\ndata &lt;- fetch_api()\nif (validate(data)) {\n  store_in_db(data)\n} else {\n  log_error(data)\n}\nPros: Bad data never enters system\nCons: May lose raw data for debugging\n\nOption 2: Store Raw, Clean Later\n# Store everything\nstore_raw(api_data)\n\n# Clean for analysis\nclean_data &lt;- query_raw_data() %&gt;%\n  transform()\nPros: Keep raw data, flexible cleaning\nCons: Storage costs, duplicate effort\n\nBest practice: Both! Validate early, keep raw, clean for use"
   },
   {
     "objectID": "slides/04-data-cleaning.html#validation-at-api-layer",
@@ -1761,91 +1761,91 @@
     "href": "slides/04-data-cleaning.html#pipeline-execution-patterns",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Pipeline Execution Patterns",
-    "text": "Pipeline Execution Patterns\nChoose the right execution model for your use case:\n\n🔄 On-Demand (Manual)\n\nTrigger when needed (button click, API call)\nBest for: Ad-hoc analysis, debugging, one-time migrations\nPros: Full control, immediate feedback\nCons: Requires manual intervention"
+    "text": "Pipeline Execution Patterns\nChoose the right execution model for your use case:\n🔄 On-Demand (Manual)\n\nTrigger when needed (button click, API call)\nBest for: Ad-hoc analysis, debugging, one-time migrations\nPros: Full control, immediate feedback\nCons: Requires manual intervention"
   },
   {
     "objectID": "slides/04-data-cleaning.html#pipeline-execution-patterns-1",
     "href": "slides/04-data-cleaning.html#pipeline-execution-patterns-1",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Pipeline Execution Patterns",
-    "text": "Pipeline Execution Patterns\nChoose the right execution model for your use case:\n\n🔄 On-Demand (Manual)\n\n\n📦 Batch Processing\n\nScheduled runs at regular intervals\n\nBest for: Daily reports, periodic ETL, data warehousing\nPros: Predictable, efficient for large datasets\nCons: Delayed processing, fixed schedules"
+    "text": "Pipeline Execution Patterns\nChoose the right execution model for your use case:\n🔄 On-Demand (Manual)\n📦 Batch Processing\n\nScheduled runs at regular intervals\n\nBest for: Daily reports, periodic ETL, data warehousing\nPros: Predictable, efficient for large datasets\nCons: Delayed processing, fixed schedules"
   },
   {
     "objectID": "slides/04-data-cleaning.html#pipeline-execution-patterns-2",
     "href": "slides/04-data-cleaning.html#pipeline-execution-patterns-2",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Pipeline Execution Patterns",
-    "text": "Pipeline Execution Patterns\nChoose the right execution model for your use case:\n\n🔄 On-Demand (Manual)\n\n\n📦 Batch Processing\n\n\n⚡ Event-Triggered (Real-time)\n\nReact to external events (file upload, webhook, queue message)\nBest for: Real-time alerts, streaming data, API integrations\nPros: Immediate response, efficient resource usage\nCons: Complex error handling, potential cascading failures"
+    "text": "Pipeline Execution Patterns\nChoose the right execution model for your use case:\n🔄 On-Demand (Manual)\n📦 Batch Processing\n⚡ Event-Triggered (Real-time)\n\nReact to external events (file upload, webhook, queue message)\nBest for: Real-time alerts, streaming data, API integrations\nPros: Immediate response, efficient resource usage\nCons: Complex error handling, potential cascading failures"
   },
   {
     "objectID": "slides/04-data-cleaning.html#scheduling-considerations-warnings",
     "href": "slides/04-data-cleaning.html#scheduling-considerations-warnings",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Scheduling Considerations & Warnings",
-    "text": "Scheduling Considerations & Warnings\n⚠️ Critical considerations before automating:\n\nResource Management\n\nCPU/Memory: Pipelines can consume significant resources\nDatabase Load: Batch operations can impact production systems\nNetwork: API calls may hit rate limits during peak hours"
+    "text": "Scheduling Considerations & Warnings\n⚠️ Critical considerations before automating:\nResource Management\n\nCPU/Memory: Pipelines can consume significant resources\nDatabase Load: Batch operations can impact production systems\nNetwork: API calls may hit rate limits during peak hours"
   },
   {
     "objectID": "slides/04-data-cleaning.html#scheduling-considerations-warnings-1",
     "href": "slides/04-data-cleaning.html#scheduling-considerations-warnings-1",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Scheduling Considerations & Warnings",
-    "text": "Scheduling Considerations & Warnings\n⚠️ Critical considerations before automating:\n\nResource Management\n\n\nFailure Scenarios\n\nSilent Failures: Scheduled jobs may fail without notification\nInfrastructure: Network outages, server downtime, disk space\nTiming: Computer hibernation, power failures, user logged out\nData Corruption: Bad data can propagate through systems\nCascade Effects: Failed pipeline can break downstream processes"
+    "text": "Scheduling Considerations & Warnings\n⚠️ Critical considerations before automating:\nResource Management\nFailure Scenarios\n\nSilent Failures: Scheduled jobs may fail without notification\nInfrastructure: Network outages, server downtime, disk space\nTiming: Computer hibernation, power failures, user logged out\nData Corruption: Bad data can propagate through systems\nCascade Effects: Failed pipeline can break downstream processes"
   },
   {
     "objectID": "slides/04-data-cleaning.html#scheduling-considerations-warnings-2",
     "href": "slides/04-data-cleaning.html#scheduling-considerations-warnings-2",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Scheduling Considerations & Warnings",
-    "text": "Scheduling Considerations & Warnings\n⚠️ Critical considerations before automating:\n\nResource Management\n\n\nFailure Scenarios\n\n\nOperational Complexity\n\nMonitoring: Need alerts, logs, and health checks\nDebugging: Harder to troubleshoot scheduled failures\nMaintenance: Updates require coordination with schedules"
+    "text": "Scheduling Considerations & Warnings\n⚠️ Critical considerations before automating:\nResource Management\nFailure Scenarios\nOperational Complexity\n\nMonitoring: Need alerts, logs, and health checks\nDebugging: Harder to troubleshoot scheduled failures\nMaintenance: Updates require coordination with schedules"
   },
   {
     "objectID": "slides/04-data-cleaning.html#scheduling-options-tools",
     "href": "slides/04-data-cleaning.html#scheduling-options-tools",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Scheduling Options & Tools",
-    "text": "Scheduling Options & Tools\nPlatform-specific scheduling tools:\n\nWindows\n\nTask Scheduler: Built-in, GUI-based, reliable\ntaskscheduleR: R package for Windows scheduling\nPowerShell: Script-based automation"
+    "text": "Scheduling Options & Tools\nPlatform-specific scheduling tools:\nWindows\n\nTask Scheduler: Built-in, GUI-based, reliable\ntaskscheduleR: R package for Windows scheduling\nPowerShell: Script-based automation"
   },
   {
     "objectID": "slides/04-data-cleaning.html#scheduling-options-tools-1",
     "href": "slides/04-data-cleaning.html#scheduling-options-tools-1",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Scheduling Options & Tools",
-    "text": "Scheduling Options & Tools\nPlatform-specific scheduling tools:\n\nWindows\n\n\nLinux/Mac\n\ncron: Standard Unix scheduler, text-based configuration\ncronR: R package wrapper for cron\nsystemd timers: Modern alternative to cron"
+    "text": "Scheduling Options & Tools\nPlatform-specific scheduling tools:\nWindows\nLinux/Mac\n\ncron: Standard Unix scheduler, text-based configuration\ncronR: R package wrapper for cron\nsystemd timers: Modern alternative to cron"
   },
   {
     "objectID": "slides/04-data-cleaning.html#scheduling-options-tools-2",
     "href": "slides/04-data-cleaning.html#scheduling-options-tools-2",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Scheduling Options & Tools",
-    "text": "Scheduling Options & Tools\nPlatform-specific scheduling tools:\n\nWindows\n\n\nLinux/Mac\n\n\nCloud/Modern\n\nGitHub Actions: CI/CD with scheduled workflows\nAzure Logic Apps / AWS Lambda: Serverless scheduling\nApache Airflow: Enterprise workflow orchestration\nAPScheduler (Python): In-process scheduling"
+    "text": "Scheduling Options & Tools\nPlatform-specific scheduling tools:\nWindows\nLinux/Mac\nCloud/Modern\n\nGitHub Actions: CI/CD with scheduled workflows\nAzure Logic Apps / AWS Lambda: Serverless scheduling\nApache Airflow: Enterprise workflow orchestration\nAPScheduler (Python): In-process scheduling"
   },
   {
     "objectID": "slides/04-data-cleaning.html#scheduling-best-practices",
     "href": "slides/04-data-cleaning.html#scheduling-best-practices",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Scheduling Best Practices",
-    "text": "Scheduling Best Practices\nDesign principles for reliable automation:\n\nStart Simple\n\nBegin with manual execution, then automate\nTest thoroughly before scheduling\nUse development environment first"
+    "text": "Scheduling Best Practices\nDesign principles for reliable automation:\nStart Simple\n\nBegin with manual execution, then automate\nTest thoroughly before scheduling\nUse development environment first"
   },
   {
     "objectID": "slides/04-data-cleaning.html#scheduling-best-practices-1",
     "href": "slides/04-data-cleaning.html#scheduling-best-practices-1",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Scheduling Best Practices",
-    "text": "Scheduling Best Practices\nDesign principles for reliable automation:\n\nStart Simple\n\n\nIdempotency is Critical\n\nPipeline should produce same result if run multiple times\nUse upserts instead of inserts\nHandle partial failures gracefully"
+    "text": "Scheduling Best Practices\nDesign principles for reliable automation:\nStart Simple\nIdempotency is Critical\n\nPipeline should produce same result if run multiple times\nUse upserts instead of inserts\nHandle partial failures gracefully"
   },
   {
     "objectID": "slides/04-data-cleaning.html#scheduling-best-practices-2",
     "href": "slides/04-data-cleaning.html#scheduling-best-practices-2",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Scheduling Best Practices",
-    "text": "Scheduling Best Practices\nDesign principles for reliable automation:\n\nStart Simple\n\n\nIdempotency is Critical\n\n\nMonitoring & Alerting\n\nLog all operations with timestamps\nSet up failure notifications (email, Slack, Teams)\nTrack execution metrics and performance"
+    "text": "Scheduling Best Practices\nDesign principles for reliable automation:\nStart Simple\nIdempotency is Critical\nMonitoring & Alerting\n\nLog all operations with timestamps\nSet up failure notifications (email, Slack, Teams)\nTrack execution metrics and performance"
   },
   {
     "objectID": "slides/04-data-cleaning.html#scheduling-best-practices-3",
     "href": "slides/04-data-cleaning.html#scheduling-best-practices-3",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Scheduling Best Practices",
-    "text": "Scheduling Best Practices\nDesign principles for reliable automation:\n\nStart Simple\n\n\nIdempotency is Critical\n\n\nMonitoring & Alerting\n\n\nResource Isolation\n\nRun during off-peak hours when possible\nUse separate environments for scheduled jobs\nImplement connection pooling and timeouts"
+    "text": "Scheduling Best Practices\nDesign principles for reliable automation:\nStart Simple\nIdempotency is Critical\nMonitoring & Alerting\nResource Isolation\n\nRun during off-peak hours when possible\nUse separate environments for scheduled jobs\nImplement connection pooling and timeouts"
   },
   {
     "objectID": "slides/04-data-cleaning.html#scheduling-automation-overview",
@@ -1936,28 +1936,28 @@
     "href": "slides/04-data-cleaning.html#best-practices-summary",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Best Practices Summary",
-    "text": "Best Practices Summary\nFrom all 4 sessions:\n\nAPI Layer (Session 2)\n\nUse authentication tokens securely (env variables)\nHandle rate limiting and pagination\nRetry on transient failures"
+    "text": "Best Practices Summary\nFrom all 4 sessions:\nAPI Layer (Session 2)\n\nUse authentication tokens securely (env variables)\nHandle rate limiting and pagination\nRetry on transient failures"
   },
   {
     "objectID": "slides/04-data-cleaning.html#best-practices-summary-1",
     "href": "slides/04-data-cleaning.html#best-practices-summary-1",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Best Practices Summary",
-    "text": "Best Practices Summary\nFrom all 4 sessions:\n\nAPI Layer (Session 2)\n\n\nDatabase Layer (Session 3)\n\nUse parameterized queries (prevent SQL injection)\nImplement upserts for idempotency\nClose connections properly"
+    "text": "Best Practices Summary\nFrom all 4 sessions:\nAPI Layer (Session 2)\nDatabase Layer (Session 3)\n\nUse parameterized queries (prevent SQL injection)\nImplement upserts for idempotency\nClose connections properly"
   },
   {
     "objectID": "slides/04-data-cleaning.html#best-practices-summary-2",
     "href": "slides/04-data-cleaning.html#best-practices-summary-2",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Best Practices Summary",
-    "text": "Best Practices Summary\nFrom all 4 sessions:\n\nAPI Layer (Session 2)\n\n\nDatabase Layer (Session 3)\n\n\nData Quality (Session 4)\n\nValidate early and often\nKeep raw data separate from clean data\nDocument all transformations"
+    "text": "Best Practices Summary\nFrom all 4 sessions:\nAPI Layer (Session 2)\nDatabase Layer (Session 3)\nData Quality (Session 4)\n\nValidate early and often\nKeep raw data separate from clean data\nDocument all transformations"
   },
   {
     "objectID": "slides/04-data-cleaning.html#best-practices-summary-3",
     "href": "slides/04-data-cleaning.html#best-practices-summary-3",
     "title": "Data Cleaning & Pipeline Integration",
     "section": "Best Practices Summary",
-    "text": "Best Practices Summary\nFrom all 4 sessions:\n\nAPI Layer (Session 2)\n\n\nDatabase Layer (Session 3)\n\n\nData Quality (Session 4)\n\n\nPipeline Design\n\nModular, reusable components\nComprehensive error handling\nMonitor and log everything"
+    "text": "Best Practices Summary\nFrom all 4 sessions:\nAPI Layer (Session 2)\nDatabase Layer (Session 3)\nData Quality (Session 4)\nPipeline Design\n\nModular, reusable components\nComprehensive error handling\nMonitor and log everything"
   },
   {
     "objectID": "slides/04-data-cleaning.html#common-pitfalls-revisited",

@@ -8,58 +8,170 @@ title: "Syllabus"
 
 **Instructor**: Andrew Redd, PhD
 
+**Format**: 4-session hands-on workshop
+
+**Duration**: 4 sessions (timing flexible based on participant needs)
+
 ## Course Description
 
-This workshop provides hands-on training in building data pipelines, acquiring data from databases and APIs, and implementing effective data cleaning strategies. Students will learn industry best practices and gain practical experience through real-world examples.
+This workshop provides comprehensive training in building robust, production-ready data pipelines for public health and epidemiological applications. Participants will learn to extract data from APIs, work with databases, implement data cleaning strategies, and deploy containerized solutions. The course emphasizes practical, real-world examples using both R and Python, with a focus on reproducibility, error handling, and best practices.
 
 ## Learning Objectives
 
-By the end of this course, students will be able to:
+By the end of this workshop, participants will be able to:
 
-1. Design and implement efficient data pipelines
-2. Acquire data from RESTful APIs using authentication and pagination
-3. Query databases effectively using SQL and ORMs
-4. Clean and validate data for analysis
-5. Handle common data quality issues
-6. Implement error handling and logging in data pipelines
-7. Apply best practices for reproducible data workflows
+1. **Design and implement efficient data pipelines** using modern programming conventions (pipe operators, lambda functions)
+2. **Extract data from RESTful APIs** with proper authentication, pagination handling, and rate limiting
+3. **Query databases effectively** using both raw SQL and Object-Relational Mapping (ORM) approaches
+4. **Clean and validate data** for analysis with robust error handling and quality assurance
+5. **Apply best practices** for idempotency, logging, monitoring, and documentation
+6. **Deploy containerized data pipelines** using Docker for reproducible, scalable solutions
+7. **Integrate multiple data sources** (APIs + databases) into unified analytical workflows
+8. **Implement proper error handling and recovery** mechanisms for production environments
 
-## Course Topics
+## Course Structure
 
-### Module 1: Introduction to Data Pipelines
-- What are data pipelines?
-- Pipeline design patterns
-- Tools and frameworks
+### Session 1: Introduction to Data Pipelines
+**Duration**: ~90 minutes
 
-### Module 2: Databases
-- SQL fundamentals review
-- Connecting to databases
-- Writing efficient queries
-- Working with ORMs
-- Transaction management
+**Topics Covered**:
+- What are data pipelines and why they matter
+- Modern R and Python conventions (pipe operators, lambda functions)
+- Pipeline design patterns: ETL vs ELT
+- Best practices: idempotency, error handling, logging, monitoring
+- Tools and frameworks overview
+- **Hands-on Example**: Building a weather data pipeline (Brighton Ski Resort precipitation data)
 
-### Module 3: Data Acquisition from APIs
-- RESTful API fundamentals
-- Authentication methods (API keys, OAuth)
-- Handling pagination and rate limits
-- Error handling and retries
-- Practical examples with real APIs
+**Key Concepts**:
+- Extract-Transform-Load (ETL) and Extract-Load-Transform (ELT) patterns
+- Idempotency and why it matters for reliable pipelines
+- Error detection and recovery strategies
+- Documentation best practices
 
-### Module 4: Data Cleaning
-- Common data quality issues
-- Missing data handling
-- Data validation techniques
-- Data transformation and normalization
-- Documentation and reproducibility
+### Session 2: Data Acquisition from APIs
+**Duration**: ~2 hours
 
+**Topics Covered**:
+- RESTful API fundamentals and HTTP methods
+- Authentication methods (API keys, OAuth 2.0, Bearer tokens)
+- Handling pagination and rate limiting
+- Error handling and retry strategies with exponential backoff
+- Working with JSON and nested data structures
+- **Hands-on Exercise**: GitHub API with authentication
 
-## Required Materials
+**Key Skills**:
+- Making authenticated API requests in both R (`httr2`) and Python (`requests`)
+- Implementing robust error handling and retries
+- Parsing complex JSON responses
+- Managing API rate limits and pagination
 
-- Laptop with Python 3.8+ or R 4.0+ installed
-- Internet connection for API access
-- Text editor or IDE you are familiar with (VS Code, RStudio, or PyCharm recommended)
+### Session 3: Database Queries and Management
+**Duration**: ~2 hours
 
-## Resources
+**Topics Covered**:
+- SQL fundamentals review and best practices
+- Database connections and connection pooling
+- Writing efficient queries and understanding query optimization
+- Object-Relational Mapping (ORMs) vs raw SQL
+- Transactions and ACID properties
+- **Hands-on Exercise**: Healthcare database queries with patient, visit, and prescription data
 
-- GitHub Repository: [https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop](https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop)
-- Additional resources will be provided throughout the course
+**Key Skills**:
+- Connecting to databases using R (`DBI`, `RPostgres`) and Python (`sqlalchemy`, `psycopg2`)
+- Writing optimized SQL queries for analytics
+- Understanding when to use ORMs vs raw SQL
+- Managing database transactions and ensuring data integrity
+
+### Session 4: Data Cleaning & Pipeline Integration
+**Duration**: ~2.5 hours
+
+**Topics Covered**:
+- Data quality assessment and common issues
+- Missing data strategies and imputation techniques
+- Data validation and constraint checking
+- Building integrated pipelines (API → Database → Clean Data)
+- Testing and monitoring pipeline health
+- **Capstone Project**: Complete healthcare analytics pipeline
+
+**Key Skills**:
+- Implementing comprehensive data cleaning workflows
+- Building end-to-end pipelines that integrate multiple data sources
+- Setting up monitoring and alerting for production pipelines
+- Creating maintainable, documented pipeline code
+
+## Docker Example: Complete Healthcare Data Pipeline
+
+In addition to the core sessions, this workshop includes a comprehensive **Docker-based example** that demonstrates a production-ready data pipeline architecture:
+
+### What's Included
+- **R Plumber API Container**: RESTful API serving patient demographic data
+- **PostgreSQL Database Container**: Healthcare database with visits, prescriptions, and lab results
+- **R Client Pipeline**: Demonstrates API + database integration using tidyverse
+- **Python Client Pipeline**: Equivalent functionality using pandas and requests
+
+### Learning Outcomes
+- Deploy multi-container applications using Docker Compose
+- Build APIs that serve as data sources for pipelines
+- Integrate data from multiple sources (API + database)
+- Create reproducible, containerized analytics environments
+
+### Architecture
+```
+Docker Environment
+├── R Plumber API (Port 8000) - Patient demographics
+├── PostgreSQL DB (Port 5432) - Visits, prescriptions, labs
+├── R Client - Pipeline integration with dplyr
+└── Python Client - Pipeline integration with pandas
+```
+
+## Prerequisites and Setup
+
+### Required Software
+- **R** (version 4.1+) with packages:
+  - `httr2` (modern HTTP client)
+  - `dplyr` (data manipulation)
+  - `DBI` and `RPostgres` (database connectivity)
+  - `jsonlite` (JSON handling)
+  
+- **Python** (version 3.8+) with packages:
+  - `requests` (HTTP client)
+  - `pandas` (data manipulation)
+  - `sqlalchemy` and `psycopg2` (database connectivity)
+  - `matplotlib` (visualization)
+
+- **Docker Desktop** (for containerized examples)
+- **Text Editor/IDE**: VS Code, RStudio, or PyCharm recommended
+
+### Development Environment
+- Laptop with reliable internet connection
+- Administrative privileges to install packages and Docker
+- GitHub account (for API exercises)
+
+## Workshop Materials and Resources
+
+### Primary Repository
+- **GitHub**: [https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop](https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop)
+- **Course Website**: [https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/](https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/)
+
+### Additional Resources
+- All slide materials and code examples
+- Exercise starter files and solutions
+- Docker example with complete healthcare pipeline
+- Reference documentation and best practices guides
+
+## Assessment and Hands-on Components
+
+This workshop is **100% hands-on** with no formal assessments. Participants will:
+
+- Work through guided coding exercises during each session
+- Complete a capstone project integrating all learned concepts
+- Deploy and test the Docker healthcare pipeline example
+- Receive individual feedback on pipeline implementations
+
+## Disclaimer
+
+The views and opinions expressed in this workshop are those of the presenter and do not necessarily reflect the official policy or position of the University of Utah, the Center for Forecasting and Outbreak Analytics (CFA), or any other affiliated organizations.
+
+## AI Disclosure
+
+This workshop content was created with the assistance of artificial intelligence tools, including GitHub Copilot for code generation and large language models for content development. All materials have been reviewed and validated by the instructor for accuracy and pedagogical effectiveness.

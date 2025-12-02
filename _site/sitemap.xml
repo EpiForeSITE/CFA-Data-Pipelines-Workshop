@@ -2,15 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/syllabus.html</loc>
-    <lastmod>2025-11-19T18:18:48.871Z</lastmod>
+    <lastmod>2025-12-02T01:00:18.189Z</lastmod>
   </url>
   <url>
     <loc>https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/slides/03-databases.html</loc>
-    <lastmod>2025-12-01T17:13:29.986Z</lastmod>
+    <lastmod>2025-12-02T00:29:08.782Z</lastmod>
   </url>
   <url>
     <loc>https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/slides/01-introduction.html</loc>
-    <lastmod>2025-12-01T20:45:33.584Z</lastmod>
+    <lastmod>2025-12-02T00:51:32.169Z</lastmod>
   </url>
   <url>
     <loc>https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/schedule.html</loc>
@@ -22,23 +22,23 @@
   </url>
   <url>
     <loc>https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/docker-example/START_HERE.html</loc>
-    <lastmod>2025-12-01T16:43:21.398Z</lastmod>
+    <lastmod>2025-12-01T22:29:11.503Z</lastmod>
   </url>
   <url>
     <loc>https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/docker-example/FILE_SUMMARY.html</loc>
-    <lastmod>2025-12-01T16:42:33.741Z</lastmod>
+    <lastmod>2025-12-01T22:29:11.496Z</lastmod>
   </url>
   <url>
     <loc>https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/docker-example/ARCHITECTURE.html</loc>
-    <lastmod>2025-12-01T16:42:33.741Z</lastmod>
+    <lastmod>2025-12-01T22:29:11.490Z</lastmod>
   </url>
   <url>
     <loc>https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/docker-example/CREATION_LOG.html</loc>
-    <lastmod>2025-12-01T16:42:33.751Z</lastmod>
+    <lastmod>2025-12-01T22:29:11.492Z</lastmod>
   </url>
   <url>
     <loc>https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/docker-example/QUICK_REFERENCE.html</loc>
-    <lastmod>2025-12-01T16:42:33.741Z</lastmod>
+    <lastmod>2025-12-01T22:29:11.497Z</lastmod>
   </url>
   <url>
     <loc>https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/index.html</loc>
@@ -58,6 +58,6 @@
   </url>
   <url>
     <loc>https://epiforesite.github.io/CFA-Data-Pipelines-Workshop/slides/04-data-cleaning.html</loc>
-    <lastmod>2025-12-01T20:39:05.104Z</lastmod>
+    <lastmod>2025-12-01T22:24:58.935Z</lastmod>
   </url>
 </urlset>
