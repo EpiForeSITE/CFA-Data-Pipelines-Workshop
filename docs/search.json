@@ -644,319 +644,151 @@
     "text": "Questions?\nNext session: Data Acquisition from APIs"
   },
   {
-    "objectID": "schedule.html",
-    "href": "schedule.html",
-    "title": "Schedule",
+    "objectID": "pre-survey.html",
+    "href": "pre-survey.html",
+    "title": "Pre-Workshop Survey",
     "section": "",
-    "text": "This schedule is tentative and may be adjusted as needed. Check back regularly for updates.\n\n\nDate: TBD\nTopics:\n\nCourse overview and objectives\nWhat are data pipelines?\nPipeline design patterns and best practices\nSetting up your development environment\n\nMaterials:\n\nIntroduction Slides\n\nAssignments:\n\nSet up development environment\nComplete introductory exercise\n\n\n\n\n\nDate: TBD\nTopics:\n\nRESTful API fundamentals\nHTTP methods and status codes\nAuthentication methods (API keys, OAuth)\nHandling pagination\nRate limiting and best practices\n\nMaterials:\n\nAPI Slides\n\nAssignments:\n\nExercise: Fetch data from a public API\nImplement error handling for API requests\n\n\n\n\n\nDate: TBD\nTopics:\n\nSQL fundamentals review\nConnecting to databases (SQLite, PostgreSQL, MySQL)\nWriting efficient queries\nWorking with ORMs (SQLAlchemy, Django ORM)\nTransaction management and ACID properties\n\nMaterials:\n\nDatabase Slides\n\nAssignments:\n\nExercise: Query a sample database\nCompare raw SQL vs ORM approaches\n\n\n\n\n\nDate: TBD\nTopics:\n\nCommon data quality issues\nMissing data strategies\nData validation and schema enforcement\nData transformation techniques\nDocumenting your cleaning process\n\nMaterials:\n\nData Cleaning Slides\n\nAssignments:\n\nExercise: Clean a messy dataset\nDocument your cleaning pipeline\n\n\n\n\n\nDue Date: TBD\nRequirements:\n\nBuild a complete data pipeline that:\n\nAcquires data from an API or database\nCleans and validates the data\nProduces analysis-ready output\nIncludes proper error handling and logging\nIs well-documented\n\n\nPresentation: TBD"
+    "text": "Replace this page with an embedded form (Google Forms / Microsoft Forms / Qualtrics) or connect the HTML form below to a handler (e.g. Formspree) before collecting responses."
   },
   {
-    "objectID": "schedule.html#course-schedule",
-    "href": "schedule.html#course-schedule",
-    "title": "Schedule",
+    "objectID": "pre-survey.html#instructions",
+    "href": "pre-survey.html#instructions",
+    "title": "Pre-Workshop Survey",
+    "section": "Instructions",
+    "text": "Instructions\nPlease complete this survey before the workshop begins. Your responses help tailor the instruction and measure learning gains. Estimated time: 5–7 minutes."
+  },
+  {
+    "objectID": "pre-survey.html#section-1-background-demographics",
+    "href": "pre-survey.html#section-1-background-demographics",
+    "title": "Pre-Workshop Survey",
+    "section": "Section 1: Background & Demographics",
+    "text": "Section 1: Background & Demographics\n\nRole / Title\nYears of experience with data, analytics, and programming (dropdown: None, &lt;1, 1–2, 3–5, &gt;5)\nComfort with command line tools (Likert 1–5)"
+  },
+  {
+    "objectID": "pre-survey.html#section-2-prior-experience-likert-1never-5expert",
+    "href": "pre-survey.html#section-2-prior-experience-likert-1never-5expert",
+    "title": "Pre-Workshop Survey",
+    "section": "Section 2: Prior Experience (Likert 1=Never … 5=Expert)",
+    "text": "Section 2: Prior Experience (Likert 1=Never … 5=Expert)\nRate your experience/comfort with the following languages 1. R 2. Python 3. SQL\nRate your experience with the following tasks: 1. I have downloaded data from the internet. 2. I can query databases confidently. 3. I can retrieve data from REST APIs. 4. I understand principles of data cleaning and validation. 5. I can design a reproducible data structure."
+  },
+  {
+    "objectID": "pre-survey.html#section-3-self-efficacy-likert-15",
+    "href": "pre-survey.html#section-3-self-efficacy-likert-15",
+    "title": "Pre-Workshop Survey",
+    "section": "Section 3: Self-Efficacy (Likert 1–5)",
+    "text": "Section 3: Self-Efficacy (Likert 1–5)\n\nI feel confident troubleshooting data pipeline failures.\nI can choose appropriate tools for data acquisition.\nI can assess data quality issues systematically.\nI can document a pipeline for other users."
+  },
+  {
+    "objectID": "pre-survey.html#section-4-knowledge-check-multiple-choice",
+    "href": "pre-survey.html#section-4-knowledge-check-multiple-choice",
+    "title": "Pre-Workshop Survey",
+    "section": "Section 4: Knowledge Check (Multiple Choice)",
+    "text": "Section 4: Knowledge Check (Multiple Choice)\nSelect the best answer. 1. A data pipeline is best described as: (a) A single script; (b) A series of connected processes moving and transforming data; (c) A database schema; (d) A visualization tool. 2. The HTTP status code 429 indicates: (a) Success; (b) Not Found; (c) Too Many Requests; (d) Unauthorized. 3. In SQL, selecting unique values uses: (a) DISTINCT; (b) UNIQUE; (c) GROUP; (d) ONLY. 4. Best first step when cleaning a dataset: (a) Delete all NAs; (b) Profile structure and summary statistics; (c) Normalize everything; (d) Load into production. 5. An API rate limit is: (a) Maximum query complexity; (b) Restriction on number of requests per time window; (c) Disk quota; (d) Memory threshold."
+  },
+  {
+    "objectID": "pre-survey.html#section-5-expectations",
+    "href": "pre-survey.html#section-5-expectations",
+    "title": "Pre-Workshop Survey",
+    "section": "Section 5: Expectations",
+    "text": "Section 5: Expectations\n\nWhat is your primary goal for attending? (long text)\nWhich topic are you MOST interested in? (Single choice: APIs, Databases, Cleaning, Pipeline Design, Other)\nAny specific questions you hope get answered? (long text)"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "CFA Data Pipelines Workshop",
     "section": "",
-    "text": "This schedule is tentative and may be adjusted as needed. Check back regularly for updates.\n\n\nDate: TBD\nTopics:\n\nCourse overview and objectives\nWhat are data pipelines?\nPipeline design patterns and best practices\nSetting up your development environment\n\nMaterials:\n\nIntroduction Slides\n\nAssignments:\n\nSet up development environment\nComplete introductory exercise\n\n\n\n\n\nDate: TBD\nTopics:\n\nRESTful API fundamentals\nHTTP methods and status codes\nAuthentication methods (API keys, OAuth)\nHandling pagination\nRate limiting and best practices\n\nMaterials:\n\nAPI Slides\n\nAssignments:\n\nExercise: Fetch data from a public API\nImplement error handling for API requests\n\n\n\n\n\nDate: TBD\nTopics:\n\nSQL fundamentals review\nConnecting to databases (SQLite, PostgreSQL, MySQL)\nWriting efficient queries\nWorking with ORMs (SQLAlchemy, Django ORM)\nTransaction management and ACID properties\n\nMaterials:\n\nDatabase Slides\n\nAssignments:\n\nExercise: Query a sample database\nCompare raw SQL vs ORM approaches\n\n\n\n\n\nDate: TBD\nTopics:\n\nCommon data quality issues\nMissing data strategies\nData validation and schema enforcement\nData transformation techniques\nDocumenting your cleaning process\n\nMaterials:\n\nData Cleaning Slides\n\nAssignments:\n\nExercise: Clean a messy dataset\nDocument your cleaning pipeline\n\n\n\n\n\nDue Date: TBD\nRequirements:\n\nBuild a complete data pipeline that:\n\nAcquires data from an API or database\nCleans and validates the data\nProduces analysis-ready output\nIncludes proper error handling and logging\nIs well-documented\n\n\nPresentation: TBD"
+    "text": "Welcome to the CFA Data Pipelines Workshop! This course will teach you essential skills for building robust data pipelines, acquiring data from various sources, and cleaning data for analysis."
   },
   {
-    "objectID": "schedule.html#important-dates",
-    "href": "schedule.html#important-dates",
-    "title": "Schedule",
-    "section": "Important Dates",
-    "text": "Important Dates\n\n\n\nDate\nEvent\n\n\n\n\nTBD\nFirst Class\n\n\nTBD\nExercise 1 Due\n\n\nTBD\nExercise 2 Due\n\n\nTBD\nExercise 3 Due\n\n\nTBD\nExercise 4 Due\n\n\nTBD\nFinal Project Presentations\n\n\nTBD\nFinal Project Due"
-  },
-  {
-    "objectID": "schedule.html#office-hours",
-    "href": "schedule.html#office-hours",
-    "title": "Schedule",
-    "section": "Office Hours",
-    "text": "Office Hours\nOffice hours will be held weekly. Schedule TBD."
-  },
-  {
-    "objectID": "post-survey.html",
-    "href": "post-survey.html",
-    "title": "Post-Workshop Survey",
+    "objectID": "index.html#welcome",
+    "href": "index.html#welcome",
+    "title": "CFA Data Pipelines Workshop",
     "section": "",
-    "text": "Please complete after the final session. Estimated time: 6–8 minutes. Your feedback measures learning gains and improves future workshops."
+    "text": "Welcome to the CFA Data Pipelines Workshop! This course will teach you essential skills for building robust data pipelines, acquiring data from various sources, and cleaning data for analysis."
   },
   {
-    "objectID": "post-survey.html#instructions",
-    "href": "post-survey.html#instructions",
-    "title": "Post-Workshop Survey",
+    "objectID": "index.html#course-overview",
+    "href": "index.html#course-overview",
+    "title": "CFA Data Pipelines Workshop",
+    "section": "Course Overview",
+    "text": "Course Overview\nIn this workshop, you will learn:\n\nData Pipeline Design: Best practices for designing and implementing data pipelines\nDatabase Operations: Querying and managing data in databases\nAPI Integration: How to acquire data from RESTful APIs\nData Cleaning: Techniques for preparing and validating data for analysis"
+  },
+  {
+    "objectID": "index.html#getting-started",
+    "href": "index.html#getting-started",
+    "title": "CFA Data Pipelines Workshop",
+    "section": "Getting Started",
+    "text": "Getting Started\n\nReview the Syllabus for course objectives and requirements\nCheck the Schedule for class dates and topics\nAccess Slides for lecture materials"
+  },
+  {
+    "objectID": "index.html#prerequisites",
+    "href": "index.html#prerequisites",
+    "title": "CFA Data Pipelines Workshop",
+    "section": "Prerequisites",
+    "text": "Prerequisites\nStudents should have:\n\nBasic programming knowledge (Python or R recommended)\nFamiliarity with data structures (lists, dictionaries, data frames)\nUnderstanding of basic database concepts"
+  },
+  {
+    "objectID": "index.html#course-materials",
+    "href": "index.html#course-materials",
+    "title": "CFA Data Pipelines Workshop",
+    "section": "Course Materials",
+    "text": "Course Materials\nAll course materials, including slides and example code, are available on the GitHub repository."
+  },
+  {
+    "objectID": "docker-example/QUICK_REFERENCE.html",
+    "href": "docker-example/QUICK_REFERENCE.html",
+    "title": "Quick Reference Guide",
     "section": "",
-    "text": "Please complete after the final session. Estimated time: 6–8 minutes. Your feedback measures learning gains and improves future workshops."
+    "text": "# Start everything\ndocker-compose up -d\n\n# Start with rebuild\ndocker-compose up -d --build\n\n# View logs\ndocker-compose logs -f\n\n# Stop everything\ndocker-compose down\n\n# Restart a service\ndocker-compose restart api\ndocker-compose restart database\n\n# View running containers\ndocker-compose ps\n\n# Access container shell\ndocker-compose exec api /bin/bash\ndocker-compose exec database psql -U healthuser -d healthcare\n\n\n\n# Health check\ncurl http://localhost:8000/health\n\n# Get all patients\ncurl http://localhost:8000/patients\n\n# Get specific patient\ncurl http://localhost:8000/patients/1001\n\n# Get by insurance\ncurl http://localhost:8000/patients/insurance/INS001\n\n# Get statistics\ncurl http://localhost:8000/stats\n\n# Create patient (POST)\ncurl -X POST http://localhost:8000/patients \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"patient_id\": 1011, \"name\": \"Test\", \"date_of_birth\": \"1990-01-01\", \"insurance_id\": \"INS001\"}'\n\n\n\n# Connect to database\ndocker-compose exec database psql -U healthuser -d healthcare\n\n# Or from host (if psql installed)\npsql -h localhost -p 5432 -U healthuser -d healthcare\n-- Common queries\nSELECT COUNT(*) FROM visits;\nSELECT COUNT(*) FROM prescriptions;\nSELECT COUNT(*) FROM lab_results;\n\n-- Get patient visit summary\nSELECT \n    patient_id,\n    COUNT(*) as visit_count,\n    MIN(visit_date) as first_visit,\n    MAX(visit_date) as last_visit\nFROM visits\nGROUP BY patient_id;\n\n-- Get prescriptions by patient\nSELECT * FROM prescriptions WHERE patient_id = 1002;\n\n-- Get lab results with visit info\nSELECT \n    l.test_name,\n    l.test_value,\n    l.test_unit,\n    v.visit_date,\n    v.provider_name\nFROM lab_results l\nJOIN visits v ON l.visit_id = v.visit_id\nWHERE l.patient_id = 1001;\n\n\n\n\n\n\nCreate .env file (copy from .env.example):\nPOSTGRES_DB=healthcare\nPOSTGRES_USER=healthuser\nPOSTGRES_PASSWORD=healthpass\nAPI_PORT=8000\nDB_PORT=5432\n\n\n\nR (DBI):\ncon &lt;- dbConnect(\n  RPostgres::Postgres(),\n  host = \"localhost\",\n  port = 5432,\n  dbname = \"healthcare\",\n  user = \"healthuser\",\n  password = \"healthpass\"\n)\nPython (psycopg2):\nconn = psycopg2.connect(\n    host=\"localhost\",\n    port=5432,\n    database=\"healthcare\",\n    user=\"healthuser\",\n    password=\"healthpass\"\n)\nPython (SQLAlchemy):\nengine = create_engine(\n    \"postgresql://healthuser:healthpass@localhost:5432/healthcare\"\n)\n\n\n\n\n\n\n\n10 patients (IDs 1001-1010)\n3 insurance types: INS001, INS002, INS003\n2 self-pay patients\n\n\n\n\n\n12 visits across multiple patients\nDate range: Jan-Apr 2024\n3 providers\n\n\n\n\n\n7 prescriptions\nVarious medications (Lisinopril, Metformin, etc.)\n\n\n\n\n\n12 lab tests\nBlood pressure, HbA1c, cholesterol, etc.\n\n\n\n\n\n\n\n# Change ports in docker-compose.yml\nports:\n  - \"8001:8000\"  # API\n  - \"5433:5432\"  # Database\n\n\n\n# Check logs\ndocker-compose logs database\ndocker-compose logs api\n\n# Rebuild\ndocker-compose down\ndocker-compose up -d --build\n\n\n\n# Wait for health check\ndocker-compose ps\n\n# Should show \"Up (healthy)\"\n# If not, wait 10-20 seconds\n\n\n\n# Try different CRAN mirror\ninstall.packages(\"RPostgres\", \n  repos = \"https://cloud.r-project.org/\")\n\n# On Windows, install Rtools first\n# https://cran.r-project.org/bin/windows/Rtools/\n\n\n\n\ndocker-example/\n├── api/                    # R Plumber API container\n│   ├── Dockerfile\n│   ├── plumber.R          # API endpoints\n│   └── patients_data.csv  # Sample patient data\n├── database/               # PostgreSQL container\n│   ├── Dockerfile\n│   └── init.sql           # Schema and sample data\n├── r-client/               # R pipeline script\n│   ├── healthcare_pipeline.R\n│   └── install_packages.R\n├── python-client/          # Python pipeline script\n│   ├── healthcare_pipeline.py\n│   └── requirements.txt\n├── docker-compose.yml      # Orchestration config\n├── .env.example           # Environment template\n└── README.md              # Full documentation\n\n\n\n\nModify the API: Add new endpoints in api/plumber.R\nAdd Tables: Extend database/init.sql with new schemas\nEnhance Clients: Add data validation, cleaning, transformation\nAuthentication: Add API keys or OAuth to the API\nMonitoring: Add logging and metrics collection\nTesting: Write unit tests for API endpoints and pipelines\n\n\n\n\n\nAlways check container health before running clients\nUse docker-compose logs -f to watch real-time logs\nThe API data is in-memory (resets on restart)\nThe database data persists in a Docker volume\nBoth clients do the same thing - compare them to learn!"
   },
   {
-    "objectID": "post-survey.html#section-1-learning-gains-retain-identical-wording-from-pre-for-comparison",
-    "href": "post-survey.html#section-1-learning-gains-retain-identical-wording-from-pre-for-comparison",
-    "title": "Post-Workshop Survey",
-    "section": "Section 1: Learning Gains (Retain identical wording from pre for comparison)",
-    "text": "Section 1: Learning Gains (Retain identical wording from pre for comparison)\n(Likert 1=Strongly Disagree … 5=Strongly Agree) 1. I have built data workflows before. 2. I can query databases confidently. 3. I have retrieved data from REST APIs. 4. I understand principles of data cleaning and validation. 5. I can design a reproducible data structure. 6. I feel confident troubleshooting data pipeline failures. 7. I can choose appropriate tools for data acquisition. 8. I can assess data quality issues systematically. 9. I can document a pipeline for other users."
-  },
-  {
-    "objectID": "post-survey.html#section-2-knowledge-check-same-items-optional-randomized-order",
-    "href": "post-survey.html#section-2-knowledge-check-same-items-optional-randomized-order",
-    "title": "Post-Workshop Survey",
-    "section": "Section 2: Knowledge Check (Same items; optional randomized order)",
-    "text": "Section 2: Knowledge Check (Same items; optional randomized order)\n\nA data pipeline is best described as: (a) A single script; (b) A series of connected processes moving and transforming data; (c) A database schema; (d) A visualization tool.\nThe HTTP status code 429 indicates: (a) Success; (b) Not Found; (c) Too Many Requests; (d) Unauthorized.\nIn SQL, selecting unique values uses: (a) DISTINCT; (b) UNIQUE; (c) GROUP; (d) ONLY.\nBest first step when cleaning a dataset: (a) Delete all NAs; (b) Profile structure and summary statistics; (c) Normalize everything; (d) Load into production.\nAn API rate limit is: (a) Maximum query complexity; (b) Restriction on number of requests per time window; (c) Disk quota; (d) Memory threshold."
-  },
-  {
-    "objectID": "post-survey.html#section-3-satisfaction-likert-15",
-    "href": "post-survey.html#section-3-satisfaction-likert-15",
-    "title": "Post-Workshop Survey",
-    "section": "Section 3: Satisfaction (Likert 1–5)",
-    "text": "Section 3: Satisfaction (Likert 1–5)\n\nThe workshop met my expectations.\nThe pacing was appropriate.\nThe examples clarified the concepts.\nThe slides/materials were well organized.\nI would recommend this workshop to others."
-  },
-  {
-    "objectID": "post-survey.html#section-4-application-impact",
-    "href": "post-survey.html#section-4-application-impact",
-    "title": "Post-Workshop Survey",
-    "section": "Section 4: Application & Impact",
-    "text": "Section 4: Application & Impact\n\nHow soon do you expect to apply what you learned? (Immediate, &lt;1 month, 1–3 months, &gt;3 months, Unsure)\nWhich topic was MOST valuable? (APIs, Databases, Cleaning, Pipeline Design, Other)\nWhich topic needs more depth next time? (APIs, Databases, Cleaning, Pipeline Design, Other)\nList one concrete change you will make to your current workflow. (long text)"
-  },
-  {
-    "objectID": "post-survey.html#section-5-open-feedback",
-    "href": "post-survey.html#section-5-open-feedback",
-    "title": "Post-Workshop Survey",
-    "section": "Section 5: Open Feedback",
-    "text": "Section 5: Open Feedback\n\nWhat was the most helpful part? (long text)\nWhat was least helpful / could be improved? (long text)\nAdditional comments or suggestions. (long text)"
-  },
-  {
-    "objectID": "docker-example/START_HERE.html",
-    "href": "docker-example/START_HERE.html",
-    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "objectID": "docker-example/QUICK_REFERENCE.html#essential-commands",
+    "href": "docker-example/QUICK_REFERENCE.html#essential-commands",
+    "title": "Quick Reference Guide",
     "section": "",
-    "text": "Welcome! This folder contains a complete, working example of a data pipeline using Docker containers.\n\n\nA hands-on example demonstrating: - ✅ R Plumber REST API in a Docker container - ✅ PostgreSQL database in a Docker container\n- ✅ R client that pulls from both sources - ✅ Python client that pulls from both sources - ✅ Real healthcare data scenarios\n\n\n\n\n\n👉 Read README.md - Complete setup guide with explanations\n\n\n\n👉 Read QUICK_REFERENCE.md - Essential commands only\n\n\n\n👉 Read ARCHITECTURE.md - Visual diagrams and data flow\n\n\n\n👉 Read FILE_SUMMARY.md - What each file does\n\n\n\n\n# 1. Start the containers\ndocker-compose up -d --build\n\n# 2. Run the pipeline (choose R or Python)\nRscript r-client/healthcare_pipeline.R\n# OR\npython python-client/healthcare_pipeline.py\n\n# 3. Stop when done\ndocker-compose down\n\n\n\ndocker-example/\n├── 📖 README.md              ← Start here if new to this\n├── 📖 QUICK_REFERENCE.md     ← Commands cheat sheet\n├── 📖 ARCHITECTURE.md        ← Visual diagrams\n├── 📖 FILE_SUMMARY.md        ← File-by-file breakdown\n├── 🐳 docker-compose.yml     ← Runs both containers\n├── 📂 api/                   ← R Plumber API code\n├── 📂 database/              ← PostgreSQL setup\n├── 📂 r-client/              ← R pipeline script\n└── 📂 python-client/         ← Python pipeline script\n\n\n\nBy working through this example, you’ll learn:\n\nDocker Basics\n\nBuilding custom images\nMulti-container applications\nContainer networking\nVolume persistence\n\nAPI Integration\n\nCreating REST APIs with R Plumber\nMaking HTTP GET/POST requests\nHandling JSON data\n\nDatabase Operations\n\nPostgreSQL in Docker\nSQL queries and joins\nConnecting from R and Python\n\nData Pipelines\n\nExtracting from multiple sources\nCombining datasets\nWriting to databases\nError handling\n\n\n\n\n\n\nDocker Desktop installed and running\nR (optional, for R client)\nPython (optional, for Python client)\n\n\n\n\n\nContainers won’t start?\ndocker-compose logs\nNeed to verify everything works?\n# Windows\n.\\validate.ps1\n\n# Linux/Mac\n./validate.sh\nWant to start fresh?\ndocker-compose down -v\ndocker-compose up -d --build\n\n\n\n\nAPI Container          Database Container\n(Patient Data)         (Visit/Lab Data)\n     │                        │\n     │                        │\n     └────────┬───────────────┘\n              │\n         Your Pipeline\n              │\n      Combined Patient + \n       Visit Summary\n\n\n\n\n✅ Run both R and Python versions - compare the code\n✅ Modify the API - add a new endpoint\n✅ Add a database table - extend the schema\n✅ Enhance the pipeline - add data validation\n✅ Deploy to production - add authentication, monitoring\n\n\n\n\n\nUse docker-compose logs -f to watch container output in real-time\nThe API data is in-memory (resets on restart)\nThe database data persists in a Docker volume\nBoth pipelines do the same thing - learn from the differences!\n\n\n\n\nThis example brings together all 4 workshop sessions:\n\n\n\nSession\nConcepts Applied\n\n\n\n\n1\nEnvironment setup, git, package management\n\n\n2\nREST APIs, HTTP requests, authentication\n\n\n3\nDatabase connections, SQL, upserts\n\n\n4\nData cleaning, pipeline integration\n\n\n\n\n\n\n\nOpen README.md for the full guide\nOr jump right in with the Quick Start above\n\nHappy Pipeline Building! 🚀\n\nQuestions? See the main workshop repository or ask in the discussion board."
+    "text": "# Start everything\ndocker-compose up -d\n\n# Start with rebuild\ndocker-compose up -d --build\n\n# View logs\ndocker-compose logs -f\n\n# Stop everything\ndocker-compose down\n\n# Restart a service\ndocker-compose restart api\ndocker-compose restart database\n\n# View running containers\ndocker-compose ps\n\n# Access container shell\ndocker-compose exec api /bin/bash\ndocker-compose exec database psql -U healthuser -d healthcare\n\n\n\n# Health check\ncurl http://localhost:8000/health\n\n# Get all patients\ncurl http://localhost:8000/patients\n\n# Get specific patient\ncurl http://localhost:8000/patients/1001\n\n# Get by insurance\ncurl http://localhost:8000/patients/insurance/INS001\n\n# Get statistics\ncurl http://localhost:8000/stats\n\n# Create patient (POST)\ncurl -X POST http://localhost:8000/patients \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"patient_id\": 1011, \"name\": \"Test\", \"date_of_birth\": \"1990-01-01\", \"insurance_id\": \"INS001\"}'\n\n\n\n# Connect to database\ndocker-compose exec database psql -U healthuser -d healthcare\n\n# Or from host (if psql installed)\npsql -h localhost -p 5432 -U healthuser -d healthcare\n-- Common queries\nSELECT COUNT(*) FROM visits;\nSELECT COUNT(*) FROM prescriptions;\nSELECT COUNT(*) FROM lab_results;\n\n-- Get patient visit summary\nSELECT \n    patient_id,\n    COUNT(*) as visit_count,\n    MIN(visit_date) as first_visit,\n    MAX(visit_date) as last_visit\nFROM visits\nGROUP BY patient_id;\n\n-- Get prescriptions by patient\nSELECT * FROM prescriptions WHERE patient_id = 1002;\n\n-- Get lab results with visit info\nSELECT \n    l.test_name,\n    l.test_value,\n    l.test_unit,\n    v.visit_date,\n    v.provider_name\nFROM lab_results l\nJOIN visits v ON l.visit_id = v.visit_id\nWHERE l.patient_id = 1001;"
   },
   {
-    "objectID": "docker-example/START_HERE.html#what-this-is",
-    "href": "docker-example/START_HERE.html#what-this-is",
-    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "objectID": "docker-example/QUICK_REFERENCE.html#configuration",
+    "href": "docker-example/QUICK_REFERENCE.html#configuration",
+    "title": "Quick Reference Guide",
     "section": "",
-    "text": "A hands-on example demonstrating: - ✅ R Plumber REST API in a Docker container - ✅ PostgreSQL database in a Docker container\n- ✅ R client that pulls from both sources - ✅ Python client that pulls from both sources - ✅ Real healthcare data scenarios"
+    "text": "Create .env file (copy from .env.example):\nPOSTGRES_DB=healthcare\nPOSTGRES_USER=healthuser\nPOSTGRES_PASSWORD=healthpass\nAPI_PORT=8000\nDB_PORT=5432\n\n\n\nR (DBI):\ncon &lt;- dbConnect(\n  RPostgres::Postgres(),\n  host = \"localhost\",\n  port = 5432,\n  dbname = \"healthcare\",\n  user = \"healthuser\",\n  password = \"healthpass\"\n)\nPython (psycopg2):\nconn = psycopg2.connect(\n    host=\"localhost\",\n    port=5432,\n    database=\"healthcare\",\n    user=\"healthuser\",\n    password=\"healthpass\"\n)\nPython (SQLAlchemy):\nengine = create_engine(\n    \"postgresql://healthuser:healthpass@localhost:5432/healthcare\"\n)"
   },
   {
-    "objectID": "docker-example/START_HERE.html#where-to-start",
-    "href": "docker-example/START_HERE.html#where-to-start",
-    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "objectID": "docker-example/QUICK_REFERENCE.html#sample-data-overview",
+    "href": "docker-example/QUICK_REFERENCE.html#sample-data-overview",
+    "title": "Quick Reference Guide",
     "section": "",
-    "text": "👉 Read README.md - Complete setup guide with explanations\n\n\n\n👉 Read QUICK_REFERENCE.md - Essential commands only\n\n\n\n👉 Read ARCHITECTURE.md - Visual diagrams and data flow\n\n\n\n👉 Read FILE_SUMMARY.md - What each file does"
+    "text": "10 patients (IDs 1001-1010)\n3 insurance types: INS001, INS002, INS003\n2 self-pay patients\n\n\n\n\n\n12 visits across multiple patients\nDate range: Jan-Apr 2024\n3 providers\n\n\n\n\n\n7 prescriptions\nVarious medications (Lisinopril, Metformin, etc.)\n\n\n\n\n\n12 lab tests\nBlood pressure, HbA1c, cholesterol, etc."
   },
   {
-    "objectID": "docker-example/START_HERE.html#super-quick-start-3-commands",
-    "href": "docker-example/START_HERE.html#super-quick-start-3-commands",
-    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "objectID": "docker-example/QUICK_REFERENCE.html#common-issues",
+    "href": "docker-example/QUICK_REFERENCE.html#common-issues",
+    "title": "Quick Reference Guide",
     "section": "",
-    "text": "# 1. Start the containers\ndocker-compose up -d --build\n\n# 2. Run the pipeline (choose R or Python)\nRscript r-client/healthcare_pipeline.R\n# OR\npython python-client/healthcare_pipeline.py\n\n# 3. Stop when done\ndocker-compose down"
+    "text": "# Change ports in docker-compose.yml\nports:\n  - \"8001:8000\"  # API\n  - \"5433:5432\"  # Database\n\n\n\n# Check logs\ndocker-compose logs database\ndocker-compose logs api\n\n# Rebuild\ndocker-compose down\ndocker-compose up -d --build\n\n\n\n# Wait for health check\ndocker-compose ps\n\n# Should show \"Up (healthy)\"\n# If not, wait 10-20 seconds\n\n\n\n# Try different CRAN mirror\ninstall.packages(\"RPostgres\", \n  repos = \"https://cloud.r-project.org/\")\n\n# On Windows, install Rtools first\n# https://cran.r-project.org/bin/windows/Rtools/"
   },
   {
-    "objectID": "docker-example/START_HERE.html#whats-inside",
-    "href": "docker-example/START_HERE.html#whats-inside",
-    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "objectID": "docker-example/QUICK_REFERENCE.html#project-structure",
+    "href": "docker-example/QUICK_REFERENCE.html#project-structure",
+    "title": "Quick Reference Guide",
     "section": "",
-    "text": "docker-example/\n├── 📖 README.md              ← Start here if new to this\n├── 📖 QUICK_REFERENCE.md     ← Commands cheat sheet\n├── 📖 ARCHITECTURE.md        ← Visual diagrams\n├── 📖 FILE_SUMMARY.md        ← File-by-file breakdown\n├── 🐳 docker-compose.yml     ← Runs both containers\n├── 📂 api/                   ← R Plumber API code\n├── 📂 database/              ← PostgreSQL setup\n├── 📂 r-client/              ← R pipeline script\n└── 📂 python-client/         ← Python pipeline script"
+    "text": "docker-example/\n├── api/                    # R Plumber API container\n│   ├── Dockerfile\n│   ├── plumber.R          # API endpoints\n│   └── patients_data.csv  # Sample patient data\n├── database/               # PostgreSQL container\n│   ├── Dockerfile\n│   └── init.sql           # Schema and sample data\n├── r-client/               # R pipeline script\n│   ├── healthcare_pipeline.R\n│   └── install_packages.R\n├── python-client/          # Python pipeline script\n│   ├── healthcare_pipeline.py\n│   └── requirements.txt\n├── docker-compose.yml      # Orchestration config\n├── .env.example           # Environment template\n└── README.md              # Full documentation"
   },
   {
-    "objectID": "docker-example/START_HERE.html#learning-objectives",
-    "href": "docker-example/START_HERE.html#learning-objectives",
-    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "objectID": "docker-example/QUICK_REFERENCE.html#next-steps",
+    "href": "docker-example/QUICK_REFERENCE.html#next-steps",
+    "title": "Quick Reference Guide",
     "section": "",
-    "text": "By working through this example, you’ll learn:\n\nDocker Basics\n\nBuilding custom images\nMulti-container applications\nContainer networking\nVolume persistence\n\nAPI Integration\n\nCreating REST APIs with R Plumber\nMaking HTTP GET/POST requests\nHandling JSON data\n\nDatabase Operations\n\nPostgreSQL in Docker\nSQL queries and joins\nConnecting from R and Python\n\nData Pipelines\n\nExtracting from multiple sources\nCombining datasets\nWriting to databases\nError handling"
+    "text": "Modify the API: Add new endpoints in api/plumber.R\nAdd Tables: Extend database/init.sql with new schemas\nEnhance Clients: Add data validation, cleaning, transformation\nAuthentication: Add API keys or OAuth to the API\nMonitoring: Add logging and metrics collection\nTesting: Write unit tests for API endpoints and pipelines"
   },
   {
-    "objectID": "docker-example/START_HERE.html#prerequisites",
-    "href": "docker-example/START_HERE.html#prerequisites",
-    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "objectID": "docker-example/QUICK_REFERENCE.html#tips",
+    "href": "docker-example/QUICK_REFERENCE.html#tips",
+    "title": "Quick Reference Guide",
     "section": "",
-    "text": "Docker Desktop installed and running\nR (optional, for R client)\nPython (optional, for Python client)"
-  },
-  {
-    "objectID": "docker-example/START_HERE.html#help-troubleshooting",
-    "href": "docker-example/START_HERE.html#help-troubleshooting",
-    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
-    "section": "",
-    "text": "Containers won’t start?\ndocker-compose logs\nNeed to verify everything works?\n# Windows\n.\\validate.ps1\n\n# Linux/Mac\n./validate.sh\nWant to start fresh?\ndocker-compose down -v\ndocker-compose up -d --build"
-  },
-  {
-    "objectID": "docker-example/START_HERE.html#what-youll-build",
-    "href": "docker-example/START_HERE.html#what-youll-build",
-    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
-    "section": "",
-    "text": "API Container          Database Container\n(Patient Data)         (Visit/Lab Data)\n     │                        │\n     │                        │\n     └────────┬───────────────┘\n              │\n         Your Pipeline\n              │\n      Combined Patient + \n       Visit Summary"
-  },
-  {
-    "objectID": "docker-example/START_HERE.html#next-steps-after-completion",
-    "href": "docker-example/START_HERE.html#next-steps-after-completion",
-    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
-    "section": "",
-    "text": "✅ Run both R and Python versions - compare the code\n✅ Modify the API - add a new endpoint\n✅ Add a database table - extend the schema\n✅ Enhance the pipeline - add data validation\n✅ Deploy to production - add authentication, monitoring"
-  },
-  {
-    "objectID": "docker-example/START_HERE.html#pro-tips",
-    "href": "docker-example/START_HERE.html#pro-tips",
-    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
-    "section": "",
-    "text": "Use docker-compose logs -f to watch container output in real-time\nThe API data is in-memory (resets on restart)\nThe database data persists in a Docker volume\nBoth pipelines do the same thing - learn from the differences!"
-  },
-  {
-    "objectID": "docker-example/START_HERE.html#integration-with-workshop",
-    "href": "docker-example/START_HERE.html#integration-with-workshop",
-    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
-    "section": "",
-    "text": "This example brings together all 4 workshop sessions:\n\n\n\nSession\nConcepts Applied\n\n\n\n\n1\nEnvironment setup, git, package management\n\n\n2\nREST APIs, HTTP requests, authentication\n\n\n3\nDatabase connections, SQL, upserts\n\n\n4\nData cleaning, pipeline integration"
-  },
-  {
-    "objectID": "docker-example/START_HERE.html#ready-to-start",
-    "href": "docker-example/START_HERE.html#ready-to-start",
-    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
-    "section": "",
-    "text": "Open README.md for the full guide\nOr jump right in with the Quick Start above\n\nHappy Pipeline Building! 🚀\n\nQuestions? See the main workshop repository or ask in the discussion board."
-  },
-  {
-    "objectID": "docker-example/FILE_SUMMARY.html",
-    "href": "docker-example/FILE_SUMMARY.html",
-    "title": "Docker Example - Complete File Listing",
-    "section": "",
-    "text": "docker-example/\n│\n├── 📄 README.md                    # Main documentation\n├── 📄 QUICK_REFERENCE.md           # Command cheat sheet\n├── 📄 ARCHITECTURE.md              # Visual diagrams\n├── 📄 docker-compose.yml           # Container orchestration\n├── 📄 .env.example                 # Environment template\n├── 📄 .gitignore                   # Git ignore rules\n├── 📜 validate.sh                  # Linux/Mac validation script\n├── 📜 validate.ps1                 # Windows validation script\n│\n├── 📂 api/                         # R Plumber API Container\n│   ├── 📄 Dockerfile               # Container build instructions\n│   ├── 📜 plumber.R                # API endpoint definitions\n│   └── 📊 patients_data.csv        # Sample patient data (10 records)\n│\n├── 📂 database/                    # PostgreSQL Database Container\n│   ├── 📄 Dockerfile               # Container build instructions\n│   └── 📜 init.sql                 # Database schema + sample data\n│\n├── 📂 r-client/                    # R Pipeline Client\n│   ├── 📜 healthcare_pipeline.R    # Main pipeline script\n│   └── 📜 install_packages.R       # Package installation helper\n│\n└── 📂 python-client/               # Python Pipeline Client\n    ├── 🐍 healthcare_pipeline.py   # Main pipeline script\n    └── 📄 requirements.txt         # Python dependencies\n\n\n\n\n\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\nREADME.md\nComplete setup guide, architecture overview, troubleshooting\n\n\nQUICK_REFERENCE.md\nQuick command reference for common operations\n\n\nARCHITECTURE.md\nVisual diagrams of system architecture and data flow\n\n\ndocker-compose.yml\nDefines both containers, networking, volumes\n\n\n.env.example\nTemplate for environment variables\n\n\n.gitignore\nPrevents committing sensitive files\n\n\nvalidate.sh\nLinux/Mac script to verify setup\n\n\nvalidate.ps1\nWindows PowerShell script to verify setup\n\n\n\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nDockerfile\n21\nBuilds R container with Plumber\n\n\nplumber.R\n115\nREST API with 6 endpoints\n\n\npatients_data.csv\n11\n10 patient records (header + data)\n\n\n\nAPI Endpoints: - GET /health - Health check - GET /patients - List all patients - GET /patients/{id} - Get single patient - GET /patients/insurance/{id} - Filter by insurance - GET /stats - Statistics - POST /patients - Create patient\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nDockerfile\n12\nBuilds PostgreSQL container\n\n\ninit.sql\n150+\nCreates 3 tables + sample data\n\n\n\nDatabase Tables: - visits - 12 healthcare visit records - prescriptions - 7 medication prescriptions - lab_results - 12 laboratory test results\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nhealthcare_pipeline.R\n200+\nFull ETL pipeline in R\n\n\ninstall_packages.R\n10\nInstalls required R packages\n\n\n\nPipeline Steps: 1. Fetch from API (httr) 2. Query database (DBI/RPostgres) 3. Combine data (dplyr) 4. Write back to database\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nhealthcare_pipeline.py\n230+\nFull ETL pipeline in Python\n\n\nrequirements.txt\n4\nPython package dependencies\n\n\n\nPipeline Steps: 1. Fetch from API (requests) 2. Query database (psycopg2/SQLAlchemy) 3. Combine data (pandas) 4. Write back to database 5. Test POST endpoint\n\n\n\n\n\n\ndocker-compose up -d --build\n\n\n\n# Windows\n.\\validate.ps1\n\n# Linux/Mac\n./validate.sh\n\n\n\n# R version\nRscript r-client/healthcare_pipeline.R\n\n# Python version\npython python-client/healthcare_pipeline.py\n\n\n\n\n\n\n\nAPI Container (healthcare_api)\n\nLoads 10 patient records into memory\nStarts REST API on port 8000\nServes HTTP requests\n\nDatabase Container (healthcare_db)\n\nCreates PostgreSQL database\nCreates 3 tables (visits, prescriptions, lab_results)\nInserts 31 total records\nListens on port 5432\n\n\n\n\n\n\nAPI Data Fetched\n\n10 patients from /patients endpoint\nConverted to DataFrame/tibble\n\nDatabase Data Queried\n\nVisit summary aggregated\nPrescription counts calculated\nLab result counts calculated\n\nCombined Dataset Created\n\nPatient demographics (from API)\nVisit statistics (from database)\nMerged on patient_id\n\nNew Table Written\n\npatient_summary table created\n10 rows written\nContains combined data\n\n\n\n\n\n\nPatients (API)           Visits (DB)\n└─ patient_id ──────────┬─ patient_id\n                        │\n                        ├─ Prescriptions (DB)\n                        │  └─ visit_id → visit_id\n                        │\n                        └─ Lab Results (DB)\n                           └─ visit_id → visit_id\n\n\n\n\n\n\nItem\nCount\nStorage\n\n\n\n\nPatients (API)\n10\nIn-memory CSV\n\n\nVisits (DB)\n12\nPostgreSQL volume\n\n\nPrescriptions (DB)\n7\nPostgreSQL volume\n\n\nLab Results (DB)\n12\nPostgreSQL volume\n\n\nTotal Records\n41\n~50 KB\n\n\n\n\n\n\n\nBeginner: Run both pipelines, compare outputs\nIntermediate: Modify API endpoints, add new queries\nAdvanced: Add authentication, implement caching, add monitoring\n\n\n\n\n\nAdd more API endpoints (PUT, DELETE)\nImplement authentication (API keys, JWT)\nAdd data validation (pandera, validate)\nCreate scheduled jobs (cron, APScheduler)\nAdd monitoring (Prometheus metrics)\nImplement caching (Redis)\nAdd logging aggregation (ELK stack)\nCreate web dashboard (Shiny, Streamlit)\n\n\n\n\n\n\n\nTechnology\nVersion\nPurpose\n\n\n\n\nDocker\nLatest\nContainerization\n\n\nDocker Compose\nLatest\nMulti-container orchestration\n\n\nPostgreSQL\n16\nRelational database\n\n\nR\n4.5.1\nProgramming language\n\n\nPlumber\nLatest\nR REST API framework\n\n\nPython\n3.8+\nProgramming language\n\n\nhttr\nLatest\nR HTTP client\n\n\nrequests\nLatest\nPython HTTP client\n\n\nDBI/RPostgres\nLatest\nR database interface\n\n\npsycopg2\nLatest\nPython PostgreSQL driver\n\n\ndplyr\nLatest\nR data manipulation\n\n\npandas\nLatest\nPython data manipulation\n\n\n\n\n\n\n\n\n\nTask\nDuration\n\n\n\n\nInitial build\n3-5 minutes\n\n\nContainer startup\n20-30 seconds\n\n\nHealth check ready\n10-20 seconds\n\n\nR pipeline execution\n5-10 seconds\n\n\nPython pipeline execution\n5-10 seconds\n\n\n\n\n\n\n\n\n\nContainer\nCPU\nMemory\nDisk\n\n\n\n\nhealthcare_api\n&lt;5%\n~200 MB\n~500 MB\n\n\nhealthcare_db\n&lt;5%\n~100 MB\n~100 MB\n\n\nTotal\n&lt;10%\n~300 MB\n~600 MB\n\n\n\n\n\n\nThis example integrates concepts from all 4 workshop sessions:\n\n✅ Session 1: Git, environments, package management\n✅ Session 2: REST APIs, HTTP requests, JSON parsing\n✅ Session 3: Database connections, SQL queries, upserts\n✅ Session 4: Data cleaning, pipeline integration, error handling\n\n\n\n\nCreated for the CFA Data Pipelines Workshop by the ForeSITE team.\n\nQuestions? See README.md or open an issue in the workshop repository."
-  },
-  {
-    "objectID": "docker-example/FILE_SUMMARY.html#project-structure",
-    "href": "docker-example/FILE_SUMMARY.html#project-structure",
-    "title": "Docker Example - Complete File Listing",
-    "section": "",
-    "text": "docker-example/\n│\n├── 📄 README.md                    # Main documentation\n├── 📄 QUICK_REFERENCE.md           # Command cheat sheet\n├── 📄 ARCHITECTURE.md              # Visual diagrams\n├── 📄 docker-compose.yml           # Container orchestration\n├── 📄 .env.example                 # Environment template\n├── 📄 .gitignore                   # Git ignore rules\n├── 📜 validate.sh                  # Linux/Mac validation script\n├── 📜 validate.ps1                 # Windows validation script\n│\n├── 📂 api/                         # R Plumber API Container\n│   ├── 📄 Dockerfile               # Container build instructions\n│   ├── 📜 plumber.R                # API endpoint definitions\n│   └── 📊 patients_data.csv        # Sample patient data (10 records)\n│\n├── 📂 database/                    # PostgreSQL Database Container\n│   ├── 📄 Dockerfile               # Container build instructions\n│   └── 📜 init.sql                 # Database schema + sample data\n│\n├── 📂 r-client/                    # R Pipeline Client\n│   ├── 📜 healthcare_pipeline.R    # Main pipeline script\n│   └── 📜 install_packages.R       # Package installation helper\n│\n└── 📂 python-client/               # Python Pipeline Client\n    ├── 🐍 healthcare_pipeline.py   # Main pipeline script\n    └── 📄 requirements.txt         # Python dependencies"
-  },
-  {
-    "objectID": "docker-example/FILE_SUMMARY.html#file-purposes",
-    "href": "docker-example/FILE_SUMMARY.html#file-purposes",
-    "title": "Docker Example - Complete File Listing",
-    "section": "",
-    "text": "File\nPurpose\n\n\n\n\nREADME.md\nComplete setup guide, architecture overview, troubleshooting\n\n\nQUICK_REFERENCE.md\nQuick command reference for common operations\n\n\nARCHITECTURE.md\nVisual diagrams of system architecture and data flow\n\n\ndocker-compose.yml\nDefines both containers, networking, volumes\n\n\n.env.example\nTemplate for environment variables\n\n\n.gitignore\nPrevents committing sensitive files\n\n\nvalidate.sh\nLinux/Mac script to verify setup\n\n\nvalidate.ps1\nWindows PowerShell script to verify setup\n\n\n\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nDockerfile\n21\nBuilds R container with Plumber\n\n\nplumber.R\n115\nREST API with 6 endpoints\n\n\npatients_data.csv\n11\n10 patient records (header + data)\n\n\n\nAPI Endpoints: - GET /health - Health check - GET /patients - List all patients - GET /patients/{id} - Get single patient - GET /patients/insurance/{id} - Filter by insurance - GET /stats - Statistics - POST /patients - Create patient\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nDockerfile\n12\nBuilds PostgreSQL container\n\n\ninit.sql\n150+\nCreates 3 tables + sample data\n\n\n\nDatabase Tables: - visits - 12 healthcare visit records - prescriptions - 7 medication prescriptions - lab_results - 12 laboratory test results\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nhealthcare_pipeline.R\n200+\nFull ETL pipeline in R\n\n\ninstall_packages.R\n10\nInstalls required R packages\n\n\n\nPipeline Steps: 1. Fetch from API (httr) 2. Query database (DBI/RPostgres) 3. Combine data (dplyr) 4. Write back to database\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nhealthcare_pipeline.py\n230+\nFull ETL pipeline in Python\n\n\nrequirements.txt\n4\nPython package dependencies\n\n\n\nPipeline Steps: 1. Fetch from API (requests) 2. Query database (psycopg2/SQLAlchemy) 3. Combine data (pandas) 4. Write back to database 5. Test POST endpoint"
-  },
-  {
-    "objectID": "docker-example/FILE_SUMMARY.html#getting-started-3-steps",
-    "href": "docker-example/FILE_SUMMARY.html#getting-started-3-steps",
-    "title": "Docker Example - Complete File Listing",
-    "section": "",
-    "text": "docker-compose up -d --build\n\n\n\n# Windows\n.\\validate.ps1\n\n# Linux/Mac\n./validate.sh\n\n\n\n# R version\nRscript r-client/healthcare_pipeline.R\n\n# Python version\npython python-client/healthcare_pipeline.py"
-  },
-  {
-    "objectID": "docker-example/FILE_SUMMARY.html#what-gets-created",
-    "href": "docker-example/FILE_SUMMARY.html#what-gets-created",
-    "title": "Docker Example - Complete File Listing",
-    "section": "",
-    "text": "API Container (healthcare_api)\n\nLoads 10 patient records into memory\nStarts REST API on port 8000\nServes HTTP requests\n\nDatabase Container (healthcare_db)\n\nCreates PostgreSQL database\nCreates 3 tables (visits, prescriptions, lab_results)\nInserts 31 total records\nListens on port 5432\n\n\n\n\n\n\nAPI Data Fetched\n\n10 patients from /patients endpoint\nConverted to DataFrame/tibble\n\nDatabase Data Queried\n\nVisit summary aggregated\nPrescription counts calculated\nLab result counts calculated\n\nCombined Dataset Created\n\nPatient demographics (from API)\nVisit statistics (from database)\nMerged on patient_id\n\nNew Table Written\n\npatient_summary table created\n10 rows written\nContains combined data"
-  },
-  {
-    "objectID": "docker-example/FILE_SUMMARY.html#data-relationships",
-    "href": "docker-example/FILE_SUMMARY.html#data-relationships",
-    "title": "Docker Example - Complete File Listing",
-    "section": "",
-    "text": "Patients (API)           Visits (DB)\n└─ patient_id ──────────┬─ patient_id\n                        │\n                        ├─ Prescriptions (DB)\n                        │  └─ visit_id → visit_id\n                        │\n                        └─ Lab Results (DB)\n                           └─ visit_id → visit_id"
-  },
-  {
-    "objectID": "docker-example/FILE_SUMMARY.html#data-volumes",
-    "href": "docker-example/FILE_SUMMARY.html#data-volumes",
-    "title": "Docker Example - Complete File Listing",
-    "section": "",
-    "text": "Item\nCount\nStorage\n\n\n\n\nPatients (API)\n10\nIn-memory CSV\n\n\nVisits (DB)\n12\nPostgreSQL volume\n\n\nPrescriptions (DB)\n7\nPostgreSQL volume\n\n\nLab Results (DB)\n12\nPostgreSQL volume\n\n\nTotal Records\n41\n~50 KB"
-  },
-  {
-    "objectID": "docker-example/FILE_SUMMARY.html#learning-path",
-    "href": "docker-example/FILE_SUMMARY.html#learning-path",
-    "title": "Docker Example - Complete File Listing",
-    "section": "",
-    "text": "Beginner: Run both pipelines, compare outputs\nIntermediate: Modify API endpoints, add new queries\nAdvanced: Add authentication, implement caching, add monitoring"
-  },
-  {
-    "objectID": "docker-example/FILE_SUMMARY.html#customization-ideas",
-    "href": "docker-example/FILE_SUMMARY.html#customization-ideas",
-    "title": "Docker Example - Complete File Listing",
-    "section": "",
-    "text": "Add more API endpoints (PUT, DELETE)\nImplement authentication (API keys, JWT)\nAdd data validation (pandera, validate)\nCreate scheduled jobs (cron, APScheduler)\nAdd monitoring (Prometheus metrics)\nImplement caching (Redis)\nAdd logging aggregation (ELK stack)\nCreate web dashboard (Shiny, Streamlit)"
-  },
-  {
-    "objectID": "docker-example/FILE_SUMMARY.html#technologies-used",
-    "href": "docker-example/FILE_SUMMARY.html#technologies-used",
-    "title": "Docker Example - Complete File Listing",
-    "section": "",
-    "text": "Technology\nVersion\nPurpose\n\n\n\n\nDocker\nLatest\nContainerization\n\n\nDocker Compose\nLatest\nMulti-container orchestration\n\n\nPostgreSQL\n16\nRelational database\n\n\nR\n4.5.1\nProgramming language\n\n\nPlumber\nLatest\nR REST API framework\n\n\nPython\n3.8+\nProgramming language\n\n\nhttr\nLatest\nR HTTP client\n\n\nrequests\nLatest\nPython HTTP client\n\n\nDBI/RPostgres\nLatest\nR database interface\n\n\npsycopg2\nLatest\nPython PostgreSQL driver\n\n\ndplyr\nLatest\nR data manipulation\n\n\npandas\nLatest\nPython data manipulation"
-  },
-  {
-    "objectID": "docker-example/FILE_SUMMARY.html#expected-execution-times",
-    "href": "docker-example/FILE_SUMMARY.html#expected-execution-times",
-    "title": "Docker Example - Complete File Listing",
-    "section": "",
-    "text": "Task\nDuration\n\n\n\n\nInitial build\n3-5 minutes\n\n\nContainer startup\n20-30 seconds\n\n\nHealth check ready\n10-20 seconds\n\n\nR pipeline execution\n5-10 seconds\n\n\nPython pipeline execution\n5-10 seconds"
-  },
-  {
-    "objectID": "docker-example/FILE_SUMMARY.html#resource-usage",
-    "href": "docker-example/FILE_SUMMARY.html#resource-usage",
-    "title": "Docker Example - Complete File Listing",
-    "section": "",
-    "text": "Container\nCPU\nMemory\nDisk\n\n\n\n\nhealthcare_api\n&lt;5%\n~200 MB\n~500 MB\n\n\nhealthcare_db\n&lt;5%\n~100 MB\n~100 MB\n\n\nTotal\n&lt;10%\n~300 MB\n~600 MB"
-  },
-  {
-    "objectID": "docker-example/FILE_SUMMARY.html#workshop-alignment",
-    "href": "docker-example/FILE_SUMMARY.html#workshop-alignment",
-    "title": "Docker Example - Complete File Listing",
-    "section": "",
-    "text": "This example integrates concepts from all 4 workshop sessions:\n\n✅ Session 1: Git, environments, package management\n✅ Session 2: REST APIs, HTTP requests, JSON parsing\n✅ Session 3: Database connections, SQL queries, upserts\n✅ Session 4: Data cleaning, pipeline integration, error handling"
-  },
-  {
-    "objectID": "docker-example/FILE_SUMMARY.html#credits",
-    "href": "docker-example/FILE_SUMMARY.html#credits",
-    "title": "Docker Example - Complete File Listing",
-    "section": "",
-    "text": "Created for the CFA Data Pipelines Workshop by the ForeSITE team.\n\nQuestions? See README.md or open an issue in the workshop repository."
-  },
-  {
-    "objectID": "docker-example/ARCHITECTURE.html",
-    "href": "docker-example/ARCHITECTURE.html",
-    "title": "Docker Healthcare Pipeline - Architecture Diagram",
-    "section": "",
-    "text": "┌─────────────────────────────────────────────────────────────────────────┐\n│                          Docker Compose Network                          │\n│                        (healthcare_network bridge)                       │\n│                                                                          │\n│  ┌────────────────────────────────┐  ┌──────────────────────────────┐  │\n│  │     Container: healthcare_api  │  │  Container: healthcare_db     │  │\n│  │                                │  │                               │  │\n│  │  ┌──────────────────────────┐  │  │  ┌────────────────────────┐  │  │\n│  │  │   R Plumber REST API     │  │  │  │  PostgreSQL 16         │  │  │\n│  │  │                          │  │  │  │                        │  │  │\n│  │  │  Endpoints:              │  │  │  │  Tables:               │  │  │\n│  │  │  • GET  /health          │  │  │  │  • visits              │  │  │\n│  │  │  • GET  /patients        │  │  │  │  • prescriptions       │  │  │\n│  │  │  • GET  /patients/:id    │  │  │  │  • lab_results         │  │  │\n│  │  │  • GET  /patients/       │  │  │  │                        │  │  │\n│  │  │         insurance/:id    │  │  │  │  Data:                 │  │  │\n│  │  │  • GET  /stats           │  │  │  │  • 12 visits           │  │  │\n│  │  │  • POST /patients        │  │  │  │  • 7 prescriptions     │  │  │\n│  │  │                          │  │  │  │  • 12 lab results      │  │  │\n│  │  │  Data:                   │  │  │  │                        │  │  │\n│  │  │  • 10 patient records    │  │  │  │  Volume:               │  │  │\n│  │  │  • CSV-based storage     │  │  │  │  postgres_data:/var/   │  │  │\n│  │  │                          │  │  │  │    lib/postgresql/data │  │  │\n│  │  └──────────────────────────┘  │  │  └────────────────────────┘  │  │\n│  │                                │  │                               │  │\n│  │  Port: 8000 → Host:8000        │  │  Port: 5432 → Host:5432      │  │\n│  │  Health: /health endpoint      │  │  Health: pg_isready          │  │\n│  └────────────────────────────────┘  └──────────────────────────────┘  │\n│              ▲                                      ▲                   │\n└──────────────┼──────────────────────────────────────┼───────────────────┘\n               │                                      │\n               │ HTTP Requests                        │ PostgreSQL Protocol\n               │ (httr / requests)                    │ (DBI / psycopg2)\n               │                                      │\n┌──────────────┴──────────────────┬───────────────────┴─────────────────┐\n│                                 │                                     │\n│  ┌───────────────────────────┐  │  ┌───────────────────────────────┐  │\n│  │    R Client Pipeline      │  │  │   Python Client Pipeline      │  │\n│  │  (r-client/ folder)       │  │  │  (python-client/ folder)      │  │\n│  │                           │  │  │                               │  │\n│  │  Libraries:               │  │  │  Libraries:                   │  │\n│  │  • httr (API calls)       │  │  │  • requests (API calls)       │  │\n│  │  • jsonlite (JSON)        │  │  │  • pandas (DataFrames)        │  │\n│  │  • DBI (DB interface)     │  │  │  • psycopg2 (PostgreSQL)      │  │\n│  │  • RPostgres (driver)     │  │  │  • sqlalchemy (ORM)           │  │\n│  │  • dplyr (data manip)     │  │  │                               │  │\n│  │                           │  │  │                               │  │\n│  │  Process:                 │  │  │  Process:                     │  │\n│  │  1. Fetch from API        │  │  │  1. Fetch from API            │  │\n│  │  2. Query database        │  │  │  2. Query database            │  │\n│  │  3. Combine datasets      │  │  │  3. Combine datasets          │  │\n│  │  4. Write to DB           │  │  │  4. Write to DB               │  │\n│  │                           │  │  │  5. Test POST endpoint        │  │\n│  └───────────────────────────┘  │  └───────────────────────────────┘  │\n│                                 │                                     │\n│  Output: patient_summary table  │  Output: patient_summary table      │\n└─────────────────────────────────┴─────────────────────────────────────┘\n\n\n\n┌─────────────────┐\n│  Start Pipeline │\n└────────┬────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 1: Extract from API               │\n│  • GET /patients (all patient data)     │\n│  • GET /patients/1001 (single patient)  │\n│  • GET /patients/insurance/INS001       │\n│  • GET /stats (aggregations)            │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 2: Extract from Database          │\n│  • SELECT FROM visits                   │\n│  • SELECT FROM prescriptions            │\n│  • SELECT FROM lab_results              │\n│  • JOIN operations for summaries        │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 3: Transform & Combine            │\n│  • Convert data types                   │\n│  • Join API patients with DB visits     │\n│  • Calculate aggregations               │\n│  • Handle missing values (fillna)       │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 4: Load (Write to Database)       │\n│  • CREATE TABLE patient_summary         │\n│  • INSERT combined data                 │\n│  • Verify write operation               │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────┐\n│  End Pipeline   │\n│  (Success!)     │\n└─────────────────┘\n\n\n\n┌─────────────────────────────────────────────────────────────────┐\n│                     docker-compose up -d                         │\n└────────────────────────┬────────────────────────────────────────┘\n                         │\n         ┌───────────────┴───────────────┐\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Build API Image    │         │  Build DB Image     │\n│  (from Dockerfile)  │         │  (from Dockerfile)  │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Start API          │         │  Start PostgreSQL   │\n│  Container          │         │  Container          │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Load plumber.R     │         │  Run init.sql       │\n│  Load patients.csv  │         │  Create tables      │\n│                     │         │  Insert sample data │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Health Check:      │         │  Health Check:      │\n│  GET /health        │         │  pg_isready         │\n│  (wait for healthy) │         │  (wait for healthy) │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         └───────────────┬───────────────┘\n                         │\n                         ▼\n                 ┌───────────────┐\n                 │  Ready for    │\n                 │  Client       │\n                 │  Connections! │\n                 └───────────────┘\n\n\n\nHost Machine (localhost)\n│\n├─ Port 8000 ──────────────► Container: healthcare_api\n│                             Network: healthcare_network\n│                             Internal IP: 172.x.x.2\n│\n└─ Port 5432 ──────────────► Container: healthcare_db\n                              Network: healthcare_network\n                              Internal IP: 172.x.x.3\n\nContainers can communicate using:\n• Service names (api, database)\n• Internal IPs (172.x.x.x)\n\nClients connect using:\n• localhost:8000 (API)\n• localhost:5432 (Database)\n\n\n\nDocker Host\n│\n├─ Named Volume: postgres_data\n│  └─ Mapped to: /var/lib/postgresql/data (in container)\n│     └─ Contains: PostgreSQL database files\n│        • Tables, indexes, data\n│        • Transaction logs\n│        • Configuration\n│\n└─ Benefits:\n   • Data persists across container restarts\n   • Data survives container removal\n   • Can be backed up independently\n   • Shared between container recreations\n\n\n\n┌─────────────────────────────────────────────────────────────┐\n│  Credentials Management                                      │\n├─────────────────────────────────────────────────────────────┤\n│                                                              │\n│  ❌ NEVER in code:                                           │\n│     password = \"healthpass\"  # BAD!                          │\n│                                                              │\n│  ✅ Use environment variables:                               │\n│     password = os.getenv(\"DB_PASSWORD\")  # GOOD!             │\n│     password = Sys.getenv(\"DB_PASSWORD\")  # GOOD!            │\n│                                                              │\n│  ✅ Use .env file (not committed to git):                    │\n│     POSTGRES_PASSWORD=healthpass                             │\n│                                                              │\n│  ✅ In docker-compose.yml:                                   │\n│     environment:                                             │\n│       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}                │\n│                                                              │\n└─────────────────────────────────────────────────────────────┘"
-  },
-  {
-    "objectID": "docker-example/ARCHITECTURE.html#system-architecture",
-    "href": "docker-example/ARCHITECTURE.html#system-architecture",
-    "title": "Docker Healthcare Pipeline - Architecture Diagram",
-    "section": "",
-    "text": "┌─────────────────────────────────────────────────────────────────────────┐\n│                          Docker Compose Network                          │\n│                        (healthcare_network bridge)                       │\n│                                                                          │\n│  ┌────────────────────────────────┐  ┌──────────────────────────────┐  │\n│  │     Container: healthcare_api  │  │  Container: healthcare_db     │  │\n│  │                                │  │                               │  │\n│  │  ┌──────────────────────────┐  │  │  ┌────────────────────────┐  │  │\n│  │  │   R Plumber REST API     │  │  │  │  PostgreSQL 16         │  │  │\n│  │  │                          │  │  │  │                        │  │  │\n│  │  │  Endpoints:              │  │  │  │  Tables:               │  │  │\n│  │  │  • GET  /health          │  │  │  │  • visits              │  │  │\n│  │  │  • GET  /patients        │  │  │  │  • prescriptions       │  │  │\n│  │  │  • GET  /patients/:id    │  │  │  │  • lab_results         │  │  │\n│  │  │  • GET  /patients/       │  │  │  │                        │  │  │\n│  │  │         insurance/:id    │  │  │  │  Data:                 │  │  │\n│  │  │  • GET  /stats           │  │  │  │  • 12 visits           │  │  │\n│  │  │  • POST /patients        │  │  │  │  • 7 prescriptions     │  │  │\n│  │  │                          │  │  │  │  • 12 lab results      │  │  │\n│  │  │  Data:                   │  │  │  │                        │  │  │\n│  │  │  • 10 patient records    │  │  │  │  Volume:               │  │  │\n│  │  │  • CSV-based storage     │  │  │  │  postgres_data:/var/   │  │  │\n│  │  │                          │  │  │  │    lib/postgresql/data │  │  │\n│  │  └──────────────────────────┘  │  │  └────────────────────────┘  │  │\n│  │                                │  │                               │  │\n│  │  Port: 8000 → Host:8000        │  │  Port: 5432 → Host:5432      │  │\n│  │  Health: /health endpoint      │  │  Health: pg_isready          │  │\n│  └────────────────────────────────┘  └──────────────────────────────┘  │\n│              ▲                                      ▲                   │\n└──────────────┼──────────────────────────────────────┼───────────────────┘\n               │                                      │\n               │ HTTP Requests                        │ PostgreSQL Protocol\n               │ (httr / requests)                    │ (DBI / psycopg2)\n               │                                      │\n┌──────────────┴──────────────────┬───────────────────┴─────────────────┐\n│                                 │                                     │\n│  ┌───────────────────────────┐  │  ┌───────────────────────────────┐  │\n│  │    R Client Pipeline      │  │  │   Python Client Pipeline      │  │\n│  │  (r-client/ folder)       │  │  │  (python-client/ folder)      │  │\n│  │                           │  │  │                               │  │\n│  │  Libraries:               │  │  │  Libraries:                   │  │\n│  │  • httr (API calls)       │  │  │  • requests (API calls)       │  │\n│  │  • jsonlite (JSON)        │  │  │  • pandas (DataFrames)        │  │\n│  │  • DBI (DB interface)     │  │  │  • psycopg2 (PostgreSQL)      │  │\n│  │  • RPostgres (driver)     │  │  │  • sqlalchemy (ORM)           │  │\n│  │  • dplyr (data manip)     │  │  │                               │  │\n│  │                           │  │  │                               │  │\n│  │  Process:                 │  │  │  Process:                     │  │\n│  │  1. Fetch from API        │  │  │  1. Fetch from API            │  │\n│  │  2. Query database        │  │  │  2. Query database            │  │\n│  │  3. Combine datasets      │  │  │  3. Combine datasets          │  │\n│  │  4. Write to DB           │  │  │  4. Write to DB               │  │\n│  │                           │  │  │  5. Test POST endpoint        │  │\n│  └───────────────────────────┘  │  └───────────────────────────────┘  │\n│                                 │                                     │\n│  Output: patient_summary table  │  Output: patient_summary table      │\n└─────────────────────────────────┴─────────────────────────────────────┘"
-  },
-  {
-    "objectID": "docker-example/ARCHITECTURE.html#data-flow-diagram",
-    "href": "docker-example/ARCHITECTURE.html#data-flow-diagram",
-    "title": "Docker Healthcare Pipeline - Architecture Diagram",
-    "section": "",
-    "text": "┌─────────────────┐\n│  Start Pipeline │\n└────────┬────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 1: Extract from API               │\n│  • GET /patients (all patient data)     │\n│  • GET /patients/1001 (single patient)  │\n│  • GET /patients/insurance/INS001       │\n│  • GET /stats (aggregations)            │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 2: Extract from Database          │\n│  • SELECT FROM visits                   │\n│  • SELECT FROM prescriptions            │\n│  • SELECT FROM lab_results              │\n│  • JOIN operations for summaries        │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 3: Transform & Combine            │\n│  • Convert data types                   │\n│  • Join API patients with DB visits     │\n│  • Calculate aggregations               │\n│  • Handle missing values (fillna)       │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 4: Load (Write to Database)       │\n│  • CREATE TABLE patient_summary         │\n│  • INSERT combined data                 │\n│  • Verify write operation               │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────┐\n│  End Pipeline   │\n│  (Success!)     │\n└─────────────────┘"
-  },
-  {
-    "objectID": "docker-example/ARCHITECTURE.html#container-lifecycle",
-    "href": "docker-example/ARCHITECTURE.html#container-lifecycle",
-    "title": "Docker Healthcare Pipeline - Architecture Diagram",
-    "section": "",
-    "text": "┌─────────────────────────────────────────────────────────────────┐\n│                     docker-compose up -d                         │\n└────────────────────────┬────────────────────────────────────────┘\n                         │\n         ┌───────────────┴───────────────┐\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Build API Image    │         │  Build DB Image     │\n│  (from Dockerfile)  │         │  (from Dockerfile)  │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Start API          │         │  Start PostgreSQL   │\n│  Container          │         │  Container          │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Load plumber.R     │         │  Run init.sql       │\n│  Load patients.csv  │         │  Create tables      │\n│                     │         │  Insert sample data │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Health Check:      │         │  Health Check:      │\n│  GET /health        │         │  pg_isready         │\n│  (wait for healthy) │         │  (wait for healthy) │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         └───────────────┬───────────────┘\n                         │\n                         ▼\n                 ┌───────────────┐\n                 │  Ready for    │\n                 │  Client       │\n                 │  Connections! │\n                 └───────────────┘"
-  },
-  {
-    "objectID": "docker-example/ARCHITECTURE.html#network-communication",
-    "href": "docker-example/ARCHITECTURE.html#network-communication",
-    "title": "Docker Healthcare Pipeline - Architecture Diagram",
-    "section": "",
-    "text": "Host Machine (localhost)\n│\n├─ Port 8000 ──────────────► Container: healthcare_api\n│                             Network: healthcare_network\n│                             Internal IP: 172.x.x.2\n│\n└─ Port 5432 ──────────────► Container: healthcare_db\n                              Network: healthcare_network\n                              Internal IP: 172.x.x.3\n\nContainers can communicate using:\n• Service names (api, database)\n• Internal IPs (172.x.x.x)\n\nClients connect using:\n• localhost:8000 (API)\n• localhost:5432 (Database)"
-  },
-  {
-    "objectID": "docker-example/ARCHITECTURE.html#volume-persistence",
-    "href": "docker-example/ARCHITECTURE.html#volume-persistence",
-    "title": "Docker Healthcare Pipeline - Architecture Diagram",
-    "section": "",
-    "text": "Docker Host\n│\n├─ Named Volume: postgres_data\n│  └─ Mapped to: /var/lib/postgresql/data (in container)\n│     └─ Contains: PostgreSQL database files\n│        • Tables, indexes, data\n│        • Transaction logs\n│        • Configuration\n│\n└─ Benefits:\n   • Data persists across container restarts\n   • Data survives container removal\n   • Can be backed up independently\n   • Shared between container recreations"
-  },
-  {
-    "objectID": "docker-example/ARCHITECTURE.html#security-considerations",
-    "href": "docker-example/ARCHITECTURE.html#security-considerations",
-    "title": "Docker Healthcare Pipeline - Architecture Diagram",
-    "section": "",
-    "text": "┌─────────────────────────────────────────────────────────────┐\n│  Credentials Management                                      │\n├─────────────────────────────────────────────────────────────┤\n│                                                              │\n│  ❌ NEVER in code:                                           │\n│     password = \"healthpass\"  # BAD!                          │\n│                                                              │\n│  ✅ Use environment variables:                               │\n│     password = os.getenv(\"DB_PASSWORD\")  # GOOD!             │\n│     password = Sys.getenv(\"DB_PASSWORD\")  # GOOD!            │\n│                                                              │\n│  ✅ Use .env file (not committed to git):                    │\n│     POSTGRES_PASSWORD=healthpass                             │\n│                                                              │\n│  ✅ In docker-compose.yml:                                   │\n│     environment:                                             │\n│       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}                │\n│                                                              │\n└─────────────────────────────────────────────────────────────┘"
+    "text": "Always check container health before running clients\nUse docker-compose logs -f to watch real-time logs\nThe API data is in-memory (resets on restart)\nThe database data persists in a Docker volume\nBoth clients do the same thing - compare them to learn!"
   },
   {
     "objectID": "docker-example/CREATION_LOG.html",
@@ -1057,151 +889,291 @@
     "text": "All files created, tested, and documented. Ready for workshop use!\n\nCreated by: GitHub Copilot\nFor: CFA Data Pipelines Workshop\nDate: November 30, 2025\nRepository: EpiForeSITE/CFA-Data-Pipelines-Workshop"
   },
   {
-    "objectID": "docker-example/QUICK_REFERENCE.html",
-    "href": "docker-example/QUICK_REFERENCE.html",
-    "title": "Quick Reference Guide",
+    "objectID": "docker-example/ARCHITECTURE.html",
+    "href": "docker-example/ARCHITECTURE.html",
+    "title": "Docker Healthcare Pipeline - Architecture Diagram",
     "section": "",
-    "text": "# Start everything\ndocker-compose up -d\n\n# Start with rebuild\ndocker-compose up -d --build\n\n# View logs\ndocker-compose logs -f\n\n# Stop everything\ndocker-compose down\n\n# Restart a service\ndocker-compose restart api\ndocker-compose restart database\n\n# View running containers\ndocker-compose ps\n\n# Access container shell\ndocker-compose exec api /bin/bash\ndocker-compose exec database psql -U healthuser -d healthcare\n\n\n\n# Health check\ncurl http://localhost:8000/health\n\n# Get all patients\ncurl http://localhost:8000/patients\n\n# Get specific patient\ncurl http://localhost:8000/patients/1001\n\n# Get by insurance\ncurl http://localhost:8000/patients/insurance/INS001\n\n# Get statistics\ncurl http://localhost:8000/stats\n\n# Create patient (POST)\ncurl -X POST http://localhost:8000/patients \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"patient_id\": 1011, \"name\": \"Test\", \"date_of_birth\": \"1990-01-01\", \"insurance_id\": \"INS001\"}'\n\n\n\n# Connect to database\ndocker-compose exec database psql -U healthuser -d healthcare\n\n# Or from host (if psql installed)\npsql -h localhost -p 5432 -U healthuser -d healthcare\n-- Common queries\nSELECT COUNT(*) FROM visits;\nSELECT COUNT(*) FROM prescriptions;\nSELECT COUNT(*) FROM lab_results;\n\n-- Get patient visit summary\nSELECT \n    patient_id,\n    COUNT(*) as visit_count,\n    MIN(visit_date) as first_visit,\n    MAX(visit_date) as last_visit\nFROM visits\nGROUP BY patient_id;\n\n-- Get prescriptions by patient\nSELECT * FROM prescriptions WHERE patient_id = 1002;\n\n-- Get lab results with visit info\nSELECT \n    l.test_name,\n    l.test_value,\n    l.test_unit,\n    v.visit_date,\n    v.provider_name\nFROM lab_results l\nJOIN visits v ON l.visit_id = v.visit_id\nWHERE l.patient_id = 1001;\n\n\n\n\n\n\nCreate .env file (copy from .env.example):\nPOSTGRES_DB=healthcare\nPOSTGRES_USER=healthuser\nPOSTGRES_PASSWORD=healthpass\nAPI_PORT=8000\nDB_PORT=5432\n\n\n\nR (DBI):\ncon &lt;- dbConnect(\n  RPostgres::Postgres(),\n  host = \"localhost\",\n  port = 5432,\n  dbname = \"healthcare\",\n  user = \"healthuser\",\n  password = \"healthpass\"\n)\nPython (psycopg2):\nconn = psycopg2.connect(\n    host=\"localhost\",\n    port=5432,\n    database=\"healthcare\",\n    user=\"healthuser\",\n    password=\"healthpass\"\n)\nPython (SQLAlchemy):\nengine = create_engine(\n    \"postgresql://healthuser:healthpass@localhost:5432/healthcare\"\n)\n\n\n\n\n\n\n\n10 patients (IDs 1001-1010)\n3 insurance types: INS001, INS002, INS003\n2 self-pay patients\n\n\n\n\n\n12 visits across multiple patients\nDate range: Jan-Apr 2024\n3 providers\n\n\n\n\n\n7 prescriptions\nVarious medications (Lisinopril, Metformin, etc.)\n\n\n\n\n\n12 lab tests\nBlood pressure, HbA1c, cholesterol, etc.\n\n\n\n\n\n\n\n# Change ports in docker-compose.yml\nports:\n  - \"8001:8000\"  # API\n  - \"5433:5432\"  # Database\n\n\n\n# Check logs\ndocker-compose logs database\ndocker-compose logs api\n\n# Rebuild\ndocker-compose down\ndocker-compose up -d --build\n\n\n\n# Wait for health check\ndocker-compose ps\n\n# Should show \"Up (healthy)\"\n# If not, wait 10-20 seconds\n\n\n\n# Try different CRAN mirror\ninstall.packages(\"RPostgres\", \n  repos = \"https://cloud.r-project.org/\")\n\n# On Windows, install Rtools first\n# https://cran.r-project.org/bin/windows/Rtools/\n\n\n\n\ndocker-example/\n├── api/                    # R Plumber API container\n│   ├── Dockerfile\n│   ├── plumber.R          # API endpoints\n│   └── patients_data.csv  # Sample patient data\n├── database/               # PostgreSQL container\n│   ├── Dockerfile\n│   └── init.sql           # Schema and sample data\n├── r-client/               # R pipeline script\n│   ├── healthcare_pipeline.R\n│   └── install_packages.R\n├── python-client/          # Python pipeline script\n│   ├── healthcare_pipeline.py\n│   └── requirements.txt\n├── docker-compose.yml      # Orchestration config\n├── .env.example           # Environment template\n└── README.md              # Full documentation\n\n\n\n\nModify the API: Add new endpoints in api/plumber.R\nAdd Tables: Extend database/init.sql with new schemas\nEnhance Clients: Add data validation, cleaning, transformation\nAuthentication: Add API keys or OAuth to the API\nMonitoring: Add logging and metrics collection\nTesting: Write unit tests for API endpoints and pipelines\n\n\n\n\n\nAlways check container health before running clients\nUse docker-compose logs -f to watch real-time logs\nThe API data is in-memory (resets on restart)\nThe database data persists in a Docker volume\nBoth clients do the same thing - compare them to learn!"
+    "text": "┌─────────────────────────────────────────────────────────────────────────┐\n│                          Docker Compose Network                          │\n│                        (healthcare_network bridge)                       │\n│                                                                          │\n│  ┌────────────────────────────────┐  ┌──────────────────────────────┐  │\n│  │     Container: healthcare_api  │  │  Container: healthcare_db     │  │\n│  │                                │  │                               │  │\n│  │  ┌──────────────────────────┐  │  │  ┌────────────────────────┐  │  │\n│  │  │   R Plumber REST API     │  │  │  │  PostgreSQL 16         │  │  │\n│  │  │                          │  │  │  │                        │  │  │\n│  │  │  Endpoints:              │  │  │  │  Tables:               │  │  │\n│  │  │  • GET  /health          │  │  │  │  • visits              │  │  │\n│  │  │  • GET  /patients        │  │  │  │  • prescriptions       │  │  │\n│  │  │  • GET  /patients/:id    │  │  │  │  • lab_results         │  │  │\n│  │  │  • GET  /patients/       │  │  │  │                        │  │  │\n│  │  │         insurance/:id    │  │  │  │  Data:                 │  │  │\n│  │  │  • GET  /stats           │  │  │  │  • 12 visits           │  │  │\n│  │  │  • POST /patients        │  │  │  │  • 7 prescriptions     │  │  │\n│  │  │                          │  │  │  │  • 12 lab results      │  │  │\n│  │  │  Data:                   │  │  │  │                        │  │  │\n│  │  │  • 10 patient records    │  │  │  │  Volume:               │  │  │\n│  │  │  • CSV-based storage     │  │  │  │  postgres_data:/var/   │  │  │\n│  │  │                          │  │  │  │    lib/postgresql/data │  │  │\n│  │  └──────────────────────────┘  │  │  └────────────────────────┘  │  │\n│  │                                │  │                               │  │\n│  │  Port: 8000 → Host:8000        │  │  Port: 5432 → Host:5432      │  │\n│  │  Health: /health endpoint      │  │  Health: pg_isready          │  │\n│  └────────────────────────────────┘  └──────────────────────────────┘  │\n│              ▲                                      ▲                   │\n└──────────────┼──────────────────────────────────────┼───────────────────┘\n               │                                      │\n               │ HTTP Requests                        │ PostgreSQL Protocol\n               │ (httr / requests)                    │ (DBI / psycopg2)\n               │                                      │\n┌──────────────┴──────────────────┬───────────────────┴─────────────────┐\n│                                 │                                     │\n│  ┌───────────────────────────┐  │  ┌───────────────────────────────┐  │\n│  │    R Client Pipeline      │  │  │   Python Client Pipeline      │  │\n│  │  (r-client/ folder)       │  │  │  (python-client/ folder)      │  │\n│  │                           │  │  │                               │  │\n│  │  Libraries:               │  │  │  Libraries:                   │  │\n│  │  • httr (API calls)       │  │  │  • requests (API calls)       │  │\n│  │  • jsonlite (JSON)        │  │  │  • pandas (DataFrames)        │  │\n│  │  • DBI (DB interface)     │  │  │  • psycopg2 (PostgreSQL)      │  │\n│  │  • RPostgres (driver)     │  │  │  • sqlalchemy (ORM)           │  │\n│  │  • dplyr (data manip)     │  │  │                               │  │\n│  │                           │  │  │                               │  │\n│  │  Process:                 │  │  │  Process:                     │  │\n│  │  1. Fetch from API        │  │  │  1. Fetch from API            │  │\n│  │  2. Query database        │  │  │  2. Query database            │  │\n│  │  3. Combine datasets      │  │  │  3. Combine datasets          │  │\n│  │  4. Write to DB           │  │  │  4. Write to DB               │  │\n│  │                           │  │  │  5. Test POST endpoint        │  │\n│  └───────────────────────────┘  │  └───────────────────────────────┘  │\n│                                 │                                     │\n│  Output: patient_summary table  │  Output: patient_summary table      │\n└─────────────────────────────────┴─────────────────────────────────────┘\n\n\n\n┌─────────────────┐\n│  Start Pipeline │\n└────────┬────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 1: Extract from API               │\n│  • GET /patients (all patient data)     │\n│  • GET /patients/1001 (single patient)  │\n│  • GET /patients/insurance/INS001       │\n│  • GET /stats (aggregations)            │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 2: Extract from Database          │\n│  • SELECT FROM visits                   │\n│  • SELECT FROM prescriptions            │\n│  • SELECT FROM lab_results              │\n│  • JOIN operations for summaries        │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 3: Transform & Combine            │\n│  • Convert data types                   │\n│  • Join API patients with DB visits     │\n│  • Calculate aggregations               │\n│  • Handle missing values (fillna)       │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 4: Load (Write to Database)       │\n│  • CREATE TABLE patient_summary         │\n│  • INSERT combined data                 │\n│  • Verify write operation               │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────┐\n│  End Pipeline   │\n│  (Success!)     │\n└─────────────────┘\n\n\n\n┌─────────────────────────────────────────────────────────────────┐\n│                     docker-compose up -d                         │\n└────────────────────────┬────────────────────────────────────────┘\n                         │\n         ┌───────────────┴───────────────┐\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Build API Image    │         │  Build DB Image     │\n│  (from Dockerfile)  │         │  (from Dockerfile)  │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Start API          │         │  Start PostgreSQL   │\n│  Container          │         │  Container          │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Load plumber.R     │         │  Run init.sql       │\n│  Load patients.csv  │         │  Create tables      │\n│                     │         │  Insert sample data │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Health Check:      │         │  Health Check:      │\n│  GET /health        │         │  pg_isready         │\n│  (wait for healthy) │         │  (wait for healthy) │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         └───────────────┬───────────────┘\n                         │\n                         ▼\n                 ┌───────────────┐\n                 │  Ready for    │\n                 │  Client       │\n                 │  Connections! │\n                 └───────────────┘\n\n\n\nHost Machine (localhost)\n│\n├─ Port 8000 ──────────────► Container: healthcare_api\n│                             Network: healthcare_network\n│                             Internal IP: 172.x.x.2\n│\n└─ Port 5432 ──────────────► Container: healthcare_db\n                              Network: healthcare_network\n                              Internal IP: 172.x.x.3\n\nContainers can communicate using:\n• Service names (api, database)\n• Internal IPs (172.x.x.x)\n\nClients connect using:\n• localhost:8000 (API)\n• localhost:5432 (Database)\n\n\n\nDocker Host\n│\n├─ Named Volume: postgres_data\n│  └─ Mapped to: /var/lib/postgresql/data (in container)\n│     └─ Contains: PostgreSQL database files\n│        • Tables, indexes, data\n│        • Transaction logs\n│        • Configuration\n│\n└─ Benefits:\n   • Data persists across container restarts\n   • Data survives container removal\n   • Can be backed up independently\n   • Shared between container recreations\n\n\n\n┌─────────────────────────────────────────────────────────────┐\n│  Credentials Management                                      │\n├─────────────────────────────────────────────────────────────┤\n│                                                              │\n│  ❌ NEVER in code:                                           │\n│     password = \"healthpass\"  # BAD!                          │\n│                                                              │\n│  ✅ Use environment variables:                               │\n│     password = os.getenv(\"DB_PASSWORD\")  # GOOD!             │\n│     password = Sys.getenv(\"DB_PASSWORD\")  # GOOD!            │\n│                                                              │\n│  ✅ Use .env file (not committed to git):                    │\n│     POSTGRES_PASSWORD=healthpass                             │\n│                                                              │\n│  ✅ In docker-compose.yml:                                   │\n│     environment:                                             │\n│       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}                │\n│                                                              │\n└─────────────────────────────────────────────────────────────┘"
   },
   {
-    "objectID": "docker-example/QUICK_REFERENCE.html#essential-commands",
-    "href": "docker-example/QUICK_REFERENCE.html#essential-commands",
-    "title": "Quick Reference Guide",
+    "objectID": "docker-example/ARCHITECTURE.html#system-architecture",
+    "href": "docker-example/ARCHITECTURE.html#system-architecture",
+    "title": "Docker Healthcare Pipeline - Architecture Diagram",
     "section": "",
-    "text": "# Start everything\ndocker-compose up -d\n\n# Start with rebuild\ndocker-compose up -d --build\n\n# View logs\ndocker-compose logs -f\n\n# Stop everything\ndocker-compose down\n\n# Restart a service\ndocker-compose restart api\ndocker-compose restart database\n\n# View running containers\ndocker-compose ps\n\n# Access container shell\ndocker-compose exec api /bin/bash\ndocker-compose exec database psql -U healthuser -d healthcare\n\n\n\n# Health check\ncurl http://localhost:8000/health\n\n# Get all patients\ncurl http://localhost:8000/patients\n\n# Get specific patient\ncurl http://localhost:8000/patients/1001\n\n# Get by insurance\ncurl http://localhost:8000/patients/insurance/INS001\n\n# Get statistics\ncurl http://localhost:8000/stats\n\n# Create patient (POST)\ncurl -X POST http://localhost:8000/patients \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"patient_id\": 1011, \"name\": \"Test\", \"date_of_birth\": \"1990-01-01\", \"insurance_id\": \"INS001\"}'\n\n\n\n# Connect to database\ndocker-compose exec database psql -U healthuser -d healthcare\n\n# Or from host (if psql installed)\npsql -h localhost -p 5432 -U healthuser -d healthcare\n-- Common queries\nSELECT COUNT(*) FROM visits;\nSELECT COUNT(*) FROM prescriptions;\nSELECT COUNT(*) FROM lab_results;\n\n-- Get patient visit summary\nSELECT \n    patient_id,\n    COUNT(*) as visit_count,\n    MIN(visit_date) as first_visit,\n    MAX(visit_date) as last_visit\nFROM visits\nGROUP BY patient_id;\n\n-- Get prescriptions by patient\nSELECT * FROM prescriptions WHERE patient_id = 1002;\n\n-- Get lab results with visit info\nSELECT \n    l.test_name,\n    l.test_value,\n    l.test_unit,\n    v.visit_date,\n    v.provider_name\nFROM lab_results l\nJOIN visits v ON l.visit_id = v.visit_id\nWHERE l.patient_id = 1001;"
+    "text": "┌─────────────────────────────────────────────────────────────────────────┐\n│                          Docker Compose Network                          │\n│                        (healthcare_network bridge)                       │\n│                                                                          │\n│  ┌────────────────────────────────┐  ┌──────────────────────────────┐  │\n│  │     Container: healthcare_api  │  │  Container: healthcare_db     │  │\n│  │                                │  │                               │  │\n│  │  ┌──────────────────────────┐  │  │  ┌────────────────────────┐  │  │\n│  │  │   R Plumber REST API     │  │  │  │  PostgreSQL 16         │  │  │\n│  │  │                          │  │  │  │                        │  │  │\n│  │  │  Endpoints:              │  │  │  │  Tables:               │  │  │\n│  │  │  • GET  /health          │  │  │  │  • visits              │  │  │\n│  │  │  • GET  /patients        │  │  │  │  • prescriptions       │  │  │\n│  │  │  • GET  /patients/:id    │  │  │  │  • lab_results         │  │  │\n│  │  │  • GET  /patients/       │  │  │  │                        │  │  │\n│  │  │         insurance/:id    │  │  │  │  Data:                 │  │  │\n│  │  │  • GET  /stats           │  │  │  │  • 12 visits           │  │  │\n│  │  │  • POST /patients        │  │  │  │  • 7 prescriptions     │  │  │\n│  │  │                          │  │  │  │  • 12 lab results      │  │  │\n│  │  │  Data:                   │  │  │  │                        │  │  │\n│  │  │  • 10 patient records    │  │  │  │  Volume:               │  │  │\n│  │  │  • CSV-based storage     │  │  │  │  postgres_data:/var/   │  │  │\n│  │  │                          │  │  │  │    lib/postgresql/data │  │  │\n│  │  └──────────────────────────┘  │  │  └────────────────────────┘  │  │\n│  │                                │  │                               │  │\n│  │  Port: 8000 → Host:8000        │  │  Port: 5432 → Host:5432      │  │\n│  │  Health: /health endpoint      │  │  Health: pg_isready          │  │\n│  └────────────────────────────────┘  └──────────────────────────────┘  │\n│              ▲                                      ▲                   │\n└──────────────┼──────────────────────────────────────┼───────────────────┘\n               │                                      │\n               │ HTTP Requests                        │ PostgreSQL Protocol\n               │ (httr / requests)                    │ (DBI / psycopg2)\n               │                                      │\n┌──────────────┴──────────────────┬───────────────────┴─────────────────┐\n│                                 │                                     │\n│  ┌───────────────────────────┐  │  ┌───────────────────────────────┐  │\n│  │    R Client Pipeline      │  │  │   Python Client Pipeline      │  │\n│  │  (r-client/ folder)       │  │  │  (python-client/ folder)      │  │\n│  │                           │  │  │                               │  │\n│  │  Libraries:               │  │  │  Libraries:                   │  │\n│  │  • httr (API calls)       │  │  │  • requests (API calls)       │  │\n│  │  • jsonlite (JSON)        │  │  │  • pandas (DataFrames)        │  │\n│  │  • DBI (DB interface)     │  │  │  • psycopg2 (PostgreSQL)      │  │\n│  │  • RPostgres (driver)     │  │  │  • sqlalchemy (ORM)           │  │\n│  │  • dplyr (data manip)     │  │  │                               │  │\n│  │                           │  │  │                               │  │\n│  │  Process:                 │  │  │  Process:                     │  │\n│  │  1. Fetch from API        │  │  │  1. Fetch from API            │  │\n│  │  2. Query database        │  │  │  2. Query database            │  │\n│  │  3. Combine datasets      │  │  │  3. Combine datasets          │  │\n│  │  4. Write to DB           │  │  │  4. Write to DB               │  │\n│  │                           │  │  │  5. Test POST endpoint        │  │\n│  └───────────────────────────┘  │  └───────────────────────────────┘  │\n│                                 │                                     │\n│  Output: patient_summary table  │  Output: patient_summary table      │\n└─────────────────────────────────┴─────────────────────────────────────┘"
   },
   {
-    "objectID": "docker-example/QUICK_REFERENCE.html#configuration",
-    "href": "docker-example/QUICK_REFERENCE.html#configuration",
-    "title": "Quick Reference Guide",
+    "objectID": "docker-example/ARCHITECTURE.html#data-flow-diagram",
+    "href": "docker-example/ARCHITECTURE.html#data-flow-diagram",
+    "title": "Docker Healthcare Pipeline - Architecture Diagram",
     "section": "",
-    "text": "Create .env file (copy from .env.example):\nPOSTGRES_DB=healthcare\nPOSTGRES_USER=healthuser\nPOSTGRES_PASSWORD=healthpass\nAPI_PORT=8000\nDB_PORT=5432\n\n\n\nR (DBI):\ncon &lt;- dbConnect(\n  RPostgres::Postgres(),\n  host = \"localhost\",\n  port = 5432,\n  dbname = \"healthcare\",\n  user = \"healthuser\",\n  password = \"healthpass\"\n)\nPython (psycopg2):\nconn = psycopg2.connect(\n    host=\"localhost\",\n    port=5432,\n    database=\"healthcare\",\n    user=\"healthuser\",\n    password=\"healthpass\"\n)\nPython (SQLAlchemy):\nengine = create_engine(\n    \"postgresql://healthuser:healthpass@localhost:5432/healthcare\"\n)"
+    "text": "┌─────────────────┐\n│  Start Pipeline │\n└────────┬────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 1: Extract from API               │\n│  • GET /patients (all patient data)     │\n│  • GET /patients/1001 (single patient)  │\n│  • GET /patients/insurance/INS001       │\n│  • GET /stats (aggregations)            │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 2: Extract from Database          │\n│  • SELECT FROM visits                   │\n│  • SELECT FROM prescriptions            │\n│  • SELECT FROM lab_results              │\n│  • JOIN operations for summaries        │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 3: Transform & Combine            │\n│  • Convert data types                   │\n│  • Join API patients with DB visits     │\n│  • Calculate aggregations               │\n│  • Handle missing values (fillna)       │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────────────────────────────┐\n│  STEP 4: Load (Write to Database)       │\n│  • CREATE TABLE patient_summary         │\n│  • INSERT combined data                 │\n│  • Verify write operation               │\n└────────┬────────────────────────────────┘\n         │\n         ▼\n┌─────────────────┐\n│  End Pipeline   │\n│  (Success!)     │\n└─────────────────┘"
   },
   {
-    "objectID": "docker-example/QUICK_REFERENCE.html#sample-data-overview",
-    "href": "docker-example/QUICK_REFERENCE.html#sample-data-overview",
-    "title": "Quick Reference Guide",
+    "objectID": "docker-example/ARCHITECTURE.html#container-lifecycle",
+    "href": "docker-example/ARCHITECTURE.html#container-lifecycle",
+    "title": "Docker Healthcare Pipeline - Architecture Diagram",
     "section": "",
-    "text": "10 patients (IDs 1001-1010)\n3 insurance types: INS001, INS002, INS003\n2 self-pay patients\n\n\n\n\n\n12 visits across multiple patients\nDate range: Jan-Apr 2024\n3 providers\n\n\n\n\n\n7 prescriptions\nVarious medications (Lisinopril, Metformin, etc.)\n\n\n\n\n\n12 lab tests\nBlood pressure, HbA1c, cholesterol, etc."
+    "text": "┌─────────────────────────────────────────────────────────────────┐\n│                     docker-compose up -d                         │\n└────────────────────────┬────────────────────────────────────────┘\n                         │\n         ┌───────────────┴───────────────┐\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Build API Image    │         │  Build DB Image     │\n│  (from Dockerfile)  │         │  (from Dockerfile)  │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Start API          │         │  Start PostgreSQL   │\n│  Container          │         │  Container          │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Load plumber.R     │         │  Run init.sql       │\n│  Load patients.csv  │         │  Create tables      │\n│                     │         │  Insert sample data │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         ▼                               ▼\n┌─────────────────────┐         ┌─────────────────────┐\n│  Health Check:      │         │  Health Check:      │\n│  GET /health        │         │  pg_isready         │\n│  (wait for healthy) │         │  (wait for healthy) │\n└────────┬────────────┘         └────────┬────────────┘\n         │                               │\n         └───────────────┬───────────────┘\n                         │\n                         ▼\n                 ┌───────────────┐\n                 │  Ready for    │\n                 │  Client       │\n                 │  Connections! │\n                 └───────────────┘"
   },
   {
-    "objectID": "docker-example/QUICK_REFERENCE.html#common-issues",
-    "href": "docker-example/QUICK_REFERENCE.html#common-issues",
-    "title": "Quick Reference Guide",
+    "objectID": "docker-example/ARCHITECTURE.html#network-communication",
+    "href": "docker-example/ARCHITECTURE.html#network-communication",
+    "title": "Docker Healthcare Pipeline - Architecture Diagram",
     "section": "",
-    "text": "# Change ports in docker-compose.yml\nports:\n  - \"8001:8000\"  # API\n  - \"5433:5432\"  # Database\n\n\n\n# Check logs\ndocker-compose logs database\ndocker-compose logs api\n\n# Rebuild\ndocker-compose down\ndocker-compose up -d --build\n\n\n\n# Wait for health check\ndocker-compose ps\n\n# Should show \"Up (healthy)\"\n# If not, wait 10-20 seconds\n\n\n\n# Try different CRAN mirror\ninstall.packages(\"RPostgres\", \n  repos = \"https://cloud.r-project.org/\")\n\n# On Windows, install Rtools first\n# https://cran.r-project.org/bin/windows/Rtools/"
+    "text": "Host Machine (localhost)\n│\n├─ Port 8000 ──────────────► Container: healthcare_api\n│                             Network: healthcare_network\n│                             Internal IP: 172.x.x.2\n│\n└─ Port 5432 ──────────────► Container: healthcare_db\n                              Network: healthcare_network\n                              Internal IP: 172.x.x.3\n\nContainers can communicate using:\n• Service names (api, database)\n• Internal IPs (172.x.x.x)\n\nClients connect using:\n• localhost:8000 (API)\n• localhost:5432 (Database)"
   },
   {
-    "objectID": "docker-example/QUICK_REFERENCE.html#project-structure",
-    "href": "docker-example/QUICK_REFERENCE.html#project-structure",
-    "title": "Quick Reference Guide",
+    "objectID": "docker-example/ARCHITECTURE.html#volume-persistence",
+    "href": "docker-example/ARCHITECTURE.html#volume-persistence",
+    "title": "Docker Healthcare Pipeline - Architecture Diagram",
     "section": "",
-    "text": "docker-example/\n├── api/                    # R Plumber API container\n│   ├── Dockerfile\n│   ├── plumber.R          # API endpoints\n│   └── patients_data.csv  # Sample patient data\n├── database/               # PostgreSQL container\n│   ├── Dockerfile\n│   └── init.sql           # Schema and sample data\n├── r-client/               # R pipeline script\n│   ├── healthcare_pipeline.R\n│   └── install_packages.R\n├── python-client/          # Python pipeline script\n│   ├── healthcare_pipeline.py\n│   └── requirements.txt\n├── docker-compose.yml      # Orchestration config\n├── .env.example           # Environment template\n└── README.md              # Full documentation"
+    "text": "Docker Host\n│\n├─ Named Volume: postgres_data\n│  └─ Mapped to: /var/lib/postgresql/data (in container)\n│     └─ Contains: PostgreSQL database files\n│        • Tables, indexes, data\n│        • Transaction logs\n│        • Configuration\n│\n└─ Benefits:\n   • Data persists across container restarts\n   • Data survives container removal\n   • Can be backed up independently\n   • Shared between container recreations"
   },
   {
-    "objectID": "docker-example/QUICK_REFERENCE.html#next-steps",
-    "href": "docker-example/QUICK_REFERENCE.html#next-steps",
-    "title": "Quick Reference Guide",
+    "objectID": "docker-example/ARCHITECTURE.html#security-considerations",
+    "href": "docker-example/ARCHITECTURE.html#security-considerations",
+    "title": "Docker Healthcare Pipeline - Architecture Diagram",
     "section": "",
-    "text": "Modify the API: Add new endpoints in api/plumber.R\nAdd Tables: Extend database/init.sql with new schemas\nEnhance Clients: Add data validation, cleaning, transformation\nAuthentication: Add API keys or OAuth to the API\nMonitoring: Add logging and metrics collection\nTesting: Write unit tests for API endpoints and pipelines"
+    "text": "┌─────────────────────────────────────────────────────────────┐\n│  Credentials Management                                      │\n├─────────────────────────────────────────────────────────────┤\n│                                                              │\n│  ❌ NEVER in code:                                           │\n│     password = \"healthpass\"  # BAD!                          │\n│                                                              │\n│  ✅ Use environment variables:                               │\n│     password = os.getenv(\"DB_PASSWORD\")  # GOOD!             │\n│     password = Sys.getenv(\"DB_PASSWORD\")  # GOOD!            │\n│                                                              │\n│  ✅ Use .env file (not committed to git):                    │\n│     POSTGRES_PASSWORD=healthpass                             │\n│                                                              │\n│  ✅ In docker-compose.yml:                                   │\n│     environment:                                             │\n│       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}                │\n│                                                              │\n└─────────────────────────────────────────────────────────────┘"
   },
   {
-    "objectID": "docker-example/QUICK_REFERENCE.html#tips",
-    "href": "docker-example/QUICK_REFERENCE.html#tips",
-    "title": "Quick Reference Guide",
+    "objectID": "docker-example/FILE_SUMMARY.html",
+    "href": "docker-example/FILE_SUMMARY.html",
+    "title": "Docker Example - Complete File Listing",
     "section": "",
-    "text": "Always check container health before running clients\nUse docker-compose logs -f to watch real-time logs\nThe API data is in-memory (resets on restart)\nThe database data persists in a Docker volume\nBoth clients do the same thing - compare them to learn!"
+    "text": "docker-example/\n│\n├── 📄 README.md                    # Main documentation\n├── 📄 QUICK_REFERENCE.md           # Command cheat sheet\n├── 📄 ARCHITECTURE.md              # Visual diagrams\n├── 📄 docker-compose.yml           # Container orchestration\n├── 📄 .env.example                 # Environment template\n├── 📄 .gitignore                   # Git ignore rules\n├── 📜 validate.sh                  # Linux/Mac validation script\n├── 📜 validate.ps1                 # Windows validation script\n│\n├── 📂 api/                         # R Plumber API Container\n│   ├── 📄 Dockerfile               # Container build instructions\n│   ├── 📜 plumber.R                # API endpoint definitions\n│   └── 📊 patients_data.csv        # Sample patient data (10 records)\n│\n├── 📂 database/                    # PostgreSQL Database Container\n│   ├── 📄 Dockerfile               # Container build instructions\n│   └── 📜 init.sql                 # Database schema + sample data\n│\n├── 📂 r-client/                    # R Pipeline Client\n│   ├── 📜 healthcare_pipeline.R    # Main pipeline script\n│   └── 📜 install_packages.R       # Package installation helper\n│\n└── 📂 python-client/               # Python Pipeline Client\n    ├── 🐍 healthcare_pipeline.py   # Main pipeline script\n    └── 📄 requirements.txt         # Python dependencies\n\n\n\n\n\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\nREADME.md\nComplete setup guide, architecture overview, troubleshooting\n\n\nQUICK_REFERENCE.md\nQuick command reference for common operations\n\n\nARCHITECTURE.md\nVisual diagrams of system architecture and data flow\n\n\ndocker-compose.yml\nDefines both containers, networking, volumes\n\n\n.env.example\nTemplate for environment variables\n\n\n.gitignore\nPrevents committing sensitive files\n\n\nvalidate.sh\nLinux/Mac script to verify setup\n\n\nvalidate.ps1\nWindows PowerShell script to verify setup\n\n\n\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nDockerfile\n21\nBuilds R container with Plumber\n\n\nplumber.R\n115\nREST API with 6 endpoints\n\n\npatients_data.csv\n11\n10 patient records (header + data)\n\n\n\nAPI Endpoints: - GET /health - Health check - GET /patients - List all patients - GET /patients/{id} - Get single patient - GET /patients/insurance/{id} - Filter by insurance - GET /stats - Statistics - POST /patients - Create patient\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nDockerfile\n12\nBuilds PostgreSQL container\n\n\ninit.sql\n150+\nCreates 3 tables + sample data\n\n\n\nDatabase Tables: - visits - 12 healthcare visit records - prescriptions - 7 medication prescriptions - lab_results - 12 laboratory test results\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nhealthcare_pipeline.R\n200+\nFull ETL pipeline in R\n\n\ninstall_packages.R\n10\nInstalls required R packages\n\n\n\nPipeline Steps: 1. Fetch from API (httr) 2. Query database (DBI/RPostgres) 3. Combine data (dplyr) 4. Write back to database\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nhealthcare_pipeline.py\n230+\nFull ETL pipeline in Python\n\n\nrequirements.txt\n4\nPython package dependencies\n\n\n\nPipeline Steps: 1. Fetch from API (requests) 2. Query database (psycopg2/SQLAlchemy) 3. Combine data (pandas) 4. Write back to database 5. Test POST endpoint\n\n\n\n\n\n\ndocker-compose up -d --build\n\n\n\n# Windows\n.\\validate.ps1\n\n# Linux/Mac\n./validate.sh\n\n\n\n# R version\nRscript r-client/healthcare_pipeline.R\n\n# Python version\npython python-client/healthcare_pipeline.py\n\n\n\n\n\n\n\nAPI Container (healthcare_api)\n\nLoads 10 patient records into memory\nStarts REST API on port 8000\nServes HTTP requests\n\nDatabase Container (healthcare_db)\n\nCreates PostgreSQL database\nCreates 3 tables (visits, prescriptions, lab_results)\nInserts 31 total records\nListens on port 5432\n\n\n\n\n\n\nAPI Data Fetched\n\n10 patients from /patients endpoint\nConverted to DataFrame/tibble\n\nDatabase Data Queried\n\nVisit summary aggregated\nPrescription counts calculated\nLab result counts calculated\n\nCombined Dataset Created\n\nPatient demographics (from API)\nVisit statistics (from database)\nMerged on patient_id\n\nNew Table Written\n\npatient_summary table created\n10 rows written\nContains combined data\n\n\n\n\n\n\nPatients (API)           Visits (DB)\n└─ patient_id ──────────┬─ patient_id\n                        │\n                        ├─ Prescriptions (DB)\n                        │  └─ visit_id → visit_id\n                        │\n                        └─ Lab Results (DB)\n                           └─ visit_id → visit_id\n\n\n\n\n\n\nItem\nCount\nStorage\n\n\n\n\nPatients (API)\n10\nIn-memory CSV\n\n\nVisits (DB)\n12\nPostgreSQL volume\n\n\nPrescriptions (DB)\n7\nPostgreSQL volume\n\n\nLab Results (DB)\n12\nPostgreSQL volume\n\n\nTotal Records\n41\n~50 KB\n\n\n\n\n\n\n\nBeginner: Run both pipelines, compare outputs\nIntermediate: Modify API endpoints, add new queries\nAdvanced: Add authentication, implement caching, add monitoring\n\n\n\n\n\nAdd more API endpoints (PUT, DELETE)\nImplement authentication (API keys, JWT)\nAdd data validation (pandera, validate)\nCreate scheduled jobs (cron, APScheduler)\nAdd monitoring (Prometheus metrics)\nImplement caching (Redis)\nAdd logging aggregation (ELK stack)\nCreate web dashboard (Shiny, Streamlit)\n\n\n\n\n\n\n\nTechnology\nVersion\nPurpose\n\n\n\n\nDocker\nLatest\nContainerization\n\n\nDocker Compose\nLatest\nMulti-container orchestration\n\n\nPostgreSQL\n16\nRelational database\n\n\nR\n4.5.1\nProgramming language\n\n\nPlumber\nLatest\nR REST API framework\n\n\nPython\n3.8+\nProgramming language\n\n\nhttr\nLatest\nR HTTP client\n\n\nrequests\nLatest\nPython HTTP client\n\n\nDBI/RPostgres\nLatest\nR database interface\n\n\npsycopg2\nLatest\nPython PostgreSQL driver\n\n\ndplyr\nLatest\nR data manipulation\n\n\npandas\nLatest\nPython data manipulation\n\n\n\n\n\n\n\n\n\nTask\nDuration\n\n\n\n\nInitial build\n3-5 minutes\n\n\nContainer startup\n20-30 seconds\n\n\nHealth check ready\n10-20 seconds\n\n\nR pipeline execution\n5-10 seconds\n\n\nPython pipeline execution\n5-10 seconds\n\n\n\n\n\n\n\n\n\nContainer\nCPU\nMemory\nDisk\n\n\n\n\nhealthcare_api\n&lt;5%\n~200 MB\n~500 MB\n\n\nhealthcare_db\n&lt;5%\n~100 MB\n~100 MB\n\n\nTotal\n&lt;10%\n~300 MB\n~600 MB\n\n\n\n\n\n\nThis example integrates concepts from all 4 workshop sessions:\n\n✅ Session 1: Git, environments, package management\n✅ Session 2: REST APIs, HTTP requests, JSON parsing\n✅ Session 3: Database connections, SQL queries, upserts\n✅ Session 4: Data cleaning, pipeline integration, error handling\n\n\n\n\nCreated for the CFA Data Pipelines Workshop by the ForeSITE team.\n\nQuestions? See README.md or open an issue in the workshop repository."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "CFA Data Pipelines Workshop",
+    "objectID": "docker-example/FILE_SUMMARY.html#project-structure",
+    "href": "docker-example/FILE_SUMMARY.html#project-structure",
+    "title": "Docker Example - Complete File Listing",
     "section": "",
-    "text": "Welcome to the CFA Data Pipelines Workshop! This course will teach you essential skills for building robust data pipelines, acquiring data from various sources, and cleaning data for analysis."
+    "text": "docker-example/\n│\n├── 📄 README.md                    # Main documentation\n├── 📄 QUICK_REFERENCE.md           # Command cheat sheet\n├── 📄 ARCHITECTURE.md              # Visual diagrams\n├── 📄 docker-compose.yml           # Container orchestration\n├── 📄 .env.example                 # Environment template\n├── 📄 .gitignore                   # Git ignore rules\n├── 📜 validate.sh                  # Linux/Mac validation script\n├── 📜 validate.ps1                 # Windows validation script\n│\n├── 📂 api/                         # R Plumber API Container\n│   ├── 📄 Dockerfile               # Container build instructions\n│   ├── 📜 plumber.R                # API endpoint definitions\n│   └── 📊 patients_data.csv        # Sample patient data (10 records)\n│\n├── 📂 database/                    # PostgreSQL Database Container\n│   ├── 📄 Dockerfile               # Container build instructions\n│   └── 📜 init.sql                 # Database schema + sample data\n│\n├── 📂 r-client/                    # R Pipeline Client\n│   ├── 📜 healthcare_pipeline.R    # Main pipeline script\n│   └── 📜 install_packages.R       # Package installation helper\n│\n└── 📂 python-client/               # Python Pipeline Client\n    ├── 🐍 healthcare_pipeline.py   # Main pipeline script\n    └── 📄 requirements.txt         # Python dependencies"
   },
   {
-    "objectID": "index.html#welcome",
-    "href": "index.html#welcome",
-    "title": "CFA Data Pipelines Workshop",
+    "objectID": "docker-example/FILE_SUMMARY.html#file-purposes",
+    "href": "docker-example/FILE_SUMMARY.html#file-purposes",
+    "title": "Docker Example - Complete File Listing",
     "section": "",
-    "text": "Welcome to the CFA Data Pipelines Workshop! This course will teach you essential skills for building robust data pipelines, acquiring data from various sources, and cleaning data for analysis."
+    "text": "File\nPurpose\n\n\n\n\nREADME.md\nComplete setup guide, architecture overview, troubleshooting\n\n\nQUICK_REFERENCE.md\nQuick command reference for common operations\n\n\nARCHITECTURE.md\nVisual diagrams of system architecture and data flow\n\n\ndocker-compose.yml\nDefines both containers, networking, volumes\n\n\n.env.example\nTemplate for environment variables\n\n\n.gitignore\nPrevents committing sensitive files\n\n\nvalidate.sh\nLinux/Mac script to verify setup\n\n\nvalidate.ps1\nWindows PowerShell script to verify setup\n\n\n\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nDockerfile\n21\nBuilds R container with Plumber\n\n\nplumber.R\n115\nREST API with 6 endpoints\n\n\npatients_data.csv\n11\n10 patient records (header + data)\n\n\n\nAPI Endpoints: - GET /health - Health check - GET /patients - List all patients - GET /patients/{id} - Get single patient - GET /patients/insurance/{id} - Filter by insurance - GET /stats - Statistics - POST /patients - Create patient\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nDockerfile\n12\nBuilds PostgreSQL container\n\n\ninit.sql\n150+\nCreates 3 tables + sample data\n\n\n\nDatabase Tables: - visits - 12 healthcare visit records - prescriptions - 7 medication prescriptions - lab_results - 12 laboratory test results\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nhealthcare_pipeline.R\n200+\nFull ETL pipeline in R\n\n\ninstall_packages.R\n10\nInstalls required R packages\n\n\n\nPipeline Steps: 1. Fetch from API (httr) 2. Query database (DBI/RPostgres) 3. Combine data (dplyr) 4. Write back to database\n\n\n\n\n\n\nFile\nLines\nPurpose\n\n\n\n\nhealthcare_pipeline.py\n230+\nFull ETL pipeline in Python\n\n\nrequirements.txt\n4\nPython package dependencies\n\n\n\nPipeline Steps: 1. Fetch from API (requests) 2. Query database (psycopg2/SQLAlchemy) 3. Combine data (pandas) 4. Write back to database 5. Test POST endpoint"
   },
   {
-    "objectID": "index.html#course-overview",
-    "href": "index.html#course-overview",
-    "title": "CFA Data Pipelines Workshop",
-    "section": "Course Overview",
-    "text": "Course Overview\nIn this workshop, you will learn:\n\nData Pipeline Design: Best practices for designing and implementing data pipelines\nDatabase Operations: Querying and managing data in databases\nAPI Integration: How to acquire data from RESTful APIs\nData Cleaning: Techniques for preparing and validating data for analysis"
-  },
-  {
-    "objectID": "index.html#getting-started",
-    "href": "index.html#getting-started",
-    "title": "CFA Data Pipelines Workshop",
-    "section": "Getting Started",
-    "text": "Getting Started\n\nReview the Syllabus for course objectives and requirements\nCheck the Schedule for class dates and topics\nAccess Slides for lecture materials"
-  },
-  {
-    "objectID": "index.html#prerequisites",
-    "href": "index.html#prerequisites",
-    "title": "CFA Data Pipelines Workshop",
-    "section": "Prerequisites",
-    "text": "Prerequisites\nStudents should have:\n\nBasic programming knowledge (Python or R recommended)\nFamiliarity with data structures (lists, dictionaries, data frames)\nUnderstanding of basic database concepts"
-  },
-  {
-    "objectID": "index.html#course-materials",
-    "href": "index.html#course-materials",
-    "title": "CFA Data Pipelines Workshop",
-    "section": "Course Materials",
-    "text": "Course Materials\nAll course materials, including slides and example code, are available on the GitHub repository."
-  },
-  {
-    "objectID": "pre-survey.html",
-    "href": "pre-survey.html",
-    "title": "Pre-Workshop Survey",
+    "objectID": "docker-example/FILE_SUMMARY.html#getting-started-3-steps",
+    "href": "docker-example/FILE_SUMMARY.html#getting-started-3-steps",
+    "title": "Docker Example - Complete File Listing",
     "section": "",
-    "text": "Replace this page with an embedded form (Google Forms / Microsoft Forms / Qualtrics) or connect the HTML form below to a handler (e.g. Formspree) before collecting responses."
+    "text": "docker-compose up -d --build\n\n\n\n# Windows\n.\\validate.ps1\n\n# Linux/Mac\n./validate.sh\n\n\n\n# R version\nRscript r-client/healthcare_pipeline.R\n\n# Python version\npython python-client/healthcare_pipeline.py"
   },
   {
-    "objectID": "pre-survey.html#instructions",
-    "href": "pre-survey.html#instructions",
-    "title": "Pre-Workshop Survey",
-    "section": "Instructions",
-    "text": "Instructions\nPlease complete this survey before the workshop begins. Your responses help tailor the instruction and measure learning gains. Estimated time: 5–7 minutes."
+    "objectID": "docker-example/FILE_SUMMARY.html#what-gets-created",
+    "href": "docker-example/FILE_SUMMARY.html#what-gets-created",
+    "title": "Docker Example - Complete File Listing",
+    "section": "",
+    "text": "API Container (healthcare_api)\n\nLoads 10 patient records into memory\nStarts REST API on port 8000\nServes HTTP requests\n\nDatabase Container (healthcare_db)\n\nCreates PostgreSQL database\nCreates 3 tables (visits, prescriptions, lab_results)\nInserts 31 total records\nListens on port 5432\n\n\n\n\n\n\nAPI Data Fetched\n\n10 patients from /patients endpoint\nConverted to DataFrame/tibble\n\nDatabase Data Queried\n\nVisit summary aggregated\nPrescription counts calculated\nLab result counts calculated\n\nCombined Dataset Created\n\nPatient demographics (from API)\nVisit statistics (from database)\nMerged on patient_id\n\nNew Table Written\n\npatient_summary table created\n10 rows written\nContains combined data"
   },
   {
-    "objectID": "pre-survey.html#section-1-background-demographics",
-    "href": "pre-survey.html#section-1-background-demographics",
-    "title": "Pre-Workshop Survey",
-    "section": "Section 1: Background & Demographics",
-    "text": "Section 1: Background & Demographics\n\nRole / Title\nYears of experience with data, analytics, and programming (dropdown: None, &lt;1, 1–2, 3–5, &gt;5)\nComfort with command line tools (Likert 1–5)"
+    "objectID": "docker-example/FILE_SUMMARY.html#data-relationships",
+    "href": "docker-example/FILE_SUMMARY.html#data-relationships",
+    "title": "Docker Example - Complete File Listing",
+    "section": "",
+    "text": "Patients (API)           Visits (DB)\n└─ patient_id ──────────┬─ patient_id\n                        │\n                        ├─ Prescriptions (DB)\n                        │  └─ visit_id → visit_id\n                        │\n                        └─ Lab Results (DB)\n                           └─ visit_id → visit_id"
   },
   {
-    "objectID": "pre-survey.html#section-2-prior-experience-likert-1never-5expert",
-    "href": "pre-survey.html#section-2-prior-experience-likert-1never-5expert",
-    "title": "Pre-Workshop Survey",
-    "section": "Section 2: Prior Experience (Likert 1=Never … 5=Expert)",
-    "text": "Section 2: Prior Experience (Likert 1=Never … 5=Expert)\nRate your experience/comfort with the following languages 1. R 2. Python 3. SQL\nRate your experience with the following tasks: 1. I have downloaded data from the internet. 2. I can query databases confidently. 3. I can retrieve data from REST APIs. 4. I understand principles of data cleaning and validation. 5. I can design a reproducible data structure."
+    "objectID": "docker-example/FILE_SUMMARY.html#data-volumes",
+    "href": "docker-example/FILE_SUMMARY.html#data-volumes",
+    "title": "Docker Example - Complete File Listing",
+    "section": "",
+    "text": "Item\nCount\nStorage\n\n\n\n\nPatients (API)\n10\nIn-memory CSV\n\n\nVisits (DB)\n12\nPostgreSQL volume\n\n\nPrescriptions (DB)\n7\nPostgreSQL volume\n\n\nLab Results (DB)\n12\nPostgreSQL volume\n\n\nTotal Records\n41\n~50 KB"
   },
   {
-    "objectID": "pre-survey.html#section-3-self-efficacy-likert-15",
-    "href": "pre-survey.html#section-3-self-efficacy-likert-15",
-    "title": "Pre-Workshop Survey",
-    "section": "Section 3: Self-Efficacy (Likert 1–5)",
-    "text": "Section 3: Self-Efficacy (Likert 1–5)\n\nI feel confident troubleshooting data pipeline failures.\nI can choose appropriate tools for data acquisition.\nI can assess data quality issues systematically.\nI can document a pipeline for other users."
+    "objectID": "docker-example/FILE_SUMMARY.html#learning-path",
+    "href": "docker-example/FILE_SUMMARY.html#learning-path",
+    "title": "Docker Example - Complete File Listing",
+    "section": "",
+    "text": "Beginner: Run both pipelines, compare outputs\nIntermediate: Modify API endpoints, add new queries\nAdvanced: Add authentication, implement caching, add monitoring"
   },
   {
-    "objectID": "pre-survey.html#section-4-knowledge-check-multiple-choice",
-    "href": "pre-survey.html#section-4-knowledge-check-multiple-choice",
-    "title": "Pre-Workshop Survey",
-    "section": "Section 4: Knowledge Check (Multiple Choice)",
-    "text": "Section 4: Knowledge Check (Multiple Choice)\nSelect the best answer. 1. A data pipeline is best described as: (a) A single script; (b) A series of connected processes moving and transforming data; (c) A database schema; (d) A visualization tool. 2. The HTTP status code 429 indicates: (a) Success; (b) Not Found; (c) Too Many Requests; (d) Unauthorized. 3. In SQL, selecting unique values uses: (a) DISTINCT; (b) UNIQUE; (c) GROUP; (d) ONLY. 4. Best first step when cleaning a dataset: (a) Delete all NAs; (b) Profile structure and summary statistics; (c) Normalize everything; (d) Load into production. 5. An API rate limit is: (a) Maximum query complexity; (b) Restriction on number of requests per time window; (c) Disk quota; (d) Memory threshold."
+    "objectID": "docker-example/FILE_SUMMARY.html#customization-ideas",
+    "href": "docker-example/FILE_SUMMARY.html#customization-ideas",
+    "title": "Docker Example - Complete File Listing",
+    "section": "",
+    "text": "Add more API endpoints (PUT, DELETE)\nImplement authentication (API keys, JWT)\nAdd data validation (pandera, validate)\nCreate scheduled jobs (cron, APScheduler)\nAdd monitoring (Prometheus metrics)\nImplement caching (Redis)\nAdd logging aggregation (ELK stack)\nCreate web dashboard (Shiny, Streamlit)"
   },
   {
-    "objectID": "pre-survey.html#section-5-expectations",
-    "href": "pre-survey.html#section-5-expectations",
-    "title": "Pre-Workshop Survey",
-    "section": "Section 5: Expectations",
-    "text": "Section 5: Expectations\n\nWhat is your primary goal for attending? (long text)\nWhich topic are you MOST interested in? (Single choice: APIs, Databases, Cleaning, Pipeline Design, Other)\nAny specific questions you hope get answered? (long text)"
+    "objectID": "docker-example/FILE_SUMMARY.html#technologies-used",
+    "href": "docker-example/FILE_SUMMARY.html#technologies-used",
+    "title": "Docker Example - Complete File Listing",
+    "section": "",
+    "text": "Technology\nVersion\nPurpose\n\n\n\n\nDocker\nLatest\nContainerization\n\n\nDocker Compose\nLatest\nMulti-container orchestration\n\n\nPostgreSQL\n16\nRelational database\n\n\nR\n4.5.1\nProgramming language\n\n\nPlumber\nLatest\nR REST API framework\n\n\nPython\n3.8+\nProgramming language\n\n\nhttr\nLatest\nR HTTP client\n\n\nrequests\nLatest\nPython HTTP client\n\n\nDBI/RPostgres\nLatest\nR database interface\n\n\npsycopg2\nLatest\nPython PostgreSQL driver\n\n\ndplyr\nLatest\nR data manipulation\n\n\npandas\nLatest\nPython data manipulation"
+  },
+  {
+    "objectID": "docker-example/FILE_SUMMARY.html#expected-execution-times",
+    "href": "docker-example/FILE_SUMMARY.html#expected-execution-times",
+    "title": "Docker Example - Complete File Listing",
+    "section": "",
+    "text": "Task\nDuration\n\n\n\n\nInitial build\n3-5 minutes\n\n\nContainer startup\n20-30 seconds\n\n\nHealth check ready\n10-20 seconds\n\n\nR pipeline execution\n5-10 seconds\n\n\nPython pipeline execution\n5-10 seconds"
+  },
+  {
+    "objectID": "docker-example/FILE_SUMMARY.html#resource-usage",
+    "href": "docker-example/FILE_SUMMARY.html#resource-usage",
+    "title": "Docker Example - Complete File Listing",
+    "section": "",
+    "text": "Container\nCPU\nMemory\nDisk\n\n\n\n\nhealthcare_api\n&lt;5%\n~200 MB\n~500 MB\n\n\nhealthcare_db\n&lt;5%\n~100 MB\n~100 MB\n\n\nTotal\n&lt;10%\n~300 MB\n~600 MB"
+  },
+  {
+    "objectID": "docker-example/FILE_SUMMARY.html#workshop-alignment",
+    "href": "docker-example/FILE_SUMMARY.html#workshop-alignment",
+    "title": "Docker Example - Complete File Listing",
+    "section": "",
+    "text": "This example integrates concepts from all 4 workshop sessions:\n\n✅ Session 1: Git, environments, package management\n✅ Session 2: REST APIs, HTTP requests, JSON parsing\n✅ Session 3: Database connections, SQL queries, upserts\n✅ Session 4: Data cleaning, pipeline integration, error handling"
+  },
+  {
+    "objectID": "docker-example/FILE_SUMMARY.html#credits",
+    "href": "docker-example/FILE_SUMMARY.html#credits",
+    "title": "Docker Example - Complete File Listing",
+    "section": "",
+    "text": "Created for the CFA Data Pipelines Workshop by the ForeSITE team.\n\nQuestions? See README.md or open an issue in the workshop repository."
+  },
+  {
+    "objectID": "docker-example/START_HERE.html",
+    "href": "docker-example/START_HERE.html",
+    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "section": "",
+    "text": "Welcome! This folder contains a complete, working example of a data pipeline using Docker containers.\n\n\nA hands-on example demonstrating: - ✅ R Plumber REST API in a Docker container - ✅ PostgreSQL database in a Docker container\n- ✅ R client that pulls from both sources - ✅ Python client that pulls from both sources - ✅ Real healthcare data scenarios\n\n\n\n\n\n👉 Read README.md - Complete setup guide with explanations\n\n\n\n👉 Read QUICK_REFERENCE.md - Essential commands only\n\n\n\n👉 Read ARCHITECTURE.md - Visual diagrams and data flow\n\n\n\n👉 Read FILE_SUMMARY.md - What each file does\n\n\n\n\n# 1. Start the containers\ndocker-compose up -d --build\n\n# 2. Run the pipeline (choose R or Python)\nRscript r-client/healthcare_pipeline.R\n# OR\npython python-client/healthcare_pipeline.py\n\n# 3. Stop when done\ndocker-compose down\n\n\n\ndocker-example/\n├── 📖 README.md              ← Start here if new to this\n├── 📖 QUICK_REFERENCE.md     ← Commands cheat sheet\n├── 📖 ARCHITECTURE.md        ← Visual diagrams\n├── 📖 FILE_SUMMARY.md        ← File-by-file breakdown\n├── 🐳 docker-compose.yml     ← Runs both containers\n├── 📂 api/                   ← R Plumber API code\n├── 📂 database/              ← PostgreSQL setup\n├── 📂 r-client/              ← R pipeline script\n└── 📂 python-client/         ← Python pipeline script\n\n\n\nBy working through this example, you’ll learn:\n\nDocker Basics\n\nBuilding custom images\nMulti-container applications\nContainer networking\nVolume persistence\n\nAPI Integration\n\nCreating REST APIs with R Plumber\nMaking HTTP GET/POST requests\nHandling JSON data\n\nDatabase Operations\n\nPostgreSQL in Docker\nSQL queries and joins\nConnecting from R and Python\n\nData Pipelines\n\nExtracting from multiple sources\nCombining datasets\nWriting to databases\nError handling\n\n\n\n\n\n\nDocker Desktop installed and running\nR (optional, for R client)\nPython (optional, for Python client)\n\n\n\n\n\nContainers won’t start?\ndocker-compose logs\nNeed to verify everything works?\n# Windows\n.\\validate.ps1\n\n# Linux/Mac\n./validate.sh\nWant to start fresh?\ndocker-compose down -v\ndocker-compose up -d --build\n\n\n\n\nAPI Container          Database Container\n(Patient Data)         (Visit/Lab Data)\n     │                        │\n     │                        │\n     └────────┬───────────────┘\n              │\n         Your Pipeline\n              │\n      Combined Patient + \n       Visit Summary\n\n\n\n\n✅ Run both R and Python versions - compare the code\n✅ Modify the API - add a new endpoint\n✅ Add a database table - extend the schema\n✅ Enhance the pipeline - add data validation\n✅ Deploy to production - add authentication, monitoring\n\n\n\n\n\nUse docker-compose logs -f to watch container output in real-time\nThe API data is in-memory (resets on restart)\nThe database data persists in a Docker volume\nBoth pipelines do the same thing - learn from the differences!\n\n\n\n\nThis example brings together all 4 workshop sessions:\n\n\n\nSession\nConcepts Applied\n\n\n\n\n1\nEnvironment setup, git, package management\n\n\n2\nREST APIs, HTTP requests, authentication\n\n\n3\nDatabase connections, SQL, upserts\n\n\n4\nData cleaning, pipeline integration\n\n\n\n\n\n\n\nOpen README.md for the full guide\nOr jump right in with the Quick Start above\n\nHappy Pipeline Building! 🚀\n\nQuestions? See the main workshop repository or ask in the discussion board."
+  },
+  {
+    "objectID": "docker-example/START_HERE.html#what-this-is",
+    "href": "docker-example/START_HERE.html#what-this-is",
+    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "section": "",
+    "text": "A hands-on example demonstrating: - ✅ R Plumber REST API in a Docker container - ✅ PostgreSQL database in a Docker container\n- ✅ R client that pulls from both sources - ✅ Python client that pulls from both sources - ✅ Real healthcare data scenarios"
+  },
+  {
+    "objectID": "docker-example/START_HERE.html#where-to-start",
+    "href": "docker-example/START_HERE.html#where-to-start",
+    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "section": "",
+    "text": "👉 Read README.md - Complete setup guide with explanations\n\n\n\n👉 Read QUICK_REFERENCE.md - Essential commands only\n\n\n\n👉 Read ARCHITECTURE.md - Visual diagrams and data flow\n\n\n\n👉 Read FILE_SUMMARY.md - What each file does"
+  },
+  {
+    "objectID": "docker-example/START_HERE.html#super-quick-start-3-commands",
+    "href": "docker-example/START_HERE.html#super-quick-start-3-commands",
+    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "section": "",
+    "text": "# 1. Start the containers\ndocker-compose up -d --build\n\n# 2. Run the pipeline (choose R or Python)\nRscript r-client/healthcare_pipeline.R\n# OR\npython python-client/healthcare_pipeline.py\n\n# 3. Stop when done\ndocker-compose down"
+  },
+  {
+    "objectID": "docker-example/START_HERE.html#whats-inside",
+    "href": "docker-example/START_HERE.html#whats-inside",
+    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "section": "",
+    "text": "docker-example/\n├── 📖 README.md              ← Start here if new to this\n├── 📖 QUICK_REFERENCE.md     ← Commands cheat sheet\n├── 📖 ARCHITECTURE.md        ← Visual diagrams\n├── 📖 FILE_SUMMARY.md        ← File-by-file breakdown\n├── 🐳 docker-compose.yml     ← Runs both containers\n├── 📂 api/                   ← R Plumber API code\n├── 📂 database/              ← PostgreSQL setup\n├── 📂 r-client/              ← R pipeline script\n└── 📂 python-client/         ← Python pipeline script"
+  },
+  {
+    "objectID": "docker-example/START_HERE.html#learning-objectives",
+    "href": "docker-example/START_HERE.html#learning-objectives",
+    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "section": "",
+    "text": "By working through this example, you’ll learn:\n\nDocker Basics\n\nBuilding custom images\nMulti-container applications\nContainer networking\nVolume persistence\n\nAPI Integration\n\nCreating REST APIs with R Plumber\nMaking HTTP GET/POST requests\nHandling JSON data\n\nDatabase Operations\n\nPostgreSQL in Docker\nSQL queries and joins\nConnecting from R and Python\n\nData Pipelines\n\nExtracting from multiple sources\nCombining datasets\nWriting to databases\nError handling"
+  },
+  {
+    "objectID": "docker-example/START_HERE.html#prerequisites",
+    "href": "docker-example/START_HERE.html#prerequisites",
+    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "section": "",
+    "text": "Docker Desktop installed and running\nR (optional, for R client)\nPython (optional, for Python client)"
+  },
+  {
+    "objectID": "docker-example/START_HERE.html#help-troubleshooting",
+    "href": "docker-example/START_HERE.html#help-troubleshooting",
+    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "section": "",
+    "text": "Containers won’t start?\ndocker-compose logs\nNeed to verify everything works?\n# Windows\n.\\validate.ps1\n\n# Linux/Mac\n./validate.sh\nWant to start fresh?\ndocker-compose down -v\ndocker-compose up -d --build"
+  },
+  {
+    "objectID": "docker-example/START_HERE.html#what-youll-build",
+    "href": "docker-example/START_HERE.html#what-youll-build",
+    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "section": "",
+    "text": "API Container          Database Container\n(Patient Data)         (Visit/Lab Data)\n     │                        │\n     │                        │\n     └────────┬───────────────┘\n              │\n         Your Pipeline\n              │\n      Combined Patient + \n       Visit Summary"
+  },
+  {
+    "objectID": "docker-example/START_HERE.html#next-steps-after-completion",
+    "href": "docker-example/START_HERE.html#next-steps-after-completion",
+    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "section": "",
+    "text": "✅ Run both R and Python versions - compare the code\n✅ Modify the API - add a new endpoint\n✅ Add a database table - extend the schema\n✅ Enhance the pipeline - add data validation\n✅ Deploy to production - add authentication, monitoring"
+  },
+  {
+    "objectID": "docker-example/START_HERE.html#pro-tips",
+    "href": "docker-example/START_HERE.html#pro-tips",
+    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "section": "",
+    "text": "Use docker-compose logs -f to watch container output in real-time\nThe API data is in-memory (resets on restart)\nThe database data persists in a Docker volume\nBoth pipelines do the same thing - learn from the differences!"
+  },
+  {
+    "objectID": "docker-example/START_HERE.html#integration-with-workshop",
+    "href": "docker-example/START_HERE.html#integration-with-workshop",
+    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "section": "",
+    "text": "This example brings together all 4 workshop sessions:\n\n\n\nSession\nConcepts Applied\n\n\n\n\n1\nEnvironment setup, git, package management\n\n\n2\nREST APIs, HTTP requests, authentication\n\n\n3\nDatabase connections, SQL, upserts\n\n\n4\nData cleaning, pipeline integration"
+  },
+  {
+    "objectID": "docker-example/START_HERE.html#ready-to-start",
+    "href": "docker-example/START_HERE.html#ready-to-start",
+    "title": "🐳 Start Here - Docker Healthcare Pipeline Example",
+    "section": "",
+    "text": "Open README.md for the full guide\nOr jump right in with the Quick Start above\n\nHappy Pipeline Building! 🚀\n\nQuestions? See the main workshop repository or ask in the discussion board."
+  },
+  {
+    "objectID": "post-survey.html",
+    "href": "post-survey.html",
+    "title": "Post-Workshop Survey",
+    "section": "",
+    "text": "Please complete after the final session. Estimated time: 6–8 minutes. Your feedback measures learning gains and improves future workshops."
+  },
+  {
+    "objectID": "post-survey.html#instructions",
+    "href": "post-survey.html#instructions",
+    "title": "Post-Workshop Survey",
+    "section": "",
+    "text": "Please complete after the final session. Estimated time: 6–8 minutes. Your feedback measures learning gains and improves future workshops."
+  },
+  {
+    "objectID": "post-survey.html#section-1-learning-gains-retain-identical-wording-from-pre-for-comparison",
+    "href": "post-survey.html#section-1-learning-gains-retain-identical-wording-from-pre-for-comparison",
+    "title": "Post-Workshop Survey",
+    "section": "Section 1: Learning Gains (Retain identical wording from pre for comparison)",
+    "text": "Section 1: Learning Gains (Retain identical wording from pre for comparison)\n(Likert 1=Strongly Disagree … 5=Strongly Agree) 1. I have built data workflows before. 2. I can query databases confidently. 3. I have retrieved data from REST APIs. 4. I understand principles of data cleaning and validation. 5. I can design a reproducible data structure. 6. I feel confident troubleshooting data pipeline failures. 7. I can choose appropriate tools for data acquisition. 8. I can assess data quality issues systematically. 9. I can document a pipeline for other users."
+  },
+  {
+    "objectID": "post-survey.html#section-2-knowledge-check-same-items-optional-randomized-order",
+    "href": "post-survey.html#section-2-knowledge-check-same-items-optional-randomized-order",
+    "title": "Post-Workshop Survey",
+    "section": "Section 2: Knowledge Check (Same items; optional randomized order)",
+    "text": "Section 2: Knowledge Check (Same items; optional randomized order)\n\nA data pipeline is best described as: (a) A single script; (b) A series of connected processes moving and transforming data; (c) A database schema; (d) A visualization tool.\nThe HTTP status code 429 indicates: (a) Success; (b) Not Found; (c) Too Many Requests; (d) Unauthorized.\nIn SQL, selecting unique values uses: (a) DISTINCT; (b) UNIQUE; (c) GROUP; (d) ONLY.\nBest first step when cleaning a dataset: (a) Delete all NAs; (b) Profile structure and summary statistics; (c) Normalize everything; (d) Load into production.\nAn API rate limit is: (a) Maximum query complexity; (b) Restriction on number of requests per time window; (c) Disk quota; (d) Memory threshold."
+  },
+  {
+    "objectID": "post-survey.html#section-3-satisfaction-likert-15",
+    "href": "post-survey.html#section-3-satisfaction-likert-15",
+    "title": "Post-Workshop Survey",
+    "section": "Section 3: Satisfaction (Likert 1–5)",
+    "text": "Section 3: Satisfaction (Likert 1–5)\n\nThe workshop met my expectations.\nThe pacing was appropriate.\nThe examples clarified the concepts.\nThe slides/materials were well organized.\nI would recommend this workshop to others."
+  },
+  {
+    "objectID": "post-survey.html#section-4-application-impact",
+    "href": "post-survey.html#section-4-application-impact",
+    "title": "Post-Workshop Survey",
+    "section": "Section 4: Application & Impact",
+    "text": "Section 4: Application & Impact\n\nHow soon do you expect to apply what you learned? (Immediate, &lt;1 month, 1–3 months, &gt;3 months, Unsure)\nWhich topic was MOST valuable? (APIs, Databases, Cleaning, Pipeline Design, Other)\nWhich topic needs more depth next time? (APIs, Databases, Cleaning, Pipeline Design, Other)\nList one concrete change you will make to your current workflow. (long text)"
+  },
+  {
+    "objectID": "post-survey.html#section-5-open-feedback",
+    "href": "post-survey.html#section-5-open-feedback",
+    "title": "Post-Workshop Survey",
+    "section": "Section 5: Open Feedback",
+    "text": "Section 5: Open Feedback\n\nWhat was the most helpful part? (long text)\nWhat was least helpful / could be improved? (long text)\nAdditional comments or suggestions. (long text)"
   },
   {
     "objectID": "SETUP.html",
@@ -1341,7 +1313,7 @@
     "href": "slides/02-apis.html#response-headers",
     "title": "Data Acquisition from APIs",
     "section": "Response Headers",
-    "text": "Response Headers\n\nglimpse(response$headers)\n\n &lt;httr2_headers&gt;\n $ Date             : chr \"Tue, 02 Dec 2025 01:12:33 GMT\"\n $ Content-Type     : chr \"application/json; charset=utf-8\"\n $ Transfer-Encoding: chr \"chunked\"\n $ Connection       : chr \"keep-alive\"\n $ Content-Encoding : chr \"deflate\"\n\n\n\n\n\nHeader\nPurpose\nExample\n\n\n\n\nContent-Type\nFormat of response\napplication/json\n\n\nX-RateLimit-Limit\nMax requests allowed\n1000\n\n\nX-RateLimit-Remaining\nRequests left\n742\n\n\nX-RateLimit-Reset\nWhen limit resets\n1640995200"
+    "text": "Response Headers\n\nglimpse(response$headers)\n\n &lt;httr2_headers&gt;\n $ Date             : chr \"Tue, 02 Dec 2025 01:26:27 GMT\"\n $ Content-Type     : chr \"application/json; charset=utf-8\"\n $ Transfer-Encoding: chr \"chunked\"\n $ Connection       : chr \"keep-alive\"\n $ Content-Encoding : chr \"deflate\"\n\n\n\n\n\nHeader\nPurpose\nExample\n\n\n\n\nContent-Type\nFormat of response\napplication/json\n\n\nX-RateLimit-Limit\nMax requests allowed\n1000\n\n\nX-RateLimit-Remaining\nRequests left\n742\n\n\nX-RateLimit-Reset\nWhen limit resets\n1640995200"
   },
   {
     "objectID": "slides/02-apis.html#response-body",

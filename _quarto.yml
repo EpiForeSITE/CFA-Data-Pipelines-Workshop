@@ -11,8 +11,6 @@ website:
         href: index.qmd
       - text: "Syllabus"
         href: syllabus.qmd
-      - text: "Schedule"
-        href: schedule.qmd
       - text: "Slides"
         menu:
           - text: "Introduction"
@@ -23,6 +21,16 @@ website:
             href: slides/03-databases.qmd
           - text: "Data Cleaning"
             href: slides/04-data-cleaning.qmd
+      - text: "Docker Example"
+        menu:
+          - text: "Getting Started"
+            href: docker-example/START_HERE.md
+          - text: "Architecture"
+            href: docker-example/ARCHITECTURE.md
+          - text: "Quick Reference"
+            href: docker-example/QUICK_REFERENCE.md
+          - text: "File Summary"
+            href: docker-example/FILE_SUMMARY.md
     right:
       - icon: github
         href: https://github.com/EpiForeSITE/CFA-Data-Pipelines-Workshop
