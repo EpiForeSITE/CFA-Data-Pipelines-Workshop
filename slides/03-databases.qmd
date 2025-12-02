@@ -1,6 +1,6 @@
 ---
 title: "Databases"
-subtitle: "CFA Data Pipelines Workshop - Week 3"
+subtitle: "CFA Data Pipelines Workshop - Session 3"
 format:
   revealjs:
     theme: simple
