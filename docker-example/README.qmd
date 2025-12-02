@@ -4,33 +4,37 @@ A complete, hands-on example demonstrating how to build data pipelines that pull
 
 ## 🏗️ Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     Docker Environment                       │
-│                                                              │
-│  ┌──────────────────┐         ┌─────────────────────┐      │
-│  │  R Plumber API   │         │  PostgreSQL DB      │      │
-│  │  (Port 8000)     │         │  (Port 5432)        │      │
-│  │                  │         │                     │      │
-│  │  Patient Data    │         │  Visits             │      │
-│  │  Demographics    │         │  Prescriptions      │      │
-│  │  Insurance Info  │         │  Lab Results        │      │
-│  └────────┬─────────┘         └──────────┬──────────┘      │
-│           │                              │                  │
-└───────────┼──────────────────────────────┼──────────────────┘
-            │                              │
-            │                              │
-    ┌───────▼──────────┐          ┌────────▼─────────┐
-    │                  │          │                  │
-    │   R Client       │          │  Python Client   │
-    │   Pipeline       │          │  Pipeline        │
-    │                  │          │                  │
-    └──────────────────┘          └──────────────────┘
-            │                              │
-            └──────────┬───────────────────┘
-                       │
-                 Combined Data
-              (Patient + Visit Summary)
+```{mermaid}
+flowchart TD
+    subgraph Docker["Docker Environment"]
+        subgraph API["R Plumber API<br/>(Port 8000)"]
+            PatientData["Patient Data<br/>Demographics<br/>Insurance Info"]
+        end
+        
+        subgraph DB["PostgreSQL DB<br/>(Port 5432)"]
+            Visits["Visits<br/>Prescriptions<br/>Lab Results"]
+        end
+    end
+    
+    subgraph Clients["Client Pipelines"]
+        RClient["R Client<br/>Pipeline"]
+        PythonClient["Python Client<br/>Pipeline"]
+    end
+    
+    API --> RClient
+    API --> PythonClient
+    DB --> RClient
+    DB --> PythonClient
+    
+    RClient --> Combined["Combined Data<br/>(Patient + Visit Summary)"]
+    PythonClient --> Combined
+    
+    style Docker fill:#e1f5fe
+    style API fill:#fff3e0
+    style DB fill:#f3e5f5
+    style RClient fill:#e8f5e8
+    style PythonClient fill:#fff9c4
+    style Combined fill:#ffebee
 ```
 
 ## 📦 What's Included

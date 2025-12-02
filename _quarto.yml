@@ -23,10 +23,12 @@ website:
             href: slides/04-data-cleaning.qmd
       - text: "Docker Example"
         menu:
+          - text: "Overview"
+            href: docker-example/README.md
           - text: "Getting Started"
             href: docker-example/START_HERE.md
           - text: "Architecture"
-            href: docker-example/ARCHITECTURE.md
+            href: docker-example/ARCHITECTURE.qmd
           - text: "Quick Reference"
             href: docker-example/QUICK_REFERENCE.md
           - text: "File Summary"

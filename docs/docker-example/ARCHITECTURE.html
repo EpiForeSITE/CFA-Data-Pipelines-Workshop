@@ -68,6 +68,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="../styles.css">
@@ -126,6 +129,10 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Docker Example</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-docker-example">    
+        <li>
+    <a class="dropdown-item" href="../docker-example/README.md">
+ <span class="dropdown-text">Overview</span></a>
+  </li>  
         <li>
     <a class="dropdown-item" href="../docker-example/START_HERE.html">
  <span class="dropdown-text">Getting Started</span></a>
@@ -189,212 +196,251 @@ ul.task-list li input[type="checkbox"] {
 <h1>Docker Healthcare Pipeline - Architecture Diagram</h1>
 <section id="system-architecture" class="level2">
 <h2 class="anchored" data-anchor-id="system-architecture">System Architecture</h2>
-<pre><code>┌─────────────────────────────────────────────────────────────────────────┐
-│                          Docker Compose Network                          │
-│                        (healthcare_network bridge)                       │
-│                                                                          │
-│  ┌────────────────────────────────┐  ┌──────────────────────────────┐  │
-│  │     Container: healthcare_api  │  │  Container: healthcare_db     │  │
-│  │                                │  │                               │  │
-│  │  ┌──────────────────────────┐  │  │  ┌────────────────────────┐  │  │
-│  │  │   R Plumber REST API     │  │  │  │  PostgreSQL 16         │  │  │
-│  │  │                          │  │  │  │                        │  │  │
-│  │  │  Endpoints:              │  │  │  │  Tables:               │  │  │
-│  │  │  • GET  /health          │  │  │  │  • visits              │  │  │
-│  │  │  • GET  /patients        │  │  │  │  • prescriptions       │  │  │
-│  │  │  • GET  /patients/:id    │  │  │  │  • lab_results         │  │  │
-│  │  │  • GET  /patients/       │  │  │  │                        │  │  │
-│  │  │         insurance/:id    │  │  │  │  Data:                 │  │  │
-│  │  │  • GET  /stats           │  │  │  │  • 12 visits           │  │  │
-│  │  │  • POST /patients        │  │  │  │  • 7 prescriptions     │  │  │
-│  │  │                          │  │  │  │  • 12 lab results      │  │  │
-│  │  │  Data:                   │  │  │  │                        │  │  │
-│  │  │  • 10 patient records    │  │  │  │  Volume:               │  │  │
-│  │  │  • CSV-based storage     │  │  │  │  postgres_data:/var/   │  │  │
-│  │  │                          │  │  │  │    lib/postgresql/data │  │  │
-│  │  └──────────────────────────┘  │  │  └────────────────────────┘  │  │
-│  │                                │  │                               │  │
-│  │  Port: 8000 → Host:8000        │  │  Port: 5432 → Host:5432      │  │
-│  │  Health: /health endpoint      │  │  Health: pg_isready          │  │
-│  └────────────────────────────────┘  └──────────────────────────────┘  │
-│              ▲                                      ▲                   │
-└──────────────┼──────────────────────────────────────┼───────────────────┘
-               │                                      │
-               │ HTTP Requests                        │ PostgreSQL Protocol
-               │ (httr / requests)                    │ (DBI / psycopg2)
-               │                                      │
-┌──────────────┴──────────────────┬───────────────────┴─────────────────┐
-│                                 │                                     │
-│  ┌───────────────────────────┐  │  ┌───────────────────────────────┐  │
-│  │    R Client Pipeline      │  │  │   Python Client Pipeline      │  │
-│  │  (r-client/ folder)       │  │  │  (python-client/ folder)      │  │
-│  │                           │  │  │                               │  │
-│  │  Libraries:               │  │  │  Libraries:                   │  │
-│  │  • httr (API calls)       │  │  │  • requests (API calls)       │  │
-│  │  • jsonlite (JSON)        │  │  │  • pandas (DataFrames)        │  │
-│  │  • DBI (DB interface)     │  │  │  • psycopg2 (PostgreSQL)      │  │
-│  │  • RPostgres (driver)     │  │  │  • sqlalchemy (ORM)           │  │
-│  │  • dplyr (data manip)     │  │  │                               │  │
-│  │                           │  │  │                               │  │
-│  │  Process:                 │  │  │  Process:                     │  │
-│  │  1. Fetch from API        │  │  │  1. Fetch from API            │  │
-│  │  2. Query database        │  │  │  2. Query database            │  │
-│  │  3. Combine datasets      │  │  │  3. Combine datasets          │  │
-│  │  4. Write to DB           │  │  │  4. Write to DB               │  │
-│  │                           │  │  │  5. Test POST endpoint        │  │
-│  └───────────────────────────┘  │  └───────────────────────────────┘  │
-│                                 │                                     │
-│  Output: patient_summary table  │  Output: patient_summary table      │
-└─────────────────────────────────┴─────────────────────────────────────┘</code></pre>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    subgraph DockerNetwork["Docker Compose Network&lt;br/&gt;(healthcare_network bridge)"]
+        subgraph APIContainer["Container: healthcare_api&lt;br/&gt;Port: 8000 → Host:8000"]
+            API["R Plumber REST API&lt;br/&gt;Endpoints:&lt;br/&gt;• GET /health&lt;br/&gt;• GET /patients&lt;br/&gt;• GET /patients/:id&lt;br/&gt;• GET /patients/insurance/:id&lt;br/&gt;• GET /stats&lt;br/&gt;• POST /patients&lt;br/&gt;&lt;br/&gt;Data:&lt;br/&gt;• 10 patient records&lt;br/&gt;• CSV-based storage"]
+            APIHealth["Health: /health endpoint"]
+        end
+        
+        subgraph DBContainer["Container: healthcare_db&lt;br/&gt;Port: 5432 → Host:5432"]
+            DB["PostgreSQL 16&lt;br/&gt;Tables:&lt;br/&gt;• visits&lt;br/&gt;• prescriptions&lt;br/&gt;• lab_results&lt;br/&gt;&lt;br/&gt;Data:&lt;br/&gt;• 12 visits&lt;br/&gt;• 7 prescriptions&lt;br/&gt;• 12 lab results&lt;br/&gt;&lt;br/&gt;Volume:&lt;br/&gt;postgres_data:/var/&lt;br/&gt;lib/postgresql/data"]
+            DBHealth["Health: pg_isready"]
+        end
+    end
+    
+    subgraph ClientPipelines["Client Pipelines"]
+        RClient["R Client Pipeline&lt;br/&gt;(r-client/ folder)&lt;br/&gt;&lt;br/&gt;Libraries:&lt;br/&gt;• httr (API calls)&lt;br/&gt;• jsonlite (JSON)&lt;br/&gt;• DBI (DB interface)&lt;br/&gt;• RPostgres (driver)&lt;br/&gt;• dplyr (data manip)&lt;br/&gt;&lt;br/&gt;Process:&lt;br/&gt;1. Fetch from API&lt;br/&gt;2. Query database&lt;br/&gt;3. Combine datasets&lt;br/&gt;4. Write to DB&lt;br/&gt;&lt;br/&gt;Output: patient_summary table"]
+        
+        PythonClient["Python Client Pipeline&lt;br/&gt;(python-client/ folder)&lt;br/&gt;&lt;br/&gt;Libraries:&lt;br/&gt;• requests (API calls)&lt;br/&gt;• pandas (DataFrames)&lt;br/&gt;• psycopg2 (PostgreSQL)&lt;br/&gt;• sqlalchemy (ORM)&lt;br/&gt;&lt;br/&gt;Process:&lt;br/&gt;1. Fetch from API&lt;br/&gt;2. Query database&lt;br/&gt;3. Combine datasets&lt;br/&gt;4. Write to DB&lt;br/&gt;5. Test POST endpoint&lt;br/&gt;&lt;br/&gt;Output: patient_summary table"]
+    end
+    
+    API --&gt;|HTTP Requests&lt;br/&gt;httr / requests| RClient
+    API --&gt;|HTTP Requests&lt;br/&gt;httr / requests| PythonClient
+    DB --&gt;|PostgreSQL Protocol&lt;br/&gt;DBI / psycopg2| RClient
+    DB --&gt;|PostgreSQL Protocol&lt;br/&gt;DBI / psycopg2| PythonClient
+    
+    style DockerNetwork fill:#e1f5fe
+    style APIContainer fill:#fff3e0
+    style DBContainer fill:#f3e5f5
+    style RClient fill:#e8f5e8
+    style PythonClient fill:#fff9c4
+    style API fill:#ffe0b2
+    style DB fill:#f8bbd9
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 </section>
 <section id="data-flow-diagram" class="level2">
 <h2 class="anchored" data-anchor-id="data-flow-diagram">Data Flow Diagram</h2>
-<pre><code>┌─────────────────┐
-│  Start Pipeline │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────────────────────────────┐
-│  STEP 1: Extract from API               │
-│  • GET /patients (all patient data)     │
-│  • GET /patients/1001 (single patient)  │
-│  • GET /patients/insurance/INS001       │
-│  • GET /stats (aggregations)            │
-└────────┬────────────────────────────────┘
-         │
-         ▼
-┌─────────────────────────────────────────┐
-│  STEP 2: Extract from Database          │
-│  • SELECT FROM visits                   │
-│  • SELECT FROM prescriptions            │
-│  • SELECT FROM lab_results              │
-│  • JOIN operations for summaries        │
-└────────┬────────────────────────────────┘
-         │
-         ▼
-┌─────────────────────────────────────────┐
-│  STEP 3: Transform &amp; Combine            │
-│  • Convert data types                   │
-│  • Join API patients with DB visits     │
-│  • Calculate aggregations               │
-│  • Handle missing values (fillna)       │
-└────────┬────────────────────────────────┘
-         │
-         ▼
-┌─────────────────────────────────────────┐
-│  STEP 4: Load (Write to Database)       │
-│  • CREATE TABLE patient_summary         │
-│  • INSERT combined data                 │
-│  • Verify write operation               │
-└────────┬────────────────────────────────┘
-         │
-         ▼
-┌─────────────────┐
-│  End Pipeline   │
-│  (Success!)     │
-└─────────────────┘</code></pre>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    Start["Start Pipeline"]
+    
+    Step1["STEP 1: Extract from API&lt;br/&gt;• GET /patients (all patient data)&lt;br/&gt;• GET /patients/1001 (single patient)&lt;br/&gt;• GET /patients/insurance/INS001&lt;br/&gt;• GET /stats (aggregations)"]
+    
+    Step2["STEP 2: Extract from Database&lt;br/&gt;• SELECT FROM visits&lt;br/&gt;• SELECT FROM prescriptions&lt;br/&gt;• SELECT FROM lab_results&lt;br/&gt;• JOIN operations for summaries"]
+    
+    Step3["STEP 3: Transform &amp; Combine&lt;br/&gt;• Convert data types&lt;br/&gt;• Join API patients with DB visits&lt;br/&gt;• Calculate aggregations&lt;br/&gt;• Handle missing values (fillna)"]
+    
+    Step4["STEP 4: Load (Write to Database)&lt;br/&gt;• CREATE TABLE patient_summary&lt;br/&gt;• INSERT combined data&lt;br/&gt;• Verify write operation"]
+    
+    End["End Pipeline&lt;br/&gt;(Success!)"]
+    
+    Start --&gt; Step1
+    Step1 --&gt; Step2
+    Step2 --&gt; Step3
+    Step3 --&gt; Step4
+    Step4 --&gt; End
+    
+    style Start fill:#e8f5e8
+    style Step1 fill:#fff3e0
+    style Step2 fill:#f3e5f5
+    style Step3 fill:#fff9c4
+    style Step4 fill:#ffebee
+    style End fill:#e8f5e8
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 </section>
 <section id="container-lifecycle" class="level2">
 <h2 class="anchored" data-anchor-id="container-lifecycle">Container Lifecycle</h2>
-<pre><code>┌─────────────────────────────────────────────────────────────────┐
-│                     docker-compose up -d                         │
-└────────────────────────┬────────────────────────────────────────┘
-                         │
-         ┌───────────────┴───────────────┐
-         │                               │
-         ▼                               ▼
-┌─────────────────────┐         ┌─────────────────────┐
-│  Build API Image    │         │  Build DB Image     │
-│  (from Dockerfile)  │         │  (from Dockerfile)  │
-└────────┬────────────┘         └────────┬────────────┘
-         │                               │
-         ▼                               ▼
-┌─────────────────────┐         ┌─────────────────────┐
-│  Start API          │         │  Start PostgreSQL   │
-│  Container          │         │  Container          │
-└────────┬────────────┘         └────────┬────────────┘
-         │                               │
-         ▼                               ▼
-┌─────────────────────┐         ┌─────────────────────┐
-│  Load plumber.R     │         │  Run init.sql       │
-│  Load patients.csv  │         │  Create tables      │
-│                     │         │  Insert sample data │
-└────────┬────────────┘         └────────┬────────────┘
-         │                               │
-         ▼                               ▼
-┌─────────────────────┐         ┌─────────────────────┐
-│  Health Check:      │         │  Health Check:      │
-│  GET /health        │         │  pg_isready         │
-│  (wait for healthy) │         │  (wait for healthy) │
-└────────┬────────────┘         └────────┬────────────┘
-         │                               │
-         └───────────────┬───────────────┘
-                         │
-                         ▼
-                 ┌───────────────┐
-                 │  Ready for    │
-                 │  Client       │
-                 │  Connections! │
-                 └───────────────┘</code></pre>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    Command["docker-compose up -d"]
+    
+    Command --&gt; BuildAPI["Build API Image&lt;br/&gt;(from Dockerfile)"]
+    Command --&gt; BuildDB["Build DB Image&lt;br/&gt;(from Dockerfile)"]
+    
+    BuildAPI --&gt; StartAPI["Start API&lt;br/&gt;Container"]
+    BuildDB --&gt; StartDB["Start PostgreSQL&lt;br/&gt;Container"]
+    
+    StartAPI --&gt; LoadAPI["Load plumber.R&lt;br/&gt;Load patients.csv"]
+    StartDB --&gt; InitDB["Run init.sql&lt;br/&gt;Create tables&lt;br/&gt;Insert sample data"]
+    
+    LoadAPI --&gt; HealthAPI["Health Check:&lt;br/&gt;GET /health&lt;br/&gt;(wait for healthy)"]
+    InitDB --&gt; HealthDB["Health Check:&lt;br/&gt;pg_isready&lt;br/&gt;(wait for healthy)"]
+    
+    HealthAPI --&gt; Ready["Ready for&lt;br/&gt;Client&lt;br/&gt;Connections!"]
+    HealthDB --&gt; Ready
+    
+    style Command fill:#e1f5fe
+    style BuildAPI fill:#fff3e0
+    style BuildDB fill:#f3e5f5
+    style StartAPI fill:#fff3e0
+    style StartDB fill:#f3e5f5
+    style LoadAPI fill:#fff3e0
+    style InitDB fill:#f3e5f5
+    style HealthAPI fill:#fff3e0
+    style HealthDB fill:#f3e5f5
+    style Ready fill:#e8f5e8
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 </section>
 <section id="network-communication" class="level2">
 <h2 class="anchored" data-anchor-id="network-communication">Network Communication</h2>
-<pre><code>Host Machine (localhost)
-│
-├─ Port 8000 ──────────────► Container: healthcare_api
-│                             Network: healthcare_network
-│                             Internal IP: 172.x.x.2
-│
-└─ Port 5432 ──────────────► Container: healthcare_db
-                              Network: healthcare_network
-                              Internal IP: 172.x.x.3
-
-Containers can communicate using:
-• Service names (api, database)
-• Internal IPs (172.x.x.x)
-
-Clients connect using:
-• localhost:8000 (API)
-• localhost:5432 (Database)</code></pre>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    subgraph HostMachine["Host Machine (localhost)"]
+        Port8000["Port 8000"]
+        Port5432["Port 5432"]
+    end
+    
+    subgraph DockerNetwork["healthcare_network"]
+        subgraph APIContainer["Container: healthcare_api&lt;br/&gt;Internal IP: 172.x.x.2"]
+            APIService["Service: api"]
+        end
+        
+        subgraph DBContainer["Container: healthcare_db&lt;br/&gt;Internal IP: 172.x.x.3"]
+            DBService["Service: database"]
+        end
+    end
+    
+    subgraph Communication["Communication Methods"]
+        ServiceNames["Containers communicate using:&lt;br/&gt;• Service names (api, database)&lt;br/&gt;• Internal IPs (172.x.x.x)"]
+        ClientAccess["Clients connect using:&lt;br/&gt;• localhost:8000 (API)&lt;br/&gt;• localhost:5432 (Database)"]
+    end
+    
+    Port8000 --&gt;|Port Mapping| APIContainer
+    Port5432 --&gt;|Port Mapping| DBContainer
+    
+    APIContainer -.-&gt;|Internal Network| DBContainer
+    
+    style HostMachine fill:#e1f5fe
+    style DockerNetwork fill:#fff3e0
+    style APIContainer fill:#e8f5e8
+    style DBContainer fill:#f3e5f5
+    style Communication fill:#fff9c4
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 </section>
 <section id="volume-persistence" class="level2">
 <h2 class="anchored" data-anchor-id="volume-persistence">Volume Persistence</h2>
-<pre><code>Docker Host
-│
-├─ Named Volume: postgres_data
-│  └─ Mapped to: /var/lib/postgresql/data (in container)
-│     └─ Contains: PostgreSQL database files
-│        • Tables, indexes, data
-│        • Transaction logs
-│        • Configuration
-│
-└─ Benefits:
-   • Data persists across container restarts
-   • Data survives container removal
-   • Can be backed up independently
-   • Shared between container recreations</code></pre>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    subgraph DockerHost["Docker Host"]
+        Volume["Named Volume: postgres_data"]
+    end
+    
+    subgraph Container["PostgreSQL Container"]
+        MountPoint["/var/lib/postgresql/data"]
+        subgraph DatabaseFiles["PostgreSQL Database Files"]
+            Tables["Tables, indexes, data"]
+            Logs["Transaction logs"]
+            Config["Configuration"]
+        end
+    end
+    
+    subgraph Benefits["Benefits"]
+        Persist["Data persists across&lt;br/&gt;container restarts"]
+        Survive["Data survives&lt;br/&gt;container removal"]
+        Backup["Can be backed up&lt;br/&gt;independently"]
+        Shared["Shared between&lt;br/&gt;container recreations"]
+    end
+    
+    Volume --&gt;|Mapped to| MountPoint
+    MountPoint --&gt; DatabaseFiles
+    
+    style DockerHost fill:#e1f5fe
+    style Container fill:#f3e5f5
+    style DatabaseFiles fill:#fff3e0
+    style Benefits fill:#e8f5e8
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 </section>
 <section id="security-considerations" class="level2">
 <h2 class="anchored" data-anchor-id="security-considerations">Security Considerations</h2>
-<pre><code>┌─────────────────────────────────────────────────────────────┐
-│  Credentials Management                                      │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  ❌ NEVER in code:                                           │
-│     password = "healthpass"  # BAD!                          │
-│                                                              │
-│  ✅ Use environment variables:                               │
-│     password = os.getenv("DB_PASSWORD")  # GOOD!             │
-│     password = Sys.getenv("DB_PASSWORD")  # GOOD!            │
-│                                                              │
-│  ✅ Use .env file (not committed to git):                    │
-│     POSTGRES_PASSWORD=healthpass                             │
-│                                                              │
-│  ✅ In docker-compose.yml:                                   │
-│     environment:                                             │
-│       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}                │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘</code></pre>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    subgraph Security["Credentials Management"]
+        subgraph Bad["❌ NEVER in code"]
+            BadExample["password = 'healthpass'  # BAD!"]
+        end
+        
+        subgraph Good["✅ Best Practices"]
+            EnvVars["Use environment variables:&lt;br/&gt;password = os.getenv('DB_PASSWORD')&lt;br/&gt;password = Sys.getenv('DB_PASSWORD')"]
+            
+            EnvFile["Use .env file (not in git):&lt;br/&gt;POSTGRES_PASSWORD=healthpass"]
+            
+            DockerCompose["In docker-compose.yml:&lt;br/&gt;environment:&lt;br/&gt;  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}"]
+        end
+    end
+    
+    style Bad fill:#ffebee
+    style Good fill:#e8f5e8
+    style BadExample fill:#ffcdd2
+    style EnvVars fill:#c8e6c9
+    style EnvFile fill:#c8e6c9
+    style DockerCompose fill:#c8e6c9
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 
 
 </section>

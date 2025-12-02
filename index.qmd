@@ -18,8 +18,8 @@ In this workshop, you will learn:
 ## Getting Started
 
 - Review the [Syllabus](syllabus.qmd) for course objectives and requirements
-- Check the [Schedule](schedule.qmd) for class dates and topics
 - Access [Slides](slides/01-introduction.qmd) for lecture materials
+- Explore the [Docker Example](docker-example/README.md) for a complete healthcare pipeline
 
 ## Prerequisites
 

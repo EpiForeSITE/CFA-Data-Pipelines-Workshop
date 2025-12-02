@@ -1,0 +1,195 @@
+# Docker Healthcare Pipeline - Architecture Diagram
+
+## System Architecture
+
+```{mermaid}
+flowchart TD
+    subgraph DockerNetwork["Docker Compose Network<br/>(healthcare_network bridge)"]
+        subgraph APIContainer["Container: healthcare_api<br/>Port: 8000 → Host:8000"]
+            API["R Plumber REST API<br/>Endpoints:<br/>• GET /health<br/>• GET /patients<br/>• GET /patients/:id<br/>• GET /patients/insurance/:id<br/>• GET /stats<br/>• POST /patients<br/><br/>Data:<br/>• 10 patient records<br/>• CSV-based storage"]
+            APIHealth["Health: /health endpoint"]
+        end
+        
+        subgraph DBContainer["Container: healthcare_db<br/>Port: 5432 → Host:5432"]
+            DB["PostgreSQL 16<br/>Tables:<br/>• visits<br/>• prescriptions<br/>• lab_results<br/><br/>Data:<br/>• 12 visits<br/>• 7 prescriptions<br/>• 12 lab results<br/><br/>Volume:<br/>postgres_data:/var/<br/>lib/postgresql/data"]
+            DBHealth["Health: pg_isready"]
+        end
+    end
+    
+    subgraph ClientPipelines["Client Pipelines"]
+        RClient["R Client Pipeline<br/>(r-client/ folder)<br/><br/>Libraries:<br/>• httr (API calls)<br/>• jsonlite (JSON)<br/>• DBI (DB interface)<br/>• RPostgres (driver)<br/>• dplyr (data manip)<br/><br/>Process:<br/>1. Fetch from API<br/>2. Query database<br/>3. Combine datasets<br/>4. Write to DB<br/><br/>Output: patient_summary table"]
+        
+        PythonClient["Python Client Pipeline<br/>(python-client/ folder)<br/><br/>Libraries:<br/>• requests (API calls)<br/>• pandas (DataFrames)<br/>• psycopg2 (PostgreSQL)<br/>• sqlalchemy (ORM)<br/><br/>Process:<br/>1. Fetch from API<br/>2. Query database<br/>3. Combine datasets<br/>4. Write to DB<br/>5. Test POST endpoint<br/><br/>Output: patient_summary table"]
+    end
+    
+    API -->|HTTP Requests<br/>httr / requests| RClient
+    API -->|HTTP Requests<br/>httr / requests| PythonClient
+    DB -->|PostgreSQL Protocol<br/>DBI / psycopg2| RClient
+    DB -->|PostgreSQL Protocol<br/>DBI / psycopg2| PythonClient
+    
+    style DockerNetwork fill:#e1f5fe
+    style APIContainer fill:#fff3e0
+    style DBContainer fill:#f3e5f5
+    style RClient fill:#e8f5e8
+    style PythonClient fill:#fff9c4
+    style API fill:#ffe0b2
+    style DB fill:#f8bbd9
+```
+
+## Data Flow Diagram
+
+```{mermaid}
+flowchart TD
+    Start["Start Pipeline"]
+    
+    Step1["STEP 1: Extract from API<br/>• GET /patients (all patient data)<br/>• GET /patients/1001 (single patient)<br/>• GET /patients/insurance/INS001<br/>• GET /stats (aggregations)"]
+    
+    Step2["STEP 2: Extract from Database<br/>• SELECT FROM visits<br/>• SELECT FROM prescriptions<br/>• SELECT FROM lab_results<br/>• JOIN operations for summaries"]
+    
+    Step3["STEP 3: Transform & Combine<br/>• Convert data types<br/>• Join API patients with DB visits<br/>• Calculate aggregations<br/>• Handle missing values (fillna)"]
+    
+    Step4["STEP 4: Load (Write to Database)<br/>• CREATE TABLE patient_summary<br/>• INSERT combined data<br/>• Verify write operation"]
+    
+    End["End Pipeline<br/>(Success!)"]
+    
+    Start --> Step1
+    Step1 --> Step2
+    Step2 --> Step3
+    Step3 --> Step4
+    Step4 --> End
+    
+    style Start fill:#e8f5e8
+    style Step1 fill:#fff3e0
+    style Step2 fill:#f3e5f5
+    style Step3 fill:#fff9c4
+    style Step4 fill:#ffebee
+    style End fill:#e8f5e8
+```
+
+## Container Lifecycle
+
+```{mermaid}
+flowchart TD
+    Command["docker-compose up -d"]
+    
+    Command --> BuildAPI["Build API Image<br/>(from Dockerfile)"]
+    Command --> BuildDB["Build DB Image<br/>(from Dockerfile)"]
+    
+    BuildAPI --> StartAPI["Start API<br/>Container"]
+    BuildDB --> StartDB["Start PostgreSQL<br/>Container"]
+    
+    StartAPI --> LoadAPI["Load plumber.R<br/>Load patients.csv"]
+    StartDB --> InitDB["Run init.sql<br/>Create tables<br/>Insert sample data"]
+    
+    LoadAPI --> HealthAPI["Health Check:<br/>GET /health<br/>(wait for healthy)"]
+    InitDB --> HealthDB["Health Check:<br/>pg_isready<br/>(wait for healthy)"]
+    
+    HealthAPI --> Ready["Ready for<br/>Client<br/>Connections!"]
+    HealthDB --> Ready
+    
+    style Command fill:#e1f5fe
+    style BuildAPI fill:#fff3e0
+    style BuildDB fill:#f3e5f5
+    style StartAPI fill:#fff3e0
+    style StartDB fill:#f3e5f5
+    style LoadAPI fill:#fff3e0
+    style InitDB fill:#f3e5f5
+    style HealthAPI fill:#fff3e0
+    style HealthDB fill:#f3e5f5
+    style Ready fill:#e8f5e8
+```
+
+## Network Communication
+
+```{mermaid}
+flowchart LR
+    subgraph HostMachine["Host Machine (localhost)"]
+        Port8000["Port 8000"]
+        Port5432["Port 5432"]
+    end
+    
+    subgraph DockerNetwork["healthcare_network"]
+        subgraph APIContainer["Container: healthcare_api<br/>Internal IP: 172.x.x.2"]
+            APIService["Service: api"]
+        end
+        
+        subgraph DBContainer["Container: healthcare_db<br/>Internal IP: 172.x.x.3"]
+            DBService["Service: database"]
+        end
+    end
+    
+    subgraph Communication["Communication Methods"]
+        ServiceNames["Containers communicate using:<br/>• Service names (api, database)<br/>• Internal IPs (172.x.x.x)"]
+        ClientAccess["Clients connect using:<br/>• localhost:8000 (API)<br/>• localhost:5432 (Database)"]
+    end
+    
+    Port8000 -->|Port Mapping| APIContainer
+    Port5432 -->|Port Mapping| DBContainer
+    
+    APIContainer -.->|Internal Network| DBContainer
+    
+    style HostMachine fill:#e1f5fe
+    style DockerNetwork fill:#fff3e0
+    style APIContainer fill:#e8f5e8
+    style DBContainer fill:#f3e5f5
+    style Communication fill:#fff9c4
+```
+
+## Volume Persistence
+
+```{mermaid}
+flowchart TD
+    subgraph DockerHost["Docker Host"]
+        Volume["Named Volume: postgres_data"]
+    end
+    
+    subgraph Container["PostgreSQL Container"]
+        MountPoint["/var/lib/postgresql/data"]
+        subgraph DatabaseFiles["PostgreSQL Database Files"]
+            Tables["Tables, indexes, data"]
+            Logs["Transaction logs"]
+            Config["Configuration"]
+        end
+    end
+    
+    subgraph Benefits["Benefits"]
+        Persist["Data persists across<br/>container restarts"]
+        Survive["Data survives<br/>container removal"]
+        Backup["Can be backed up<br/>independently"]
+        Shared["Shared between<br/>container recreations"]
+    end
+    
+    Volume -->|Mapped to| MountPoint
+    MountPoint --> DatabaseFiles
+    
+    style DockerHost fill:#e1f5fe
+    style Container fill:#f3e5f5
+    style DatabaseFiles fill:#fff3e0
+    style Benefits fill:#e8f5e8
+```
+
+## Security Considerations
+
+```{mermaid}
+flowchart TD
+    subgraph Security["Credentials Management"]
+        subgraph Bad["❌ NEVER in code"]
+            BadExample["password = 'healthpass'  # BAD!"]
+        end
+        
+        subgraph Good["✅ Best Practices"]
+            EnvVars["Use environment variables:<br/>password = os.getenv('DB_PASSWORD')<br/>password = Sys.getenv('DB_PASSWORD')"]
+            
+            EnvFile["Use .env file (not in git):<br/>POSTGRES_PASSWORD=healthpass"]
+            
+            DockerCompose["In docker-compose.yml:<br/>environment:<br/>  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}"]
+        end
+    end
+    
+    style Bad fill:#ffebee
+    style Good fill:#e8f5e8
+    style BadExample fill:#ffcdd2
+    style EnvVars fill:#c8e6c9
+    style EnvFile fill:#c8e6c9
+    style DockerCompose fill:#c8e6c9
+```
