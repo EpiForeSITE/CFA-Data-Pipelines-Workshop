@@ -24,7 +24,7 @@ website:
       - text: "Docker Example"
         menu:
           - text: "Overview"
-            href: docker-example/README.md
+            href: docker-example/README.qmd
           - text: "Getting Started"
             href: docker-example/START_HERE.md
           - text: "Architecture"

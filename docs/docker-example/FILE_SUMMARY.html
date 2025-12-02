@@ -162,6 +162,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-docker-example">    
         <li>
+    <a class="dropdown-item" href="../docker-example/README.qmd">
+ <span class="dropdown-text">Overview</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../docker-example/START_HERE.html">
  <span class="dropdown-text">Getting Started</span></a>
   </li>  
@@ -249,9 +253,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="project-structure">📁 Project Structure</h2>
 <pre><code>docker-example/
 │
-├── 📄 README.md                    # Main documentation
+├── 📄 README.qmd                   # Main documentation
 ├── 📄 QUICK_REFERENCE.md           # Command cheat sheet
-├── 📄 ARCHITECTURE.md              # Visual diagrams
+├── 📄 ARCHITECTURE.qmd             # Visual diagrams
 ├── 📄 docker-compose.yml           # Container orchestration
 ├── 📄 .env.example                 # Environment template
 ├── 📄 .gitignore                   # Git ignore rules
@@ -269,7 +273,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 │
 ├── 📂 r-client/                    # R Pipeline Client
 │   ├── 📜 healthcare_pipeline.R    # Main pipeline script
-│   └── 📜 install_packages.R       # Package installation helper
+│   ├── 📜 healthcare_pipeline_tidyverse.R # Tidyverse version
+│   ├── 📜 install_packages.R       # Package installation helper
+│   └── 📄 README.md                # R client documentation
 │
 └── 📂 python-client/               # Python Pipeline Client
     ├── 🐍 healthcare_pipeline.py   # Main pipeline script
@@ -280,48 +286,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="root-directory" class="level3">
 <h3 class="anchored" data-anchor-id="root-directory">Root Directory</h3>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 40%">
-<col style="width: 60%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>File</th>
 <th>Purpose</th>
+<th>Repository Link</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>README.md</code></td>
+<td><code>README.qmd</code></td>
 <td>Complete setup guide, architecture overview, troubleshooting</td>
+<td><a href="README.qmd">View File</a></td>
 </tr>
 <tr class="even">
 <td><code>QUICK_REFERENCE.md</code></td>
 <td>Quick command reference for common operations</td>
+<td><a href="../docker-example/QUICK_REFERENCE.html">View File</a></td>
 </tr>
 <tr class="odd">
-<td><code>ARCHITECTURE.md</code></td>
+<td><code>ARCHITECTURE.qmd</code></td>
 <td>Visual diagrams of system architecture and data flow</td>
+<td><a href="../docker-example/ARCHITECTURE.html">View File</a></td>
 </tr>
 <tr class="even">
 <td><code>docker-compose.yml</code></td>
 <td>Defines both containers, networking, volumes</td>
+<td><a href="docker-compose.yml">View File</a></td>
 </tr>
 <tr class="odd">
 <td><code>.env.example</code></td>
 <td>Template for environment variables</td>
+<td><a href=".env.example">View File</a></td>
 </tr>
 <tr class="even">
 <td><code>.gitignore</code></td>
 <td>Prevents committing sensitive files</td>
+<td><a href=".gitignore">View File</a></td>
 </tr>
 <tr class="odd">
 <td><code>validate.sh</code></td>
 <td>Linux/Mac script to verify setup</td>
+<td><a href="validate.sh">View File</a></td>
 </tr>
 <tr class="even">
 <td><code>validate.ps1</code></td>
 <td>Windows PowerShell script to verify setup</td>
+<td><a href="validate.ps1">View File</a></td>
 </tr>
 </tbody>
 </table>
@@ -334,6 +345,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <th>File</th>
 <th>Lines</th>
 <th>Purpose</th>
+<th>Repository Link</th>
 </tr>
 </thead>
 <tbody>
@@ -341,16 +353,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><code>Dockerfile</code></td>
 <td>21</td>
 <td>Builds R container with Plumber</td>
+<td><a href="api/Dockerfile">View File</a></td>
 </tr>
 <tr class="even">
 <td><code>plumber.R</code></td>
 <td>115</td>
 <td>REST API with 6 endpoints</td>
+<td><a href="api/plumber.R">View File</a></td>
 </tr>
 <tr class="odd">
 <td><code>patients_data.csv</code></td>
 <td>11</td>
 <td>10 patient records (header + data)</td>
+<td><a href="api/patients_data.csv">View File</a></td>
 </tr>
 </tbody>
 </table>
@@ -364,6 +379,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <th>File</th>
 <th>Lines</th>
 <th>Purpose</th>
+<th>Repository Link</th>
 </tr>
 </thead>
 <tbody>
@@ -371,11 +387,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><code>Dockerfile</code></td>
 <td>12</td>
 <td>Builds PostgreSQL container</td>
+<td><a href="database/Dockerfile">View File</a></td>
 </tr>
 <tr class="even">
 <td><code>init.sql</code></td>
 <td>150+</td>
 <td>Creates 3 tables + sample data</td>
+<td><a href="database/init.sql">View File</a></td>
 </tr>
 </tbody>
 </table>
@@ -389,6 +407,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <th>File</th>
 <th>Lines</th>
 <th>Purpose</th>
+<th>Repository Link</th>
 </tr>
 </thead>
 <tbody>
@@ -396,11 +415,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><code>healthcare_pipeline.R</code></td>
 <td>200+</td>
 <td>Full ETL pipeline in R</td>
+<td><a href="r-client/healthcare_pipeline.R">View File</a></td>
 </tr>
 <tr class="even">
+<td><code>healthcare_pipeline_tidyverse.R</code></td>
+<td>200+</td>
+<td>Tidyverse version of ETL pipeline</td>
+<td><a href="r-client/healthcare_pipeline_tidyverse.R">View File</a></td>
+</tr>
+<tr class="odd">
 <td><code>install_packages.R</code></td>
 <td>10</td>
 <td>Installs required R packages</td>
+<td><a href="r-client/install_packages.R">View File</a></td>
+</tr>
+<tr class="even">
+<td><code>README.md</code></td>
+<td>20+</td>
+<td>R client documentation</td>
+<td><a href="r-client/README.md">View File</a></td>
 </tr>
 </tbody>
 </table>
@@ -414,6 +447,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <th>File</th>
 <th>Lines</th>
 <th>Purpose</th>
+<th>Repository Link</th>
 </tr>
 </thead>
 <tbody>
@@ -421,11 +455,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><code>healthcare_pipeline.py</code></td>
 <td>230+</td>
 <td>Full ETL pipeline in Python</td>
+<td><a href="python-client/healthcare_pipeline.py">View File</a></td>
 </tr>
 <tr class="even">
 <td><code>requirements.txt</code></td>
 <td>4</td>
 <td>Python package dependencies</td>
+<td><a href="python-client/requirements.txt">View File</a></td>
 </tr>
 </tbody>
 </table>

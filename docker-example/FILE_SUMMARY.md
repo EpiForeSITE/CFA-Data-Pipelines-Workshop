@@ -5,9 +5,9 @@
 ```
 docker-example/
 │
-├── 📄 README.md                    # Main documentation
+├── 📄 README.qmd                   # Main documentation
 ├── 📄 QUICK_REFERENCE.md           # Command cheat sheet
-├── 📄 ARCHITECTURE.md              # Visual diagrams
+├── 📄 ARCHITECTURE.qmd             # Visual diagrams
 ├── 📄 docker-compose.yml           # Container orchestration
 ├── 📄 .env.example                 # Environment template
 ├── 📄 .gitignore                   # Git ignore rules
@@ -25,7 +25,9 @@ docker-example/
 │
 ├── 📂 r-client/                    # R Pipeline Client
 │   ├── 📜 healthcare_pipeline.R    # Main pipeline script
-│   └── 📜 install_packages.R       # Package installation helper
+│   ├── 📜 healthcare_pipeline_tidyverse.R # Tidyverse version
+│   ├── 📜 install_packages.R       # Package installation helper
+│   └── 📄 README.md                # R client documentation
 │
 └── 📂 python-client/               # Python Pipeline Client
     ├── 🐍 healthcare_pipeline.py   # Main pipeline script
@@ -36,24 +38,24 @@ docker-example/
 
 ### Root Directory
 
-| File | Purpose |
-|------|---------|
-| `README.md` | Complete setup guide, architecture overview, troubleshooting |
-| `QUICK_REFERENCE.md` | Quick command reference for common operations |
-| `ARCHITECTURE.md` | Visual diagrams of system architecture and data flow |
-| `docker-compose.yml` | Defines both containers, networking, volumes |
-| `.env.example` | Template for environment variables |
-| `.gitignore` | Prevents committing sensitive files |
-| `validate.sh` | Linux/Mac script to verify setup |
-| `validate.ps1` | Windows PowerShell script to verify setup |
+| File | Purpose | Repository Link |
+|------|---------|-----------------|
+| `README.qmd` | Complete setup guide, architecture overview, troubleshooting | [View File](README.qmd) |
+| `QUICK_REFERENCE.md` | Quick command reference for common operations | [View File](QUICK_REFERENCE.md) |
+| `ARCHITECTURE.qmd` | Visual diagrams of system architecture and data flow | [View File](ARCHITECTURE.qmd) |
+| `docker-compose.yml` | Defines both containers, networking, volumes | [View File](docker-compose.yml) |
+| `.env.example` | Template for environment variables | [View File](.env.example) |
+| `.gitignore` | Prevents committing sensitive files | [View File](.gitignore) |
+| `validate.sh` | Linux/Mac script to verify setup | [View File](validate.sh) |
+| `validate.ps1` | Windows PowerShell script to verify setup | [View File](validate.ps1) |
 
 ### api/ Directory
 
-| File | Lines | Purpose |
-|------|-------|---------|
-| `Dockerfile` | 21 | Builds R container with Plumber |
-| `plumber.R` | 115 | REST API with 6 endpoints |
-| `patients_data.csv` | 11 | 10 patient records (header + data) |
+| File | Lines | Purpose | Repository Link |
+|------|-------|---------|-----------------|
+| `Dockerfile` | 21 | Builds R container with Plumber | [View File](api/Dockerfile) |
+| `plumber.R` | 115 | REST API with 6 endpoints | [View File](api/plumber.R) |
+| `patients_data.csv` | 11 | 10 patient records (header + data) | [View File](api/patients_data.csv) |
 
 **API Endpoints:**
 - `GET /health` - Health check
@@ -65,10 +67,10 @@ docker-example/
 
 ### database/ Directory
 
-| File | Lines | Purpose |
-|------|-------|---------|
-| `Dockerfile` | 12 | Builds PostgreSQL container |
-| `init.sql` | 150+ | Creates 3 tables + sample data |
+| File | Lines | Purpose | Repository Link |
+|------|-------|---------|-----------------|
+| `Dockerfile` | 12 | Builds PostgreSQL container | [View File](database/Dockerfile) |
+| `init.sql` | 150+ | Creates 3 tables + sample data | [View File](database/init.sql) |
 
 **Database Tables:**
 - `visits` - 12 healthcare visit records
@@ -77,10 +79,12 @@ docker-example/
 
 ### r-client/ Directory
 
-| File | Lines | Purpose |
-|------|-------|---------|
-| `healthcare_pipeline.R` | 200+ | Full ETL pipeline in R |
-| `install_packages.R` | 10 | Installs required R packages |
+| File | Lines | Purpose | Repository Link |
+|------|-------|---------|-----------------|
+| `healthcare_pipeline.R` | 200+ | Full ETL pipeline in R | [View File](r-client/healthcare_pipeline.R) |
+| `healthcare_pipeline_tidyverse.R` | 200+ | Tidyverse version of ETL pipeline | [View File](r-client/healthcare_pipeline_tidyverse.R) |
+| `install_packages.R` | 10 | Installs required R packages | [View File](r-client/install_packages.R) |
+| `README.md` | 20+ | R client documentation | [View File](r-client/README.md) |
 
 **Pipeline Steps:**
 1. Fetch from API (httr)
@@ -90,10 +94,10 @@ docker-example/
 
 ### python-client/ Directory
 
-| File | Lines | Purpose |
-|------|-------|---------|
-| `healthcare_pipeline.py` | 230+ | Full ETL pipeline in Python |
-| `requirements.txt` | 4 | Python package dependencies |
+| File | Lines | Purpose | Repository Link |
+|------|-------|---------|-----------------|
+| `healthcare_pipeline.py` | 230+ | Full ETL pipeline in Python | [View File](python-client/healthcare_pipeline.py) |
+| `requirements.txt` | 4 | Python package dependencies | [View File](python-client/requirements.txt) |
 
 **Pipeline Steps:**
 1. Fetch from API (requests)
